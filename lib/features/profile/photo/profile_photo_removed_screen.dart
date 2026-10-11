@@ -62,8 +62,8 @@ class ProfilePhotoRemovedScreen extends StatelessWidget {
                 children: [
                   PrimaryButton(
                     'Return to Profile',
-                    onPressed: () => Navigator.popUntil(
-                        context, ModalRoute.withName(AppRoutes.profile)),
+                    onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                        context, AppRoutes.profile, (route) => false),
                   ),
                   const SizedBox(height: 12),
                   SizedBox(
@@ -77,8 +77,10 @@ class ProfilePhotoRemovedScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(14),
                         ),
                       ),
-                      onPressed: () => Navigator.popUntil(context,
-                          ModalRoute.withName(AppRoutes.changePhoto)),
+                      onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          AppRoutes.changePhoto,
+                          ModalRoute.withName(AppRoutes.profile)),
                       child: const Text('Add a New Photo'),
                     ),
                   ),

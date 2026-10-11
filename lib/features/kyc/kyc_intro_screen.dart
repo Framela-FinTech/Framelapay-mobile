@@ -48,7 +48,8 @@ class KycIntroScreen extends StatelessWidget {
               const SizedBox(height: 12),
               Center(
                 child: TextButton(
-                  onPressed: () => Navigator.pushNamed(context, AppRoutes.home),
+                  onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                      context, AppRoutes.home, (route) => false),
                   child: const Text('Do this later',
                       style: TextStyle(color: AppColors.textGrey)),
                 ),

@@ -64,7 +64,8 @@ class _BiometricsSetupScreenState extends State<BiometricsSetupScreen> {
               ),
               const SizedBox(height: 28),
               ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, AppRoutes.biometricsSetup),
+                onPressed: () =>
+                    Navigator.pushNamed(context, AppRoutes.fingerprintCapture),
                 child: const Text('Enable biometric'),
               ),
               const SizedBox(height: 12),

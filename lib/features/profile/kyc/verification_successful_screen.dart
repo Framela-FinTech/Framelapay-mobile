@@ -56,8 +56,8 @@ class VerificationSuccessfulScreen extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
               child: PrimaryButton(
                 'Continue to Profile',
-                onPressed: () => Navigator.popUntil(
-                    context, ModalRoute.withName(AppRoutes.profile)),
+                onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                    context, AppRoutes.profile, (route) => false),
               ),
             ),
           ],
