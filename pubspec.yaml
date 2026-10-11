@@ -1,0 +1,43 @@
+name: framela
+description: Framela - Send money across borders, simply.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  smooth_page_indicator: ^1.1.0
+  pinput: ^4.0.0
+  local_auth: ^2.1.8
+  camera: ^0.10.5+9
+  flutter_svg: ^2.0.10
+  flutter_animate: ^4.5.0
+  country_flags: ^3.0.0
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/ 
+    - assets/icons/
+  fonts:
+  - family: PlusJakartaSans
+    fonts:
+      - asset: assets/fonts/PlusJakartaSans-Regular.ttf
+      - asset: assets/fonts/PlusJakartaSans-Medium.ttf
+        weight: 500
+      - asset: assets/fonts/PlusJakartaSans-SemiBold.ttf
+        weight: 600
+      - asset: assets/fonts/PlusJakartaSans-Bold.ttf
+        weight: 700
+      - asset: assets/fonts/PlusJakartaSans-ExtraBold.ttf
+        weight: 800
