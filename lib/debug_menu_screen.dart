@@ -57,6 +57,10 @@ import 'features/profile/beneficiaries/confirm_beneficiary_screen.dart';
 import 'features/profile/beneficiaries/beneficiary_details_screen.dart';
 import 'features/profile/beneficiaries/edit_beneficiary_screen.dart';
 import 'features/profile/beneficiaries/remove_beneficiary_screen.dart';
+import 'features/profile/photo/change_profile_photo_screen.dart';
+import 'features/profile/photo/adjust_profile_photo_screen.dart';
+import 'features/profile/photo/remove_profile_photo_screen.dart';
+import 'features/profile/photo/profile_photo_removed_screen.dart';
 import 'features/profile/widgets/profile_success_screen.dart';
 import 'data/models/transaction_receipt.dart';
 import 'data/models/currency_wallet.dart';
@@ -211,6 +215,17 @@ class DebugMenuScreen extends StatelessWidget {
             summary: 'EUR Wallet • 2026-06-01 to 2026-09-30'),
         'Transaction Receipts': const TransactionReceiptsScreen(),
         'Receipt Detail': ReceiptDetailScreen(receipt: sampleReceipts[0]),
+      },
+      'Profile / Photo': {
+        'Change Profile Photo': const ChangeProfilePhotoScreen(),
+        'Adjust Profile Photo': const AdjustProfilePhotoScreen(),
+        'Photo Updated': const ProfileSuccessScreen(
+          title: 'Profile photo updated',
+          message: 'Your new profile photo is now visible on your account.',
+          primary: SuccessButton('Return to Profile', AppRoutes.profile),
+        ),
+        'Remove Profile Photo?': const RemoveProfilePhotoScreen(),
+        'Profile Photo Removed': const ProfilePhotoRemovedScreen(),
       },
       'Profile / Beneficiaries': {
         'Beneficiaries List': const BeneficiariesListScreen(),

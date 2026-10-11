@@ -105,6 +105,10 @@ class AppIcon extends StatelessWidget {
     'chevron-down': Icons.keyboard_arrow_down,
     'info-circle': Icons.info_outline,
     'info-triangle': Icons.warning_amber_outlined,
+    'camera': Icons.photo_camera_outlined,
+    'image': Icons.image_outlined,
+    'trash': Icons.delete_outline,
+    'image-off': Icons.hide_image_outlined,
   };
 
   /// Filled Material fallbacks for the bold style, where a filled counterpart
@@ -122,6 +126,7 @@ class AppIcon extends StatelessWidget {
     'check-circle': Icons.check_circle,
     'card': Icons.credit_card,
     'shield-tick': Icons.verified_user,
+    'camera': Icons.photo_camera,
   };
 
   bool get _hasSvg => _exportedAssets.contains('$name-${style.name}');

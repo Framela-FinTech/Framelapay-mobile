@@ -52,6 +52,10 @@ import '../../features/profile/beneficiaries/confirm_beneficiary_screen.dart';
 import '../../features/profile/beneficiaries/beneficiary_details_screen.dart';
 import '../../features/profile/beneficiaries/edit_beneficiary_screen.dart';
 import '../../features/profile/beneficiaries/remove_beneficiary_screen.dart';
+import '../../features/profile/photo/change_profile_photo_screen.dart';
+import '../../features/profile/photo/adjust_profile_photo_screen.dart';
+import '../../features/profile/photo/remove_profile_photo_screen.dart';
+import '../../features/profile/photo/profile_photo_removed_screen.dart';
 import '../../features/profile/widgets/profile_success_screen.dart';
 import '../../data/models/transaction_receipt.dart';
 import '../../data/models/fiat_beneficiary.dart';
@@ -134,6 +138,10 @@ class AppRoutes {
   static const deactivateAccount = '/deactivate-account';
   static const signOut = '/sign-out';
   static const changePhoto = '/change-photo';
+  static const adjustProfilePhoto = '/change-photo/adjust';
+  static const photoUpdated = '/change-photo/updated';
+  static const removeProfilePhoto = '/change-photo/remove';
+  static const profilePhotoRemoved = '/change-photo/removed';
   // Sub-flow entry points (screens land in their own sub-flows).
   static const profileKycStatus = '/profile-kyc-status';
   static const beneficiariesList = '/beneficiaries';
@@ -289,8 +297,19 @@ class AppRoutes {
         return _page(const ProfilePlaceholderScreen(title: 'Sign Out'));
       // Temporary placeholders — repointed when each sub-flow is built.
       case changePhoto:
-        return _page(
-            const ProfilePlaceholderScreen(title: 'Edit Profile Photo'));
+        return _page(const ChangeProfilePhotoScreen());
+      case adjustProfilePhoto:
+        return _page(const AdjustProfilePhotoScreen());
+      case photoUpdated:
+        return _page(const ProfileSuccessScreen(
+          title: 'Profile photo updated',
+          message: 'Your new profile photo is now visible on your account.',
+          primary: SuccessButton('Return to Profile', profile),
+        ));
+      case removeProfilePhoto:
+        return _page(const RemoveProfilePhotoScreen());
+      case profilePhotoRemoved:
+        return _page(const ProfilePhotoRemovedScreen());
       case profileKycStatus:
         return _page(const ProfilePlaceholderScreen(title: 'KYC Status'));
       case beneficiariesList:
