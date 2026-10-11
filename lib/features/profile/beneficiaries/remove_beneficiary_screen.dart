@@ -64,7 +64,7 @@ class RemoveBeneficiaryScreen extends StatelessWidget {
                     Navigator.pushNamedAndRemoveUntil(
                         context,
                         AppRoutes.beneficiariesList,
-                        ModalRoute.withName(AppRoutes.profile));
+                        (route) => false);
                   },
                   child: const Text('Remove Beneficiary'),
                 ),

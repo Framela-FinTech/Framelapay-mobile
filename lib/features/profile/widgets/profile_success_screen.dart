@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/routes/app_routes.dart';
 import '../../transfer/fiat/widgets/fiat_form_widgets.dart';
 
 /// One button on a [ProfileSuccessScreen].
@@ -28,19 +27,10 @@ class ProfileSuccessScreen extends StatelessWidget {
   });
 
   void _go(BuildContext context, SuccessButton b) {
-    // Rebuild the destination instead of popping to it. popUntil to a route
-    // that isn't on the current stack empties the Navigator and crashes the
-    // app (observed as a brief "jam" then restart on device).
-    // pushNamedAndRemoveUntil always lands on a valid route.
-    if (b.route == AppRoutes.profile || b.route == AppRoutes.home) {
-      // Returning to a tab root: reset to a clean stack.
-      Navigator.pushNamedAndRemoveUntil(context, b.route, (route) => false);
-    } else {
-      // Returning to a Profile sub-screen: keep the Profile tab as the base
-      // when it's present, otherwise land cleanly on the destination.
-      Navigator.pushNamedAndRemoveUntil(
-          context, b.route, ModalRoute.withName(AppRoutes.profile));
-    }
+    // Push the destination as a fresh root and clear everything else. This can
+    // neither pop back into the onboarding/KYC stack nor exit the app the way
+    // pop()/popUntil() can when the target route isn't on the current stack.
+    Navigator.pushNamedAndRemoveUntil(context, b.route, (route) => false);
   }
 
   @override

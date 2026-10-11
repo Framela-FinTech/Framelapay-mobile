@@ -29,11 +29,33 @@ class _SplashScreenState extends State<SplashScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Spacer(flex: 4),
-            Center(
-              child: Image.asset('assets/images/framelapay_logo_white.png',
-                  height: 90),
+            // Logo image. If the asset fails to load we fall back to an empty
+            // box so the wordmark + tagline below are always visible.
+            Image.asset(
+              'assets/images/framelapay_logo_white.png',
+              height: 90,
+              errorBuilder: (context, error, stackTrace) =>
+                  const SizedBox(height: 90),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 16),
+            // Wordmark — always shown as text, independent of the logo asset.
+            RichText(
+              textAlign: TextAlign.center,
+              text: const TextSpan(
+                style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 2),
+                children: [
+                  TextSpan(
+                      text: 'FRAMELA ',
+                      style: TextStyle(color: AppColors.white)),
+                  TextSpan(
+                      text: 'PAY',
+                      style: TextStyle(color: AppColors.accentYellow)),
+                ],
+              ),
+            ),
             const Spacer(flex: 5),
             RichText(
               textAlign: TextAlign.center,
@@ -63,4 +85,4 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
     );
   }
-} // Bankai: Katenkyostu Karamatu Shinju
+}
