@@ -78,9 +78,7 @@ class ProfilePhotoRemovedScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () => Navigator.pushNamedAndRemoveUntil(
-                          context,
-                          AppRoutes.changePhoto,
-                          ModalRoute.withName(AppRoutes.profile)),
+                          context, AppRoutes.changePhoto, (route) => false),
                       child: const Text('Add a New Photo'),
                     ),
                   ),
