@@ -25,7 +25,9 @@ class TransferScreen extends StatelessWidget {
               Row(
                 children: [
                   _tab('Send Money', selected: true),
-                  _tab('Add Money'),
+                  _tab('Add Money',
+                      onTap: () => Navigator.pushNamed(
+                          context, AppRoutes.addMoneySelectWallet)),
                   _tab('History'),
                 ],
               ),
@@ -85,20 +87,25 @@ class TransferScreen extends StatelessWidget {
     );
   }
 
-  Widget _tab(String label, {bool selected = false}) {
+  Widget _tab(String label, {bool selected = false, VoidCallback? onTap}) {
     return Padding(
       padding: const EdgeInsets.only(right: 20),
-      child: Column(
-        children: [
-          Text(label,
-              style: TextStyle(
-                  fontWeight: selected ? FontWeight.w700 : FontWeight.w400,
-                  color: selected ? AppColors.primaryDark : AppColors.textGrey,
-                  fontSize: 13)),
-          const SizedBox(height: 4),
-          if (selected)
-            Container(width: 24, height: 2, color: AppColors.accentYellow),
-        ],
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: Column(
+          children: [
+            Text(label,
+                style: TextStyle(
+                    fontWeight: selected ? FontWeight.w700 : FontWeight.w400,
+                    color:
+                        selected ? AppColors.primaryDark : AppColors.textGrey,
+                    fontSize: 13)),
+            const SizedBox(height: 4),
+            if (selected)
+              Container(width: 24, height: 2, color: AppColors.accentYellow),
+          ],
+        ),
       ),
     );
   }

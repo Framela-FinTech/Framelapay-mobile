@@ -154,7 +154,8 @@ class HomeScreen extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14)),
                   ),
-                  onPressed: () {},
+                  onPressed: () => Navigator.pushNamed(
+                      context, AppRoutes.addMoneySelectWallet),
                   icon: const AppIcon('arrow-down',
                       size: 16, color: Colors.white),
                   label: const Text('Add Money',
@@ -203,7 +204,9 @@ class HomeScreen extends StatelessWidget {
         children: [
           _quickLink('send', 'Send Money',
               onTap: () => Navigator.pushNamed(context, AppRoutes.transferHub)),
-          _quickLink('folder-user', 'Beneficiaries'),
+          _quickLink('folder-user', 'Beneficiaries',
+              onTap: () =>
+                  Navigator.pushNamed(context, AppRoutes.beneficiariesList)),
           _quickLink('BTC', 'Crypto'),
           _quickLink('receipt', 'Transactions History'),
         ],
