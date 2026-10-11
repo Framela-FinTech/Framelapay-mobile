@@ -87,8 +87,8 @@ class VerificationSubmittedScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(14),
                         ),
                       ),
-                      onPressed: () => Navigator.popUntil(
-                          context, ModalRoute.withName(AppRoutes.profile)),
+                      onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                          context, AppRoutes.profile, (route) => false),
                       child: const Text('Return to Profile'),
                     ),
                   ),

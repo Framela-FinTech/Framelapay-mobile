@@ -8,12 +8,7 @@ class SuccessButton {
   final String label;
   final String route;
 
-  /// When false (default), tapping pops back up to the existing [route] in the
-  /// stack. When true, the [route] isn't on the stack, so navigate to it while
-  /// keeping the Profile tab as the stack base.
-  final bool keepProfileBase;
-
-  const SuccessButton(this.label, this.route, {this.keepProfileBase = false});
+  const SuccessButton(this.label, this.route);
 }
 
 /// Shared success screen for the Profile section. Green check, title + message,
@@ -33,11 +28,18 @@ class ProfileSuccessScreen extends StatelessWidget {
   });
 
   void _go(BuildContext context, SuccessButton b) {
-    if (b.keepProfileBase) {
+    // Rebuild the destination instead of popping to it. popUntil to a route
+    // that isn't on the current stack empties the Navigator and crashes the
+    // app (observed as a brief "jam" then restart on device).
+    // pushNamedAndRemoveUntil always lands on a valid route.
+    if (b.route == AppRoutes.profile || b.route == AppRoutes.home) {
+      // Returning to a tab root: reset to a clean stack.
+      Navigator.pushNamedAndRemoveUntil(context, b.route, (route) => false);
+    } else {
+      // Returning to a Profile sub-screen: keep the Profile tab as the base
+      // when it's present, otherwise land cleanly on the destination.
       Navigator.pushNamedAndRemoveUntil(
           context, b.route, ModalRoute.withName(AppRoutes.profile));
-    } else {
-      Navigator.popUntil(context, ModalRoute.withName(b.route));
     }
   }
 

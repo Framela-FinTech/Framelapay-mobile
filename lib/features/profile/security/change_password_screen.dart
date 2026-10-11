@@ -33,9 +33,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         builder: (_) => const ProfileSuccessScreen(
           title: 'Password changed',
           message: 'Your login password has been updated.',
-          primary: SuccessButton('Return to Settings',
-              AppRoutes.settingsHome,
-              keepProfileBase: true),
+          primary:
+              SuccessButton('Return to Settings', AppRoutes.settingsHome),
           secondary: SuccessButton('Return to Profile', AppRoutes.profile),
         ),
       ),
