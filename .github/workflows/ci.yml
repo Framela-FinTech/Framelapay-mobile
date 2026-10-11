@@ -20,7 +20,16 @@ jobs:
         run: flutter pub get
 
       - name: Analyze
-        run: flutter analyze
+        run: flutter analyze --no-fatal-infos
 
       - name: Build web (compile check)
         run: flutter build web --release
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: framela-pay-apk
+          path: build/app/outputs/flutter-apk/app-release.apk

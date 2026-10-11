@@ -49,3 +49,4 @@ app.*.map.json
 .kilo/
 .mcp.json
 .claude/
+scratch_*
