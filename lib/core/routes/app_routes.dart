@@ -41,6 +41,20 @@ import '../../features/profile/security/change_password_screen.dart';
 import '../../features/profile/security/reset_password_screen.dart';
 import '../../features/profile/security/verify_email_screen.dart';
 import '../../features/profile/security/create_new_password_screen.dart';
+import '../../features/profile/statements/statements_hub_screen.dart';
+import '../../features/profile/statements/account_statements_screen.dart';
+import '../../features/profile/statements/statement_ready_screen.dart';
+import '../../features/profile/statements/transaction_receipts_screen.dart';
+import '../../features/profile/statements/receipt_detail_screen.dart';
+import '../../features/profile/beneficiaries/beneficiaries_list_screen.dart';
+import '../../features/profile/beneficiaries/add_beneficiary_screen.dart';
+import '../../features/profile/beneficiaries/confirm_beneficiary_screen.dart';
+import '../../features/profile/beneficiaries/beneficiary_details_screen.dart';
+import '../../features/profile/beneficiaries/edit_beneficiary_screen.dart';
+import '../../features/profile/beneficiaries/remove_beneficiary_screen.dart';
+import '../../features/profile/widgets/profile_success_screen.dart';
+import '../../data/models/transaction_receipt.dart';
+import '../../data/models/fiat_beneficiary.dart';
 import '../../data/models/currency_wallet.dart';
 
 import '../../features/transfer/shared/transfer_screen.dart';
@@ -138,6 +152,18 @@ class AppRoutes {
   static const createNewPassword = '/security/reset-password/create';
   static const transactionPin = '/security/transaction-pin';
   static const trustedDevices = '/security/trusted-devices';
+  // Beneficiaries sub-screens.
+  static const addBeneficiary = '/beneficiaries/add';
+  static const confirmBeneficiary = '/beneficiaries/confirm';
+  static const beneficiarySaved = '/beneficiaries/saved';
+  static const beneficiaryDetails = '/beneficiaries/detail';
+  static const editBeneficiary = '/beneficiaries/edit';
+  static const removeBeneficiary = '/beneficiaries/remove';
+  // Statements & Receipts sub-screens.
+  static const accountStatements = '/statements/account';
+  static const statementReady = '/statements/ready';
+  static const transactionReceipts = '/statements/receipts';
+  static const receiptDetail = '/statements/receipts/detail';
 
   static const transferHub = '/transfer-hub';
   static const sendStablecoinWallet = '/send-stablecoin-wallet';
@@ -268,10 +294,40 @@ class AppRoutes {
       case profileKycStatus:
         return _page(const ProfilePlaceholderScreen(title: 'KYC Status'));
       case beneficiariesList:
-        return _page(const ProfilePlaceholderScreen(title: 'Beneficiaries'));
+        return _page(const BeneficiariesListScreen());
+      case addBeneficiary:
+        return _page(const AddBeneficiaryScreen());
+      case confirmBeneficiary:
+        final beneficiary = settings.arguments as FiatBeneficiary;
+        return _page(ConfirmBeneficiaryScreen(beneficiary: beneficiary));
+      case beneficiarySaved:
+        return _page(const ProfileSuccessScreen(
+          title: 'Beneficiary saved',
+          message: 'This recipient is now available in your saved list.',
+          primary:
+              SuccessButton('Return to Beneficiaries', beneficiariesList),
+        ));
+      case beneficiaryDetails:
+        final beneficiary = settings.arguments as FiatBeneficiary;
+        return _page(BeneficiaryDetailsScreen(beneficiary: beneficiary));
+      case editBeneficiary:
+        final beneficiary = settings.arguments as FiatBeneficiary;
+        return _page(EditBeneficiaryScreen(beneficiary: beneficiary));
+      case removeBeneficiary:
+        final beneficiary = settings.arguments as FiatBeneficiary;
+        return _page(RemoveBeneficiaryScreen(beneficiary: beneficiary));
       case statementsHub:
-        return _page(
-            const ProfilePlaceholderScreen(title: 'Statements & Receipts'));
+        return _page(const StatementsHubScreen());
+      case accountStatements:
+        return _page(const AccountStatementsScreen());
+      case statementReady:
+        final summary = settings.arguments as String? ?? '';
+        return _page(StatementReadyScreen(summary: summary));
+      case transactionReceipts:
+        return _page(const TransactionReceiptsScreen());
+      case receiptDetail:
+        final receipt = settings.arguments as TransactionReceipt;
+        return _page(ReceiptDetailScreen(receipt: receipt));
       case securityHome:
         return _page(const SecurityScreen());
       case securityPassword:
