@@ -105,6 +105,17 @@ class AppIcon extends StatelessWidget {
     'chevron-down': Icons.keyboard_arrow_down,
     'info-circle': Icons.info_outline,
     'info-triangle': Icons.warning_amber_outlined,
+    'camera': Icons.photo_camera_outlined,
+    'image': Icons.image_outlined,
+    'trash': Icons.delete_outline,
+    'image-off': Icons.hide_image_outlined,
+    'id-card': Icons.badge_outlined,
+    'location': Icons.location_on_outlined,
+    'briefcase': Icons.work_outline,
+    'scan': Icons.crop_free,
+    'cloud-upload': Icons.cloud_upload_outlined,
+    'clock': Icons.schedule,
+    'arrow-up-right': Icons.north_east,
   };
 
   /// Filled Material fallbacks for the bold style, where a filled counterpart
@@ -122,6 +133,7 @@ class AppIcon extends StatelessWidget {
     'check-circle': Icons.check_circle,
     'card': Icons.credit_card,
     'shield-tick': Icons.verified_user,
+    'camera': Icons.photo_camera,
   };
 
   bool get _hasSvg => _exportedAssets.contains('$name-${style.name}');

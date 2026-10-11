@@ -52,6 +52,18 @@ import '../../features/profile/beneficiaries/confirm_beneficiary_screen.dart';
 import '../../features/profile/beneficiaries/beneficiary_details_screen.dart';
 import '../../features/profile/beneficiaries/edit_beneficiary_screen.dart';
 import '../../features/profile/beneficiaries/remove_beneficiary_screen.dart';
+import '../../features/profile/photo/change_profile_photo_screen.dart';
+import '../../features/profile/photo/adjust_profile_photo_screen.dart';
+import '../../features/profile/photo/remove_profile_photo_screen.dart';
+import '../../features/profile/photo/profile_photo_removed_screen.dart';
+import '../../features/profile/kyc/profile_kyc_status_screen.dart';
+import '../../features/profile/kyc/upgrade_verification_screen.dart';
+import '../../features/profile/kyc/identity_verification_screen.dart';
+import '../../features/profile/kyc/address_verification_screen.dart';
+import '../../features/profile/kyc/source_of_funds_screen.dart';
+import '../../features/profile/kyc/review_verification_screen.dart';
+import '../../features/profile/kyc/verification_submitted_screen.dart';
+import '../../features/profile/kyc/verification_successful_screen.dart';
 import '../../features/profile/widgets/profile_success_screen.dart';
 import '../../data/models/transaction_receipt.dart';
 import '../../data/models/fiat_beneficiary.dart';
@@ -134,8 +146,20 @@ class AppRoutes {
   static const deactivateAccount = '/deactivate-account';
   static const signOut = '/sign-out';
   static const changePhoto = '/change-photo';
+  static const adjustProfilePhoto = '/change-photo/adjust';
+  static const photoUpdated = '/change-photo/updated';
+  static const removeProfilePhoto = '/change-photo/remove';
+  static const profilePhotoRemoved = '/change-photo/removed';
   // Sub-flow entry points (screens land in their own sub-flows).
   static const profileKycStatus = '/profile-kyc-status';
+  // Profile KYC upgrade (Tier 2 -> Tier 3). Separate from onboarding KYC.
+  static const profileKycUpgrade = '/profile-kyc/upgrade';
+  static const profileKycIdentity = '/profile-kyc/identity';
+  static const profileKycAddress = '/profile-kyc/address';
+  static const profileKycSourceOfFunds = '/profile-kyc/source-of-funds';
+  static const profileKycReview = '/profile-kyc/review';
+  static const profileKycSubmitted = '/profile-kyc/submitted';
+  static const profileKycSuccessful = '/profile-kyc/successful';
   static const beneficiariesList = '/beneficiaries';
   static const statementsHub = '/statements';
   static const securityHome = '/security';
@@ -289,10 +313,35 @@ class AppRoutes {
         return _page(const ProfilePlaceholderScreen(title: 'Sign Out'));
       // Temporary placeholders — repointed when each sub-flow is built.
       case changePhoto:
-        return _page(
-            const ProfilePlaceholderScreen(title: 'Edit Profile Photo'));
+        return _page(const ChangeProfilePhotoScreen());
+      case adjustProfilePhoto:
+        return _page(const AdjustProfilePhotoScreen());
+      case photoUpdated:
+        return _page(const ProfileSuccessScreen(
+          title: 'Profile photo updated',
+          message: 'Your new profile photo is now visible on your account.',
+          primary: SuccessButton('Return to Profile', profile),
+        ));
+      case removeProfilePhoto:
+        return _page(const RemoveProfilePhotoScreen());
+      case profilePhotoRemoved:
+        return _page(const ProfilePhotoRemovedScreen());
       case profileKycStatus:
-        return _page(const ProfilePlaceholderScreen(title: 'KYC Status'));
+        return _page(const ProfileKycStatusScreen());
+      case profileKycUpgrade:
+        return _page(const UpgradeVerificationScreen());
+      case profileKycIdentity:
+        return _page(const IdentityVerificationScreen());
+      case profileKycAddress:
+        return _page(const AddressVerificationScreen());
+      case profileKycSourceOfFunds:
+        return _page(const SourceOfFundsScreen());
+      case profileKycReview:
+        return _page(const ReviewVerificationScreen());
+      case profileKycSubmitted:
+        return _page(const VerificationSubmittedScreen());
+      case profileKycSuccessful:
+        return _page(const VerificationSuccessfulScreen());
       case beneficiariesList:
         return _page(const BeneficiariesListScreen());
       case addBeneficiary:
