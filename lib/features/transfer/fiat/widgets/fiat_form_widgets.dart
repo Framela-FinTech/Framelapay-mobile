@@ -64,6 +64,7 @@ class AppTextInput extends StatelessWidget {
   final TextInputType? keyboardType;
   final String? prefixText;
   final int? maxLength;
+  final bool obscureText;
   const AppTextInput({
     super.key,
     this.hint,
@@ -71,6 +72,7 @@ class AppTextInput extends StatelessWidget {
     this.keyboardType,
     this.prefixText,
     this.maxLength,
+    this.obscureText = false,
   });
 
   @override
@@ -79,6 +81,7 @@ class AppTextInput extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       maxLength: maxLength,
+      obscureText: obscureText,
       style: const TextStyle(fontSize: 14),
       decoration: InputDecoration(
         counterText: '',

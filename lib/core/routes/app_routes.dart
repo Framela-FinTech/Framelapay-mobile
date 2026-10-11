@@ -31,6 +31,16 @@ import '../../features/wallet/fund_card_screen.dart';
 import '../../features/wallet/add_money_success_screen.dart';
 import '../../features/profile/profile_screen.dart';
 import '../../features/profile/widgets/profile_placeholder_screen.dart';
+import '../../features/profile/settings/settings_screen.dart';
+import '../../features/profile/settings/appearance_screen.dart';
+import '../../features/profile/settings/notifications_settings_screen.dart';
+import '../../features/profile/settings/language_region_screen.dart';
+import '../../features/profile/security/security_screen.dart';
+import '../../features/profile/security/password_screen.dart';
+import '../../features/profile/security/change_password_screen.dart';
+import '../../features/profile/security/reset_password_screen.dart';
+import '../../features/profile/security/verify_email_screen.dart';
+import '../../features/profile/security/create_new_password_screen.dart';
 import '../../data/models/currency_wallet.dart';
 
 import '../../features/transfer/shared/transfer_screen.dart';
@@ -116,6 +126,18 @@ class AppRoutes {
   static const statementsHub = '/statements';
   static const securityHome = '/security';
   static const settingsHome = '/settings';
+  // Settings sub-screens.
+  static const appearance = '/settings/appearance';
+  static const notificationsSettings = '/settings/notifications';
+  static const languageRegion = '/settings/language-region';
+  // Security sub-screens.
+  static const securityPassword = '/security/password';
+  static const changePassword = '/security/change-password';
+  static const resetPassword = '/security/reset-password';
+  static const resetVerifyEmail = '/security/reset-password/verify-email';
+  static const createNewPassword = '/security/reset-password/create';
+  static const transactionPin = '/security/transaction-pin';
+  static const trustedDevices = '/security/trusted-devices';
 
   static const transferHub = '/transfer-hub';
   static const sendStablecoinWallet = '/send-stablecoin-wallet';
@@ -251,9 +273,30 @@ class AppRoutes {
         return _page(
             const ProfilePlaceholderScreen(title: 'Statements & Receipts'));
       case securityHome:
-        return _page(const ProfilePlaceholderScreen(title: 'Security'));
+        return _page(const SecurityScreen());
+      case securityPassword:
+        return _page(const PasswordScreen());
+      case changePassword:
+        return _page(const ChangePasswordScreen());
+      case resetPassword:
+        return _page(const ResetPasswordScreen());
+      case resetVerifyEmail:
+        final email = settings.arguments as String? ?? '';
+        return _page(VerifyEmailScreen(email: email));
+      case createNewPassword:
+        return _page(const CreateNewPasswordScreen());
+      case transactionPin:
+        return _page(const ProfilePlaceholderScreen(title: 'Transaction PIN'));
+      case trustedDevices:
+        return _page(const ProfilePlaceholderScreen(title: 'Trusted Devices'));
       case settingsHome:
-        return _page(const ProfilePlaceholderScreen(title: 'Settings'));
+        return _page(const SettingsScreen());
+      case appearance:
+        return _page(const AppearanceScreen());
+      case notificationsSettings:
+        return _page(const NotificationsSettingsScreen());
+      case languageRegion:
+        return _page(const LanguageRegionScreen());
 
       case transferHub:
         return _page(const TransferScreen());
