@@ -46,6 +46,19 @@ import 'features/profile/security/change_password_screen.dart';
 import 'features/profile/security/reset_password_screen.dart';
 import 'features/profile/security/verify_email_screen.dart';
 import 'features/profile/security/create_new_password_screen.dart';
+import 'features/profile/statements/statements_hub_screen.dart';
+import 'features/profile/statements/account_statements_screen.dart';
+import 'features/profile/statements/statement_ready_screen.dart';
+import 'features/profile/statements/transaction_receipts_screen.dart';
+import 'features/profile/statements/receipt_detail_screen.dart';
+import 'features/profile/beneficiaries/beneficiaries_list_screen.dart';
+import 'features/profile/beneficiaries/add_beneficiary_screen.dart';
+import 'features/profile/beneficiaries/confirm_beneficiary_screen.dart';
+import 'features/profile/beneficiaries/beneficiary_details_screen.dart';
+import 'features/profile/beneficiaries/edit_beneficiary_screen.dart';
+import 'features/profile/beneficiaries/remove_beneficiary_screen.dart';
+import 'features/profile/widgets/profile_success_screen.dart';
+import 'data/models/transaction_receipt.dart';
 import 'data/models/currency_wallet.dart';
 
 import 'features/transfer/shared/transfer_screen.dart';
@@ -190,6 +203,32 @@ class DebugMenuScreen extends StatelessWidget {
         'Reset Password - Verify Email':
             const VerifyEmailScreen(email: 'cynthia.nkechi@email.com'),
         'Reset Password - Create New': const CreateNewPasswordScreen(),
+      },
+      'Profile / Statements': {
+        'Statements & Receipts Hub': const StatementsHubScreen(),
+        'Account Statements': const AccountStatementsScreen(),
+        'Statement Ready': const StatementReadyScreen(
+            summary: 'EUR Wallet • 2026-06-01 to 2026-09-30'),
+        'Transaction Receipts': const TransactionReceiptsScreen(),
+        'Receipt Detail': ReceiptDetailScreen(receipt: sampleReceipts[0]),
+      },
+      'Profile / Beneficiaries': {
+        'Beneficiaries List': const BeneficiariesListScreen(),
+        'Add Beneficiary': const AddBeneficiaryScreen(),
+        'Confirm Beneficiary':
+            ConfirmBeneficiaryScreen(beneficiary: sampleBeneficiaries[0]),
+        'Beneficiary Saved': const ProfileSuccessScreen(
+          title: 'Beneficiary saved',
+          message: 'This recipient is now available in your saved list.',
+          primary:
+              SuccessButton('Return to Beneficiaries', AppRoutes.beneficiariesList),
+        ),
+        'Beneficiary Details':
+            BeneficiaryDetailsScreen(beneficiary: sampleBeneficiaries[0]),
+        'Edit Beneficiary':
+            EditBeneficiaryScreen(beneficiary: sampleBeneficiaries[0]),
+        'Remove Beneficiary':
+            RemoveBeneficiaryScreen(beneficiary: sampleBeneficiaries[0]),
       },
       'Bottom Nav Stubs': {
         'Activity (Coming soon)':

@@ -66,6 +66,7 @@ class AppIcon extends StatelessWidget {
     'shield': Icons.shield_outlined,
     'BTC': Icons.currency_bitcoin,
     'receipt': Icons.receipt_long_outlined,
+    'calendar': Icons.calendar_today_outlined, // date fields
     'chart-up': Icons.trending_up,
     'coins-alt': Icons.savings_outlined,
     'gift': Icons.card_giftcard, // Referral
