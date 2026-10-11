@@ -75,6 +75,7 @@ class AppIcon extends StatelessWidget {
     'lifebuoy': Icons.support_agent_outlined,
     'question-circle': Icons.help_outline,
     'settings': Icons.settings_outlined,
+    'globe': Icons.language_outlined, // Language & Region
     'call': Icons.call_outlined,
     'wifi': Icons.wifi,
     'bulb': Icons.lightbulb_outline,

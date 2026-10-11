@@ -34,16 +34,6 @@ class _SplashScreenState extends State<SplashScreen> {
                   height: 90),
             ),
             const SizedBox(height: 10),
-            const Text(
-              'PAY',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: AppColors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-                letterSpacing: 4,
-              ),
-            ),
             const Spacer(flex: 5),
             RichText(
               textAlign: TextAlign.center,
@@ -73,4 +63,4 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
     );
   }
-}// Bankai: Katenkyostu Karamatu Shinju
+} // Bankai: Katenkyostu Karamatu Shinju

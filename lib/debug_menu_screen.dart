@@ -36,6 +36,16 @@ import 'features/wallet/fund_wallet_details_screen.dart';
 import 'features/wallet/fund_card_screen.dart';
 import 'features/wallet/add_money_success_screen.dart';
 import 'features/profile/profile_screen.dart';
+import 'features/profile/settings/settings_screen.dart';
+import 'features/profile/settings/appearance_screen.dart';
+import 'features/profile/settings/notifications_settings_screen.dart';
+import 'features/profile/settings/language_region_screen.dart';
+import 'features/profile/security/security_screen.dart';
+import 'features/profile/security/password_screen.dart';
+import 'features/profile/security/change_password_screen.dart';
+import 'features/profile/security/reset_password_screen.dart';
+import 'features/profile/security/verify_email_screen.dart';
+import 'features/profile/security/create_new_password_screen.dart';
 import 'data/models/currency_wallet.dart';
 
 import 'features/transfer/shared/transfer_screen.dart';
@@ -165,6 +175,21 @@ class DebugMenuScreen extends StatelessWidget {
       },
       'Profile': {
         'Profile Hub': const ProfileScreen(),
+      },
+      'Profile / Settings': {
+        'Settings Hub': const SettingsScreen(),
+        'Appearance': const AppearanceScreen(),
+        'Notifications': const NotificationsSettingsScreen(),
+        'Language & Region': const LanguageRegionScreen(),
+      },
+      'Profile / Security': {
+        'Security Hub': const SecurityScreen(),
+        'Password (Change/Reset)': const PasswordScreen(),
+        'Change Password': const ChangePasswordScreen(),
+        'Reset Password - Email': const ResetPasswordScreen(),
+        'Reset Password - Verify Email':
+            const VerifyEmailScreen(email: 'cynthia.nkechi@email.com'),
+        'Reset Password - Create New': const CreateNewPasswordScreen(),
       },
       'Bottom Nav Stubs': {
         'Activity (Coming soon)':
