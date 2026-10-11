@@ -1,0 +1,5 @@
+package com.example.framela_pay
+
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity : FlutterActivity()
