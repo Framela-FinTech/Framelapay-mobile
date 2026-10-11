@@ -10,7 +10,7 @@ environment:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/images/framelapay_logo.png"
+  image_path: "assets/images/framelapay_icon.png"
   adaptive_icon_background: "#0B0E2C"
   adaptive_icon_foreground: "assets/images/framelapay_icon.png"
 
