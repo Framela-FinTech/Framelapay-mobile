@@ -12,4 +12,9 @@ class AppColors {
   static const Color error = Color(0xFFE74C3C);
   static const Color inputFill = Color(0xFFF5F6FA);
   static const Color divider = Color(0xFFE0E2EA);
+
+  // Accent icon tints (centralized so widgets never hardcode raw hex).
+  static const Color iconBlue = Color(0xFF3B5BDB);
+  static const Color iconPurple = Color(0xFF7048E8);
+  static const Color pageGrey = Color(0xFFF7F8FA); // light app background
 }
