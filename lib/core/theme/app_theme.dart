@@ -13,7 +13,7 @@ class AppTheme {
         primary: AppColors.primaryDark,
         secondary: AppColors.accentYellow,
       ),
-      fontFamily: 'PlusJakartaSans',
+      fontFamily: 'Sora',
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.accentYellow,

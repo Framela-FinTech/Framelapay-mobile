@@ -116,6 +116,10 @@ class AppIcon extends StatelessWidget {
     'cloud-upload': Icons.cloud_upload_outlined,
     'clock': Icons.schedule,
     'arrow-up-right': Icons.north_east,
+    'more': Icons.more_horiz,
+    'refresh': Icons.refresh,
+    'arrow-up-circle': Icons.arrow_circle_up_outlined,
+    'arrow-down-circle': Icons.arrow_circle_down_outlined,
   };
 
   /// Filled Material fallbacks for the bold style, where a filled counterpart

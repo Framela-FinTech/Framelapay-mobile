@@ -10,9 +10,9 @@ environment:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/images/framelapay_icon.png"
+  image_path: "assets/images/app_icon.png"
   adaptive_icon_background: "#0B0E2C"
-  adaptive_icon_foreground: "assets/images/framelapay_icon.png"
+  adaptive_icon_foreground: "assets/images/app_icon.png"
 
 
 dependencies:
@@ -51,3 +51,12 @@ flutter:
         weight: 700
       - asset: assets/fonts/PlusJakartaSans-ExtraBold.ttf
         weight: 800
+  - family: Sora
+    fonts:
+      - asset: assets/fonts/Sora-Regular.ttf
+      - asset: assets/fonts/Sora-Medium.ttf
+        weight: 500
+      - asset: assets/fonts/Sora-SemiBold.ttf
+        weight: 600
+      - asset: assets/fonts/Sora-Bold.ttf
+        weight: 700

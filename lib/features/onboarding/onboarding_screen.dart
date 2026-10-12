@@ -5,10 +5,13 @@ import '../../core/theme/app_colors.dart';
 import '../../core/routes/app_routes.dart';
 
 class OnboardingData {
-  final String title;
+  /// Title split into a dark leading part and an accent-yellow trailing part.
+  final String titleDark;
+  final String titleAccent;
   final String subtitle;
   final String image;
-  const OnboardingData(this.title, this.subtitle, this.image);
+  const OnboardingData(
+      this.titleDark, this.titleAccent, this.subtitle, this.image);
 }
 
 class OnboardingScreen extends StatefulWidget {
@@ -25,17 +28,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final List<OnboardingData> _pages = const [
     OnboardingData(
-      'Connect with the people who matter.',
+      'Connect with the people who ',
+      'matter.',
       'Send and receive across borders, wherever life takes you.',
       'assets/images/onboarding_1.png',
     ),
     OnboardingData(
-      'For the people who matter most.',
+      'For the people who ',
+      'matter most.',
       'Support your loved ones, build memories, and be there no matter the distance.',
       'assets/images/onboarding_2.png',
     ),
     OnboardingData(
-      'One World One connection.',
+      'One World One ',
+      'connection.',
       'Send and manage your money across countries with real exchange rates, low fees and total confidence.',
       'assets/images/onboarding_3.png',
     ),
@@ -63,6 +69,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     _startAutoAdvance();
   }
 
+  void _next() {
+    _controller.animateToPage(
+      _currentPage + 1,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+    );
+    _resetAutoAdvance();
+  }
+
   @override
   void dispose() {
     _timer?.cancel();
@@ -72,11 +87,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isLast = _currentPage == _pages.length - 1;
     return Scaffold(
       backgroundColor: AppColors.primaryDark,
       body: Stack(
         children: [
-          // ---- Layer 1: full-bleed background image per slide ----
+          // ---- Full-bleed background image per slide ----
+          // No SafeArea: the photo bleeds to every edge, including behind the
+          // status bar, with BoxFit.cover so there are no gaps or margins.
           Positioned.fill(
             child: PageView.builder(
               controller: _controller,
@@ -89,7 +107,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 return Image.asset(
                   _pages[index].image,
                   fit: BoxFit.cover,
-                  // If an image is missing, show the dark bg instead of crashing
                   errorBuilder: (_, __, ___) =>
                       Container(color: AppColors.primaryDark),
                 );
@@ -97,85 +114,102 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
 
-          // ---- Layer 2: gradient scrim for text readability ----
-          // Delete this whole Positioned.fill if your design needs no darkening.
-          Positioned.fill(
-            child: IgnorePointer(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      AppColors.primaryDark.withOpacity(0.4),
-                      AppColors.primaryDark.withOpacity(0.92),
-                    ],
-                    stops: const [0.0, 0.5, 1.0],
-                  ),
-                ),
+          // ---- White rounded card floating over the lower portion ----
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                color: AppColors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
               ),
-            ),
-          ),
-
-          // ---- Layer 3: text + indicator + button on top ----
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                children: [
-                  const Spacer(),
-                  // Text block sits in the lower portion, over the scrim
-                  Text(
-                    _pages[_currentPage].title,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: AppColors.white,
-                      fontSize: 26,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    _pages[_currentPage].subtitle,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: AppColors.white,
-                      fontSize: 14,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  SmoothPageIndicator(
-                    controller: _controller,
-                    count: _pages.length,
-                    effect: const ExpandingDotsEffect(
-                      activeDotColor: AppColors.accentYellow,
-                      dotColor: Colors.white24,
-                      dotHeight: 6,
-                      dotWidth: 6,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  _currentPage == _pages.length - 1
-                      ? SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: () => Navigator.pushReplacementNamed(
-                                context, AppRoutes.welcome),
-                            child: const Text('Get Started'),
+              child: SafeArea(
+                top: false,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          style: const TextStyle(
+                            color: AppColors.primaryDark,
+                            fontSize: 26,
+                            fontWeight: FontWeight.w800,
+                            height: 1.2,
                           ),
-                        )
-                      : Align(
-                          alignment: Alignment.center,
-                          child: TextButton(
-                            onPressed: () => Navigator.pushReplacementNamed(
-                                context, AppRoutes.welcome),
-                            child: const Text('Skip',
-                                style: TextStyle(color: AppColors.white)),
+                          children: [
+                            TextSpan(text: _pages[_currentPage].titleDark),
+                            TextSpan(
+                              text: _pages[_currentPage].titleAccent,
+                              style: const TextStyle(
+                                  color: AppColors.accentYellow),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        _pages[_currentPage].subtitle,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: AppColors.textGrey,
+                          fontSize: 14,
+                          height: 1.4,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      SmoothPageIndicator(
+                        controller: _controller,
+                        count: _pages.length,
+                        effect: const ExpandingDotsEffect(
+                          activeDotColor: AppColors.accentYellow,
+                          dotColor: AppColors.divider,
+                          dotHeight: 6,
+                          dotWidth: 6,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primaryDark,
+                            foregroundColor: AppColors.white,
+                            minimumSize: const Size.fromHeight(56),
+                          ),
+                          onPressed: isLast
+                              ? () => Navigator.pushReplacementNamed(
+                                  context, AppRoutes.welcome)
+                              : _next,
+                          child: Text(isLast ? 'Get Started' : 'Next'),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      GestureDetector(
+                        onTap: () => Navigator.pushReplacementNamed(
+                            context, AppRoutes.welcome),
+                        child: RichText(
+                          text: const TextSpan(
+                            style: TextStyle(
+                                color: AppColors.textGrey, fontSize: 13),
+                            children: [
+                              TextSpan(text: 'Already have an account? '),
+                              TextSpan(
+                                text: 'Login',
+                                style: TextStyle(
+                                    color: AppColors.primaryDark,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ],
                           ),
                         ),
-                  const SizedBox(height: 24),
-                ],
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
