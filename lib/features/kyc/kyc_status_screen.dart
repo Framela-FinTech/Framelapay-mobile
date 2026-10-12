@@ -17,7 +17,7 @@ class KycStatusScreen extends StatelessWidget {
             style: TextStyle(color: Colors.black, fontSize: 16)),
       ),
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [

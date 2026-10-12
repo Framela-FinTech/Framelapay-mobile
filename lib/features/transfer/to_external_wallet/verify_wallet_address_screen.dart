@@ -22,68 +22,79 @@ class VerifyWalletAddressScreen extends StatelessWidget {
             style: TextStyle(color: Colors.black, fontSize: 16)),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 8),
-              const Text('Verify wallet address',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20)),
-              const SizedBox(height: 4),
-              const Text(
-                'Confirm that the wallet address is correct and compatible with the selected network.',
-                style: TextStyle(color: AppColors.textGrey, fontSize: 12),
-              ),
-              const SizedBox(height: 16),
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: const CircleAvatar(
-                    backgroundColor: AppColors.inputFill,
-                    child: Icon(Icons.account_balance_wallet_outlined,
-                        color: AppColors.primaryDark)),
-                title: const Text('External wallet',
-                    style:
-                        TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
-                subtitle: const Text('0x71F3A2c4B6e9....8F29',
-                    style: TextStyle(color: AppColors.textGrey, fontSize: 12)),
-                trailing:
-                    TextButton(onPressed: () {}, child: const Text('Edit')),
-              ),
-              const Divider(height: 32),
-              _row('Asset', 'USDC · USD Coin'),
-              _row('Network', 'Ethereum · ERC-20'),
-              _row('Recipient address', '0x8a71...94cd'),
-              _verifiedRow('Network compatibility', 'Compatible'),
-              _verifiedRow('Address format', 'Valid · Correct format'),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFFF4E5),
-                  borderRadius: BorderRadius.circular(12),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Verify wallet address',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 20)),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'Confirm that the wallet address is correct and compatible with the selected network.',
+                      style: TextStyle(color: AppColors.textGrey, fontSize: 12),
+                    ),
+                    const SizedBox(height: 16),
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: const CircleAvatar(
+                          backgroundColor: AppColors.inputFill,
+                          child: Icon(Icons.account_balance_wallet_outlined,
+                              color: AppColors.primaryDark)),
+                      title: const Text('External wallet',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 14)),
+                      subtitle: const Text('0x71F3A2c4B6e9....8F29',
+                          style: TextStyle(
+                              color: AppColors.textGrey, fontSize: 12)),
+                      trailing: TextButton(
+                          onPressed: () {}, child: const Text('Edit')),
+                    ),
+                    const Divider(height: 32),
+                    _row('Asset', 'USDC · USD Coin'),
+                    _row('Network', 'Ethereum · ERC-20'),
+                    _row('Recipient address', '0x8a71...94cd'),
+                    _verifiedRow('Network compatibility', 'Compatible'),
+                    _verifiedRow('Address format', 'Valid · Correct format'),
+                    const SizedBox(height: 16),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFF4E5),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Text(
+                        'This transfer will be sent directly to the wallet address on the Ethereum network. Once sent, it cannot be reversed.',
+                        style: TextStyle(fontSize: 11, color: Colors.black87),
+                      ),
+                    ),
+                  ],
                 ),
-                child: const Text(
-                  'This transfer will be sent directly to the wallet address on the Ethereum network. Once sent, it cannot be reversed.',
-                  style: TextStyle(fontSize: 11, color: Colors.black87),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primaryDark,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () => Navigator.pushNamed(
+                    context,
+                    AppRoutes.reviewTransfer,
+                    arguments: recipient,
+                  ),
+                  child: const Text('Continue'),
                 ),
               ),
-              const Spacer(),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryDark,
-                  foregroundColor: Colors.white,
-                ),
-                onPressed: () => Navigator.pushNamed(
-                  context,
-                  AppRoutes.reviewTransfer,
-                  arguments: recipient,
-                ),
-                child: const Text('Continue'),
-              ),
-              const SizedBox(height: 16),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

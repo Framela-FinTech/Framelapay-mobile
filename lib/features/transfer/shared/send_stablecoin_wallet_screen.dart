@@ -25,42 +25,53 @@ class _SendStablecoinWalletScreenState
             style: TextStyle(color: Colors.black, fontSize: 16)),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 8),
-              const Text('Your wallets',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-              const SizedBox(height: 12),
-              _walletTile('USDC', 'USD Coin', '2,500.00 USDC'),
-              _walletTile('USDT', 'Tether', '2,500.00 USDC'),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: AppColors.inputFill,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Text(
-                  "Stablecoin transfer may use blockchain networks. You'll choose a network next.",
-                  style: TextStyle(color: AppColors.textGrey, fontSize: 12),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Your wallets',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 15)),
+                    const SizedBox(height: 12),
+                    _walletTile('USDC', 'USD Coin', '2,500.00 USDC'),
+                    _walletTile('USDT', 'Tether', '2,500.00 USDC'),
+                    const SizedBox(height: 16),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppColors.inputFill,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Text(
+                        "Stablecoin transfer may use blockchain networks. You'll choose a network next.",
+                        style:
+                            TextStyle(color: AppColors.textGrey, fontSize: 12),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              const Spacer(),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryDark,
-                  foregroundColor: Colors.white,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primaryDark,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () =>
+                      Navigator.pushNamed(context, AppRoutes.chooseNetwork),
+                  child: const Text('Continue'),
                 ),
-                onPressed: () =>
-                    Navigator.pushNamed(context, AppRoutes.chooseNetwork),
-                child: const Text('Continue'),
               ),
-              const SizedBox(height: 16),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
