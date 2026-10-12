@@ -15,9 +15,20 @@ class WelcomeScreen extends StatelessWidget {
           child: Column(
             children: [
               const Spacer(flex: 2),
-              // Logo + wordmark (same as splash screen)
-              Image.asset('assets/images/framelapay_logo.png', height: 60),
-              const SizedBox(height: 8),
+              // Logo + wordmark (same as splash screen). Rendered large via an
+              // OverflowBox while keeping a 60px layout slot, so the logo grows
+              // without shifting any of the text/buttons below.
+              SizedBox(
+                height: 60,
+                child: OverflowBox(
+                  minHeight: 0,
+                  maxHeight: 180,
+                  alignment: Alignment.center,
+                  child: Image.asset('assets/images/framelapay_logo.png',
+                      height: 180),
+                ),
+              ),
+              const SizedBox(height: 16),
               const Spacer(flex: 2),
               // Title
               const Text(
@@ -42,7 +53,8 @@ class WelcomeScreen extends StatelessWidget {
               ),
               const Spacer(flex: 3),
               ElevatedButton(
-                onPressed: () => Navigator.pushReplacementNamed(context, AppRoutes.createAccount),
+                onPressed: () => Navigator.pushReplacementNamed(
+                    context, AppRoutes.createAccount),
                 child: const Text('Create Account'),
               ),
               const SizedBox(height: 12),
