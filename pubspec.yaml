@@ -51,3 +51,12 @@ flutter:
         weight: 700
       - asset: assets/fonts/PlusJakartaSans-ExtraBold.ttf
         weight: 800
+  - family: Sora
+    fonts:
+      - asset: assets/fonts/Sora-Regular.ttf
+      - asset: assets/fonts/Sora-Medium.ttf
+        weight: 500
+      - asset: assets/fonts/Sora-SemiBold.ttf
+        weight: 600
+      - asset: assets/fonts/Sora-Bold.ttf
+        weight: 700
