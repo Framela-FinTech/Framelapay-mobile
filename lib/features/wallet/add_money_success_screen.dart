@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/routes/app_routes.dart';
 import '../../data/models/currency_wallet.dart';
 import '../transfer/fiat/widgets/fiat_form_widgets.dart';
 
@@ -11,8 +10,9 @@ class AddMoneySuccessScreen extends StatelessWidget {
   const AddMoneySuccessScreen({super.key, required this.wallet});
 
   void _goHome(BuildContext context) {
-    Navigator.pushNamedAndRemoveUntil(
-        context, AppRoutes.home, (route) => false);
+    // Walk back down to the Home root (the single cleared root). Never uses
+    // removeUntil so it can't leave a rootless stack; isFirst can't exit.
+    Navigator.popUntil(context, (route) => route.isFirst);
   }
 
   @override

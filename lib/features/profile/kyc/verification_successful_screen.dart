@@ -10,11 +10,21 @@ import 'kyc_widgets.dart';
 class VerificationSuccessfulScreen extends StatelessWidget {
   const VerificationSuccessfulScreen({super.key});
 
+  void _toProfile(BuildContext context) {
+    Navigator.popUntil(context,
+        (route) => route.settings.name == AppRoutes.profile || route.isFirst);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: whiteAppBar('Verification Submitted'),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) _toProfile(context);
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        appBar: whiteAppBar('Verification Submitted'),
       body: SafeArea(
         child: Column(
           children: [
@@ -56,12 +66,12 @@ class VerificationSuccessfulScreen extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
               child: PrimaryButton(
                 'Continue to Profile',
-                onPressed: () => Navigator.pushNamedAndRemoveUntil(
-                    context, AppRoutes.profile, (route) => false),
+                onPressed: () => _toProfile(context),
               ),
             ),
           ],
         ),
+      ),
       ),
     );
   }

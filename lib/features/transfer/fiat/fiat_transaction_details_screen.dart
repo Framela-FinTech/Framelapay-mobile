@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/routes/app_routes.dart';
 import '../../../data/models/fiat_transfer.dart';
 import 'widgets/fiat_form_widgets.dart';
 
@@ -12,8 +11,9 @@ class FiatTransactionDetailsScreen extends StatelessWidget {
   const FiatTransactionDetailsScreen({super.key, required this.transfer});
 
   void _goHome(BuildContext context) {
-    Navigator.pushNamedAndRemoveUntil(
-        context, AppRoutes.home, (route) => false);
+    // Walk back down to the Home root (the single cleared root). Never uses
+    // removeUntil so it can't leave a rootless stack; isFirst can't exit.
+    Navigator.popUntil(context, (route) => route.isFirst);
   }
 
   @override

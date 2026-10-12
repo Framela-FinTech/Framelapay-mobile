@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../data/models/transfer_recipient.dart';
-import '../../../core/routes/app_routes.dart';
 
 class TransactionDetailsScreen extends StatelessWidget {
   final TransferRecipient recipient;
@@ -79,11 +78,8 @@ class TransactionDetailsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               TextButton(
-                onPressed: () => Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        AppRoutes.home,
-                        (route) => false,
-                      ),
+                onPressed: () =>
+                    Navigator.popUntil(context, (route) => route.isFirst),
                child: const Text('Back to Home')),
               const SizedBox(height: 16),
             ],

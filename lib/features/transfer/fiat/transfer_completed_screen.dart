@@ -12,8 +12,9 @@ class TransferCompletedScreen extends StatelessWidget {
   const TransferCompletedScreen({super.key, required this.transfer});
 
   void _goHome(BuildContext context) {
-    Navigator.pushNamedAndRemoveUntil(
-        context, AppRoutes.home, (route) => false);
+    // Walk back down to the Home root (the single cleared root). Never uses
+    // removeUntil so it can't leave a rootless stack; isFirst can't exit.
+    Navigator.popUntil(context, (route) => route.isFirst);
   }
 
   @override
