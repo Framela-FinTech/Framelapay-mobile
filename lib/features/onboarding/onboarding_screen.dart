@@ -88,6 +88,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     final isLast = _currentPage == _pages.length - 1;
+    final size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: AppColors.primaryDark,
       body: Stack(
@@ -107,6 +108,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 return Image.asset(
                   _pages[index].image,
                   fit: BoxFit.cover,
+                  // Anchor to the top so BoxFit.cover crops at the BOTTOM
+                  // (hidden under the taller card) — the subject/traveller at
+                  // the top of the photo stays fully visible.
+                  alignment: Alignment.topCenter,
                   errorBuilder: (_, __, ___) =>
                       Container(color: AppColors.primaryDark),
                 );
@@ -119,6 +124,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             alignment: Alignment.bottomCenter,
             child: Container(
               width: double.infinity,
+              // Taller card: covers roughly the bottom ~45-50% of the screen.
+              // minHeight (not a fixed height) keeps it from overflowing on
+              // small screens — it still grows with its content.
+              constraints: BoxConstraints(minHeight: size.height * 0.47),
               decoration: const BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
@@ -126,9 +135,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: SafeArea(
                 top: false,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
+                  padding: const EdgeInsets.fromLTRB(24, 40, 24, 24),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       RichText(

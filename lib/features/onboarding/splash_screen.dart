@@ -22,65 +22,49 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: AppColors.primaryDark,
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Spacer(flex: 4),
-            // Logo image. If the asset fails to load we fall back to an empty
-            // box so the wordmark + tagline below are always visible.
-            Image.asset(
-              'assets/images/framelapay_logo_white.png',
-              height: 90,
-              errorBuilder: (context, error, stackTrace) =>
-                  const SizedBox(height: 90),
-            ),
-            const SizedBox(height: 16),
-            // Wordmark — always shown as text, independent of the logo asset.
-            RichText(
-              textAlign: TextAlign.center,
-              text: const TextSpan(
-                style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 2),
-                children: [
-                  TextSpan(
-                      text: 'FRAMELA ',
-                      style: TextStyle(color: AppColors.white)),
-                  TextSpan(
-                      text: 'PAY',
-                      style: TextStyle(color: AppColors.accentYellow)),
-                ],
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Logo image — sized to cover a reasonable part of the screen.
+              // If the asset fails to load we fall back to an empty box.
+              Image.asset(
+                'assets/images/framelapay_logo_white.png',
+                height: screenHeight * 0.22,
+                errorBuilder: (context, error, stackTrace) =>
+                    SizedBox(height: screenHeight * 0.22),
               ),
-            ),
-            const Spacer(flex: 5),
-            RichText(
-              textAlign: TextAlign.center,
-              text: const TextSpan(
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                children: [
-                  TextSpan(
-                      text: 'Fast. ', style: TextStyle(color: AppColors.white)),
-                  TextSpan(
-                      text: 'Secure',
-                      style: TextStyle(color: AppColors.accentYellow)),
-                  TextSpan(
-                      text: '. Borderless.',
-                      style: TextStyle(color: AppColors.white)),
-                ],
+              SizedBox(height: screenHeight * 0.06),
+              RichText(
+                textAlign: TextAlign.center,
+                text: const TextSpan(
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  children: [
+                    TextSpan(
+                        text: 'Fast. ',
+                        style: TextStyle(color: AppColors.white)),
+                    TextSpan(
+                        text: 'Secure',
+                        style: TextStyle(color: AppColors.accentYellow)),
+                    TextSpan(
+                        text: '. Borderless.',
+                        style: TextStyle(color: AppColors.white)),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 6),
-            const Text(
-              'Powered by Framela Fintech',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.accentYellow, fontSize: 11),
-            ),
-            const Spacer(flex: 1),
-          ],
+              const SizedBox(height: 6),
+              const Text(
+                'Powered by Framela Fintech',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: AppColors.accentYellow, fontSize: 11),
+              ),
+            ],
+          ),
         ),
       ),
     );
