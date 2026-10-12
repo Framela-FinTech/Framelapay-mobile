@@ -32,53 +32,65 @@ class ReviewTransferScreen extends StatelessWidget {
             style: TextStyle(color: Colors.black, fontSize: 16)),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 8),
-              const Text('Review transfer',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20)),
-              const SizedBox(height: 4),
-              const Text('Please review the details carefully before sending.',
-                  style: TextStyle(color: AppColors.textGrey, fontSize: 12)),
-              const SizedBox(height: 16),
-              _buildRecipientTile(),
-              const Divider(height: 32),
-              _row('You send', amount),
-              _row('Network', network),
-              _row('Network fee', networkFee),
-              const Divider(),
-              _row('Total amount', totalAmount, bold: true),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFFF4E5),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Text(
-                  'This transfer will be sent directly to the wallet address on the selected network. Once sent, it cannot be reversed.',
-                  style: TextStyle(fontSize: 11, color: Colors.black87),
-                ),
-              ),
-              const Spacer(),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryDark,
-                  foregroundColor: Colors.white,
-                ),
-                onPressed: () => Navigator.pushNamed(
-                      context,
-                      AppRoutes.verifyFingerprint,
-                      arguments: _stablecoinAuthFlow(),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Review transfer',
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700, fontSize: 20)),
+                    const SizedBox(height: 4),
+                    const Text(
+                        'Please review the details carefully before sending.',
+                        style:
+                            TextStyle(color: AppColors.textGrey, fontSize: 12)),
+                    const SizedBox(height: 16),
+                    _buildRecipientTile(),
+                    const Divider(height: 32),
+                    _row('You send', amount),
+                    _row('Network', network),
+                    _row('Network fee', networkFee),
+                    const Divider(),
+                    _row('Total amount', totalAmount, bold: true),
+                    const SizedBox(height: 16),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFF4E5),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Text(
+                        'This transfer will be sent directly to the wallet address on the selected network. Once sent, it cannot be reversed.',
+                        style: TextStyle(fontSize: 11, color: Colors.black87),
+                      ),
                     ),
-                child: const Text('Continue'),
+                  ],
+                ),
               ),
-              const SizedBox(height: 16),
-            ],
-          ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primaryDark,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () => Navigator.pushNamed(
+                        context,
+                        AppRoutes.verifyFingerprint,
+                        arguments: _stablecoinAuthFlow(),
+                      ),
+                  child: const Text('Continue'),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

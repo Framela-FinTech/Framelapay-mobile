@@ -33,11 +33,15 @@ class AppBottomNav extends StatelessWidget {
 
   void _onTap(BuildContext context, int index) {
     if (index == currentIndex) return;
-    // Switch to the tab's root screen and clear everything below it, so a tab
-    // can never leave the onboarding/auth/KYC stack reachable underneath (which
-    // caused back/pop to fall into KYC). Each tab becomes a clean root.
-    Navigator.pushNamedAndRemoveUntil(
-        context, _routes[index], (route) => false);
+    // Home is the single cleared root (the onboarding/auth/KYC stack was
+    // removed once, when the app first entered Home). Walk back down to that
+    // root, then push the target tab on top of it. This keeps the back stack
+    // shallow ([Home] or [Home, tab]) so hardware back always walks down to
+    // Home and can never exit the app or re-enter onboarding.
+    Navigator.popUntil(context, (route) => route.isFirst);
+    if (_routes[index] != AppRoutes.home) {
+      Navigator.pushNamed(context, _routes[index]);
+    }
   }
 
   @override

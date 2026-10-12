@@ -11,11 +11,21 @@ enum _StepState { done, active, pending }
 class VerificationSubmittedScreen extends StatelessWidget {
   const VerificationSubmittedScreen({super.key});
 
+  void _toProfile(BuildContext context) {
+    Navigator.popUntil(context,
+        (route) => route.settings.name == AppRoutes.profile || route.isFirst);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: whiteAppBar('Verification Submitted'),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) _toProfile(context);
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        appBar: whiteAppBar('Verification Submitted'),
       body: SafeArea(
         child: Column(
           children: [
@@ -87,8 +97,7 @@ class VerificationSubmittedScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(14),
                         ),
                       ),
-                      onPressed: () => Navigator.pushNamedAndRemoveUntil(
-                          context, AppRoutes.profile, (route) => false),
+                      onPressed: () => _toProfile(context),
                       child: const Text('Return to Profile'),
                     ),
                   ),
@@ -97,6 +106,7 @@ class VerificationSubmittedScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }

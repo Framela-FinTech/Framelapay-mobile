@@ -72,7 +72,8 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
   }
 
   Widget _buildCodeEntry(PinTheme theme) {
-    return Column(
+    return SingleChildScrollView(
+      child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 16),
@@ -86,7 +87,11 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
           style: const TextStyle(color: AppColors.textGrey, fontSize: 14),
         ),
         const SizedBox(height: 32),
-        Pinput(length: 6, defaultPinTheme: theme),
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: Alignment.centerLeft,
+          child: Pinput(length: 6, defaultPinTheme: theme),
+        ),
         const SizedBox(height: 16),
         Text('Code expires in ${_format(_expireSeconds)}',
             style: const TextStyle(color: AppColors.textGrey, fontSize: 13)),
@@ -108,6 +113,7 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
           child: const Text('Verify'),
         ),
       ],
+      ),
     );
   }
 

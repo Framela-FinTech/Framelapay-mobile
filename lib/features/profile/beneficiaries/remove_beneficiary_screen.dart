@@ -61,10 +61,15 @@ class RemoveBeneficiaryScreen extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Beneficiary removed')),
                     );
-                    Navigator.pushNamedAndRemoveUntil(
+                    // Walk back up to the Beneficiaries list (an existing
+                    // ancestor); stop at the Home root if not found so this
+                    // never exits the app.
+                    Navigator.popUntil(
                         context,
-                        AppRoutes.beneficiariesList,
-                        (route) => false);
+                        (route) =>
+                            route.settings.name ==
+                                AppRoutes.beneficiariesList ||
+                            route.isFirst);
                   },
                   child: const Text('Remove Beneficiary'),
                 ),
