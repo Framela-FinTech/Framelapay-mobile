@@ -100,7 +100,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             top: 0,
             left: 0,
             right: 0,
-            height: size.height * 0.53,
+            height: size.height * 0.58,
             child: PageView.builder(
               controller: _controller,
               itemCount: _pages.length,
