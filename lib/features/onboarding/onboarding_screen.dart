@@ -93,10 +93,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       backgroundColor: AppColors.primaryDark,
       body: Stack(
         children: [
-          // ---- Full-bleed background image per slide ----
-          // No SafeArea: the photo bleeds to every edge, including behind the
-          // status bar, with BoxFit.cover so there are no gaps or margins.
-          Positioned.fill(
+          // ---- Image area per slide ----
+          // Match the reference composition: the image fills the upper part
+          // of the screen, while the existing card overlays the lower part.
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: size.height * 0.53,
             child: PageView.builder(
               controller: _controller,
               itemCount: _pages.length,
@@ -107,10 +111,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               itemBuilder: (context, index) {
                 return Image.asset(
                   _pages[index].image,
-                  fit: BoxFit.cover,
-                  // Anchor to the top so BoxFit.cover crops at the BOTTOM
-                  // (hidden under the taller card) — the subject/traveller at
-                  // the top of the photo stays fully visible.
+                  fit: BoxFit.contain,
                   alignment: Alignment.topCenter,
                   errorBuilder: (_, __, ___) =>
                       Container(color: AppColors.primaryDark),

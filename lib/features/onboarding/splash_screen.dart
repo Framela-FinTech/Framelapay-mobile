@@ -26,45 +26,53 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: AppColors.primaryDark,
       body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Logo image — sized to cover a reasonable part of the screen.
-              // If the asset fails to load we fall back to an empty box.
-              Image.asset(
-                'assets/images/framelapay_logo_white.png',
-                height: screenHeight * 0.22,
-                errorBuilder: (context, error, stackTrace) =>
-                    SizedBox(height: screenHeight * 0.22),
-              ),
-              SizedBox(height: screenHeight * 0.06),
-              RichText(
-                textAlign: TextAlign.center,
-                text: const TextSpan(
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Image.asset(
+              'assets/images/framelapay_logo_white.png',
+              height: screenHeight * 0.32,
+              errorBuilder: (context, error, stackTrace) =>
+                  SizedBox(height: screenHeight * 0.32),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    TextSpan(
-                        text: 'Fast. ',
-                        style: TextStyle(color: AppColors.white)),
-                    TextSpan(
-                        text: 'Secure',
-                        style: TextStyle(color: AppColors.accentYellow)),
-                    TextSpan(
-                        text: '. Borderless.',
-                        style: TextStyle(color: AppColors.white)),
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: const TextSpan(
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
+                        children: [
+                          TextSpan(
+                              text: 'Fast. ',
+                              style: TextStyle(color: AppColors.white)),
+                          TextSpan(
+                              text: 'Secure',
+                              style: TextStyle(color: AppColors.accentYellow)),
+                          TextSpan(
+                              text: '. Borderless.',
+                              style: TextStyle(color: AppColors.white)),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    const Text(
+                      'Powered by Framela Fintech',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: AppColors.accentYellow, fontSize: 11),
+                    ),
                   ],
                 ),
               ),
-              const SizedBox(height: 6),
-              const Text(
-                'Powered by Framela Fintech',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: AppColors.accentYellow, fontSize: 11),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
