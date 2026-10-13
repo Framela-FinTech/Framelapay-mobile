@@ -111,7 +111,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               itemBuilder: (context, index) {
                 return Image.asset(
                   _pages[index].image,
-                  fit: BoxFit.contain,
+                  fit: BoxFit.fill,
                   alignment: Alignment.topCenter,
                   errorBuilder: (_, __, ___) =>
                       Container(color: AppColors.primaryDark),
