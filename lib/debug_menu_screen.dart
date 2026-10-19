@@ -36,6 +36,7 @@ import 'features/wallet/fund_wallet_details_screen.dart';
 import 'features/wallet/fund_card_screen.dart';
 import 'features/wallet/add_money_success_screen.dart';
 import 'features/profile/profile_screen.dart';
+import 'features/profile/support/help_support_screens.dart';
 import 'features/profile/settings/settings_screen.dart';
 import 'features/profile/settings/appearance_screen.dart';
 import 'features/profile/settings/notifications_settings_screen.dart';
@@ -266,6 +267,14 @@ class DebugMenuScreen extends StatelessWidget {
       },
       'Bottom Nav': {
         'Activity': const ActivityScreen(),
+      },
+      'Support': {
+        'Help & Support': const HelpSupportScreen(),
+        'Help Centre': const HelpCentreScreen(),
+        'Live Support': const LiveSupportScreen(),
+        'Support Requests': const SupportRequestsScreen(),
+        'Report a Problem': const ReportProblemScreen(),
+        'Start Live Support': const StartLiveSupportScreen(),
       },
       'Stablecoin Transfer': {
         'Transfer Hub': const TransferScreen(),

@@ -65,9 +65,11 @@ import '../../features/profile/kyc/review_verification_screen.dart';
 import '../../features/profile/kyc/verification_submitted_screen.dart';
 import '../../features/profile/kyc/verification_successful_screen.dart';
 import '../../features/profile/widgets/profile_success_screen.dart';
+import '../../features/profile/support/help_support_screens.dart';
 import '../../data/models/transaction_receipt.dart';
 import '../../data/models/fiat_beneficiary.dart';
 import '../../data/models/currency_wallet.dart';
+import '../../data/models/support_models.dart';
 
 import '../../features/transfer/shared/transfer_screen.dart';
 import '../../features/transfer/shared/send_stablecoin_wallet_screen.dart';
@@ -142,6 +144,12 @@ class AppRoutes {
   static const personalInformation = '/personal-information';
   static const referral = '/referral';
   static const helpSupport = '/help-support';
+  static const helpCentre = '/help-centre';
+  static const helpArticle = '/help-centre/article';
+  static const liveSupport = '/live-support';
+  static const supportRequests = '/support-requests';
+  static const reportProblem = '/report-problem';
+  static const startLiveSupport = '/start-live-support';
   static const deactivateAccount = '/deactivate-account';
   static const signOut = '/sign-out';
   static const changePhoto = '/change-photo';
@@ -304,7 +312,23 @@ class AppRoutes {
       case referral:
         return _page(const ProfilePlaceholderScreen(title: 'Referral'));
       case helpSupport:
-        return _page(const ProfilePlaceholderScreen(title: 'Help & Support'));
+        return _page(const HelpSupportScreen());
+      case helpCentre:
+        return _page(const HelpCentreScreen());
+      case helpArticle:
+        final article = settings.arguments is HelpArticle
+            ? settings.arguments as HelpArticle
+            : null;
+        if (article == null) return _page(const HelpCentreScreen());
+        return _page(HelpArticleScreen(article: article));
+      case liveSupport:
+        return _page(const LiveSupportScreen());
+      case supportRequests:
+        return _page(const SupportRequestsScreen());
+      case reportProblem:
+        return _page(const ReportProblemScreen());
+      case startLiveSupport:
+        return _page(const StartLiveSupportScreen());
       case deactivateAccount:
         return _page(
             const ProfilePlaceholderScreen(title: 'Deactivate Account'));
@@ -352,8 +376,7 @@ class AppRoutes {
         return _page(const ProfileSuccessScreen(
           title: 'Beneficiary saved',
           message: 'This recipient is now available in your saved list.',
-          primary:
-              SuccessButton('Return to Beneficiaries', beneficiariesList),
+          primary: SuccessButton('Return to Beneficiaries', beneficiariesList),
         ));
       case beneficiaryDetails:
         final beneficiary = settings.arguments as FiatBeneficiary;
