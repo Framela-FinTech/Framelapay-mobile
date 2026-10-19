@@ -101,6 +101,7 @@ class AppIcon extends StatelessWidget {
     'share': Icons.share_outlined,
     'chevron-left': Icons.chevron_left,
     'chevron-right': Icons.chevron_right,
+    'close': Icons.close,
     'search': Icons.search,
     'chevron-down': Icons.keyboard_arrow_down,
     'info-circle': Icons.info_outline,

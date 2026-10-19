@@ -22,7 +22,7 @@ import '../../features/kyc/kyc_status_screen.dart';
 import '../../features/home/home_screen.dart';
 import '../../features/home/quick_actions_screen.dart';
 import '../../features/home/notifications_screen.dart';
-import '../../features/placeholder/coming_soon_screen.dart';
+import '../../features/activity/activity_screen.dart';
 import '../../features/wallet/wallet_tab_screen.dart';
 import '../../features/wallet/add_money_select_wallet_screen.dart';
 import '../../features/wallet/choose_method_screen.dart';
@@ -126,8 +126,7 @@ class AppRoutes {
   static const quickActions = '/quick-actions';
   static const notifications = '/notifications';
 
-  // Bottom-nav tab destinations. Activity is still a stub (ComingSoonScreen)
-  // until its real screen is built; Wallet and Profile are live.
+  // Bottom-nav tab destinations.
   static const walletTab = '/wallet-tab';
   static const activity = '/activity';
   static const profile = '/profile';
@@ -278,7 +277,7 @@ class AppRoutes {
       case walletTab:
         return _page(const WalletTabScreen());
       case activity:
-        return _page(const ComingSoonScreen(title: 'Activity', navIndex: 3));
+        return _page(const ActivityScreen());
 
       case addMoneySelectWallet:
         return _page(const AddMoneySelectWalletScreen());

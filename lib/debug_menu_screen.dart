@@ -28,7 +28,7 @@ import 'features/kyc/kyc_status_screen.dart';
 import 'features/home/home_screen.dart';
 import 'features/home/quick_actions_screen.dart';
 import 'features/home/notifications_screen.dart';
-import 'features/placeholder/coming_soon_screen.dart';
+import 'features/activity/activity_screen.dart';
 import 'features/wallet/wallet_tab_screen.dart';
 import 'features/wallet/add_money_select_wallet_screen.dart';
 import 'features/wallet/choose_method_screen.dart';
@@ -264,9 +264,8 @@ class DebugMenuScreen extends StatelessWidget {
         'Remove Beneficiary':
             RemoveBeneficiaryScreen(beneficiary: sampleBeneficiaries[0]),
       },
-      'Bottom Nav Stubs': {
-        'Activity (Coming soon)':
-            const ComingSoonScreen(title: 'Activity', navIndex: 3),
+      'Bottom Nav': {
+        'Activity': const ActivityScreen(),
       },
       'Stablecoin Transfer': {
         'Transfer Hub': const TransferScreen(),

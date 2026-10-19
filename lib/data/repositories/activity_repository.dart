@@ -1,0 +1,122 @@
+import '../models/activity_transaction.dart';
+
+abstract class ActivityRepository {
+  Future<List<ActivityTransaction>> getTransactions();
+}
+
+class MockActivityRepository implements ActivityRepository {
+  @override
+  Future<List<ActivityTransaction>> getTransactions() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    return const [
+      ActivityTransaction(
+        month: 'Oct 2026',
+        date: '10 Oct · 10:45',
+        title: 'USDC sent to External wallet',
+        subtitle: 'USDT external · 10:45',
+        amount: r'-$250.00',
+        incoming: false,
+        category: 'Stablecoin',
+        currency: 'USD',
+        status: ActivityTransactionStatus.completed,
+        icon: 'arrow-up-right',
+      ),
+      ActivityTransaction(
+        month: 'Oct 2026',
+        date: '08 Oct · 12:02',
+        title: 'Sent to Michael Ade',
+        subtitle: 'EUR wallet · 12:02',
+        amount: '+€500.00',
+        incoming: true,
+        category: 'Sent',
+        currency: 'EUR',
+        status: ActivityTransactionStatus.pending,
+        icon: 'arrow-down',
+      ),
+      ActivityTransaction(
+        month: 'Oct 2026',
+        date: '04 Oct · 10:24',
+        title: 'Sent to Ada Okafor',
+        subtitle: 'Bank transfer · 10:24',
+        amount: '+€1,000.00',
+        incoming: true,
+        category: 'Bank Transfer',
+        currency: 'EUR',
+        status: ActivityTransactionStatus.completed,
+        icon: 'bank',
+      ),
+      ActivityTransaction(
+        month: 'Oct 2026',
+        date: '02 Oct · 09:15',
+        title: 'EUR exchanged to NGN',
+        subtitle: 'EUR → NGN · 09:15',
+        amount: r'-$250.00',
+        incoming: false,
+        category: 'Exchange',
+        currency: 'EUR',
+        status: ActivityTransactionStatus.failed,
+        icon: 'coin-swap',
+      ),
+      ActivityTransaction(
+        month: 'Oct 2026',
+        date: '01 Oct · 08:50',
+        title: 'Money added to USD wallet',
+        subtitle: 'Debit card · 08:50',
+        amount: r'-$250.00',
+        incoming: false,
+        category: 'Wallet Funded',
+        currency: 'USD',
+        status: ActivityTransactionStatus.completed,
+        icon: 'card',
+      ),
+      ActivityTransaction(
+        month: 'Sept 2026',
+        date: '28 Sep · 14:04',
+        title: 'Money sent',
+        subtitle: 'Daniel Okoro · 14:04',
+        amount: '-€250.00',
+        incoming: false,
+        category: 'Sent',
+        currency: 'EUR',
+        status: ActivityTransactionStatus.completed,
+        icon: 'arrow-up',
+      ),
+      ActivityTransaction(
+        month: 'Sept 2026',
+        date: '25 Sep · 09:32',
+        title: 'Money received',
+        subtitle: 'Michael Ade · 09:32',
+        amount: '+€500.00',
+        incoming: true,
+        category: 'Received',
+        currency: 'EUR',
+        status: ActivityTransactionStatus.completed,
+        icon: 'arrow-down',
+      ),
+      ActivityTransaction(
+        month: 'Aug 2026',
+        date: '16 Aug · 08:50',
+        title: 'USDC sent to External wallet',
+        subtitle: 'USDT external · 08:50',
+        amount: '-100 USDT',
+        incoming: false,
+        category: 'Stablecoin',
+        currency: 'USD',
+        status: ActivityTransactionStatus.completed,
+        icon: 'arrow-up-right',
+      ),
+      ActivityTransaction(
+        month: 'Aug 2026',
+        date: '06 Aug · 21:29',
+        title: 'Received from Cynthia Ade',
+        subtitle: 'USD wallet · 21:29',
+        amount: r'+$75.00',
+        incoming: true,
+        category: 'Received',
+        currency: 'USD',
+        status: ActivityTransactionStatus.completed,
+        icon: 'arrow-down',
+      ),
+    ];
+  }
+}
