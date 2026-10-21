@@ -68,6 +68,8 @@ import '../../features/profile/widgets/profile_success_screen.dart';
 import '../../features/profile/support/help_support_screens.dart';
 import '../../features/profile/account_controls/deactivate_account_screens.dart';
 import '../../features/profile/account_controls/sign_out_screens.dart';
+import '../../features/profile/referral/referral_screen.dart';
+import '../../features/profile/security/trusted_devices_screens.dart';
 import '../../data/models/transaction_receipt.dart';
 import '../../data/models/fiat_beneficiary.dart';
 import '../../data/models/currency_wallet.dart';
@@ -192,6 +194,9 @@ class AppRoutes {
   static const createNewPassword = '/security/reset-password/create';
   static const transactionPin = '/security/transaction-pin';
   static const trustedDevices = '/security/trusted-devices';
+  static const deviceDetails = '/security/trusted-devices/detail';
+  static const removeDevice = '/security/trusted-devices/remove';
+  static const deviceActionComplete = '/security/trusted-devices/complete';
   // Beneficiaries sub-screens.
   static const addBeneficiary = '/beneficiaries/add';
   static const confirmBeneficiary = '/beneficiaries/confirm';
@@ -319,7 +324,7 @@ class AppRoutes {
         return _page(
             const ProfilePlaceholderScreen(title: 'Personal Information'));
       case referral:
-        return _page(const ProfilePlaceholderScreen(title: 'Referral'));
+        return _page(const ReferralScreen());
       case helpSupport:
         return _page(const HelpSupportScreen());
       case helpCentre:
@@ -437,7 +442,16 @@ class AppRoutes {
       case transactionPin:
         return _page(const ProfilePlaceholderScreen(title: 'Transaction PIN'));
       case trustedDevices:
-        return _page(const ProfilePlaceholderScreen(title: 'Trusted Devices'));
+        return _page(const TrustedDevicesScreen());
+      case deviceDetails:
+        final current = settings.arguments is bool
+            ? settings.arguments as bool
+            : true;
+        return _page(DeviceDetailsScreen(current: current));
+      case removeDevice:
+        return _page(const RemoveDeviceScreen());
+      case deviceActionComplete:
+        return _page(const DeviceActionCompleteScreen());
       case settingsHome:
         return _page(const SettingsScreen());
       case appearance:

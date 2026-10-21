@@ -39,6 +39,8 @@ import 'features/profile/profile_screen.dart';
 import 'features/profile/support/help_support_screens.dart';
 import 'features/profile/account_controls/deactivate_account_screens.dart';
 import 'features/profile/account_controls/sign_out_screens.dart';
+import 'features/profile/referral/referral_screen.dart';
+import 'features/profile/security/trusted_devices_screens.dart';
 import 'features/profile/settings/settings_screen.dart';
 import 'features/profile/settings/appearance_screen.dart';
 import 'features/profile/settings/notifications_settings_screen.dart';
@@ -286,6 +288,13 @@ class DebugMenuScreen extends StatelessWidget {
         'Account Reactivated': const AccountReactivatedScreen(),
         'Sign Out': const SignOutScreen(),
         'Login': const LoginScreen(),
+      },
+      'Referral and Devices': {
+        'Referral': const ReferralScreen(),
+        'Trusted Devices': const TrustedDevicesScreen(),
+        'Device Details': const DeviceDetailsScreen(),
+        'Remove Device': const RemoveDeviceScreen(),
+        'Device Action Complete': const DeviceActionCompleteScreen(),
       },
       'Stablecoin Transfer': {
         'Transfer Hub': const TransferScreen(),
