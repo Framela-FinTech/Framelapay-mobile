@@ -66,6 +66,8 @@ import '../../features/profile/kyc/verification_submitted_screen.dart';
 import '../../features/profile/kyc/verification_successful_screen.dart';
 import '../../features/profile/widgets/profile_success_screen.dart';
 import '../../features/profile/support/help_support_screens.dart';
+import '../../features/profile/account_controls/deactivate_account_screens.dart';
+import '../../features/profile/account_controls/sign_out_screens.dart';
 import '../../data/models/transaction_receipt.dart';
 import '../../data/models/fiat_beneficiary.dart';
 import '../../data/models/currency_wallet.dart';
@@ -151,7 +153,14 @@ class AppRoutes {
   static const reportProblem = '/report-problem';
   static const startLiveSupport = '/start-live-support';
   static const deactivateAccount = '/deactivate-account';
+  static const accountCheck = '/deactivate-account/check';
+  static const deactivateDetails = '/deactivate-account/details';
+  static const securityVerification = '/deactivate-account/verification';
+  static const accountDeactivated = '/deactivate-account/complete';
+  static const reactivateAccount = '/reactivate-account';
+  static const accountReactivated = '/reactivate-account/complete';
   static const signOut = '/sign-out';
+  static const login = '/login';
   static const changePhoto = '/change-photo';
   static const adjustProfilePhoto = '/change-photo/adjust';
   static const photoUpdated = '/change-photo/updated';
@@ -330,10 +339,23 @@ class AppRoutes {
       case startLiveSupport:
         return _page(const StartLiveSupportScreen());
       case deactivateAccount:
-        return _page(
-            const ProfilePlaceholderScreen(title: 'Deactivate Account'));
+        return _page(const DeactivateAccountScreen());
+      case accountCheck:
+        return _page(const AccountCheckScreen());
+      case deactivateDetails:
+        return _page(const DeactivateDetailsScreen());
+      case securityVerification:
+        return _page(const SecurityVerificationScreen());
+      case accountDeactivated:
+        return _page(const AccountDeactivatedScreen());
+      case reactivateAccount:
+        return _page(const ReactivateAccountScreen());
+      case accountReactivated:
+        return _page(const AccountReactivatedScreen());
       case signOut:
-        return _page(const ProfilePlaceholderScreen(title: 'Sign Out'));
+        return _page(const SignOutScreen());
+      case login:
+        return _page(const LoginScreen());
       // Temporary placeholders — repointed when each sub-flow is built.
       case changePhoto:
         return _page(const ChangeProfilePhotoScreen());

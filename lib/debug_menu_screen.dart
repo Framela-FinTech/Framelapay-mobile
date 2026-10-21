@@ -37,6 +37,8 @@ import 'features/wallet/fund_card_screen.dart';
 import 'features/wallet/add_money_success_screen.dart';
 import 'features/profile/profile_screen.dart';
 import 'features/profile/support/help_support_screens.dart';
+import 'features/profile/account_controls/deactivate_account_screens.dart';
+import 'features/profile/account_controls/sign_out_screens.dart';
 import 'features/profile/settings/settings_screen.dart';
 import 'features/profile/settings/appearance_screen.dart';
 import 'features/profile/settings/notifications_settings_screen.dart';
@@ -123,8 +125,7 @@ const _sampleAuthFlow = TransferAuthFlow(
         time: '10:41 AM',
         subtitle: 'Your transfer has been created',
         done: true),
-    ProcessingStep(
-        title: 'Finalizing transfer', subtitle: 'Almost there...'),
+    ProcessingStep(title: 'Finalizing transfer', subtitle: 'Almost there...'),
   ],
 );
 
@@ -196,8 +197,7 @@ class DebugMenuScreen extends StatelessWidget {
         'Fund Wallet (bank details)':
             const FundWalletDetailsScreen(wallet: _sampleWallet),
         'Fund with Card': const FundCardScreen(wallet: _sampleWallet),
-        'Add Money Success':
-            const AddMoneySuccessScreen(wallet: _sampleWallet),
+        'Add Money Success': const AddMoneySuccessScreen(wallet: _sampleWallet),
       },
       'Profile': {
         'Profile Hub': const ProfileScreen(),
@@ -255,8 +255,8 @@ class DebugMenuScreen extends StatelessWidget {
         'Beneficiary Saved': const ProfileSuccessScreen(
           title: 'Beneficiary saved',
           message: 'This recipient is now available in your saved list.',
-          primary:
-              SuccessButton('Return to Beneficiaries', AppRoutes.beneficiariesList),
+          primary: SuccessButton(
+              'Return to Beneficiaries', AppRoutes.beneficiariesList),
         ),
         'Beneficiary Details':
             BeneficiaryDetailsScreen(beneficiary: sampleBeneficiaries[0]),
@@ -275,6 +275,17 @@ class DebugMenuScreen extends StatelessWidget {
         'Support Requests': const SupportRequestsScreen(),
         'Report a Problem': const ReportProblemScreen(),
         'Start Live Support': const StartLiveSupportScreen(),
+      },
+      'Account Controls': {
+        'Deactivate Account': const DeactivateAccountScreen(),
+        'Account Check': const AccountCheckScreen(),
+        'Deactivate Details': const DeactivateDetailsScreen(),
+        'Security Verification': const SecurityVerificationScreen(),
+        'Account Deactivated': const AccountDeactivatedScreen(),
+        'Reactivate Account': const ReactivateAccountScreen(),
+        'Account Reactivated': const AccountReactivatedScreen(),
+        'Sign Out': const SignOutScreen(),
+        'Login': const LoginScreen(),
       },
       'Stablecoin Transfer': {
         'Transfer Hub': const TransferScreen(),
