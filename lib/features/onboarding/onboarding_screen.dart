@@ -28,8 +28,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final List<OnboardingData> _pages = const [
     OnboardingData(
-      'Connect with the people who ',
-      'matter.',
+      'Connect with the ',
+      'people who matter.',
       'Send and receive across borders, wherever life takes you.',
       'assets/images/onboarding_1.png',
     ),
@@ -78,6 +78,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     _resetAutoAdvance();
   }
 
+  void _goToWelcome() =>
+      Navigator.pushReplacementNamed(context, AppRoutes.welcome);
+
   @override
   void dispose() {
     _timer?.cancel();
@@ -94,8 +97,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       body: Stack(
         children: [
           // ---- Image area per slide ----
-          // Match the reference composition: the image fills the upper part
-          // of the screen, while the existing card overlays the lower part.
+          // The image fills the upper part of the screen, while the white
+          // card overlays the lower portion.
           Positioned(
             top: 0,
             left: 0,
@@ -125,9 +128,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             alignment: Alignment.bottomCenter,
             child: Container(
               width: double.infinity,
-              // Taller card: covers roughly the bottom ~45-50% of the screen.
-              // minHeight (not a fixed height) keeps it from overflowing on
-              // small screens — it still grows with its content.
               constraints: BoxConstraints(minHeight: size.height * 0.47),
               decoration: const BoxDecoration(
                 color: AppColors.white,
@@ -136,19 +136,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: SafeArea(
                 top: false,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 40, 24, 24),
+                  padding: const EdgeInsets.fromLTRB(24, 36, 24, 24),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // ---- Title (left-aligned display, dark + gold split) ----
                       RichText(
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.left,
                         text: TextSpan(
                           style: const TextStyle(
+                            fontFamily: 'Inter',
                             color: AppColors.primaryDark,
-                            fontSize: 26,
-                            fontWeight: FontWeight.w800,
+                            fontSize: 32,
+                            fontWeight: FontWeight.w700,
                             height: 1.2,
                           ),
                           children: [
@@ -164,25 +165,30 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       const SizedBox(height: 12),
                       Text(
                         _pages[_currentPage].subtitle,
-                        textAlign: TextAlign.center,
+                        textAlign: TextAlign.left,
                         style: const TextStyle(
-                          color: AppColors.textGrey,
-                          fontSize: 14,
+                          color: AppColors.neutral40,
+                          fontSize: 15,
                           height: 1.4,
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      SmoothPageIndicator(
-                        controller: _controller,
-                        count: _pages.length,
-                        effect: const ExpandingDotsEffect(
-                          activeDotColor: AppColors.accentYellow,
-                          dotColor: AppColors.divider,
-                          dotHeight: 6,
-                          dotWidth: 6,
+                      const SizedBox(height: 28),
+                      // ---- Page indicator (centered, equal gold/grey dots) ----
+                      Center(
+                        child: SmoothPageIndicator(
+                          controller: _controller,
+                          count: _pages.length,
+                          effect: const ScrollingDotsEffect(
+                            activeDotColor: AppColors.accentYellow,
+                            dotColor: AppColors.divider,
+                            dotHeight: 8,
+                            dotWidth: 8,
+                            spacing: 8,
+                            activeDotScale: 1.0,
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 28),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
@@ -191,31 +197,45 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             foregroundColor: AppColors.white,
                             minimumSize: const Size.fromHeight(56),
                           ),
-                          onPressed: isLast
-                              ? () => Navigator.pushReplacementNamed(
-                                  context, AppRoutes.welcome)
-                              : _next,
+                          onPressed: isLast ? _goToWelcome : _next,
                           child: Text(isLast ? 'Get Started' : 'Next'),
                         ),
                       ),
-                      const SizedBox(height: 12),
-                      GestureDetector(
-                        onTap: () => Navigator.pushReplacementNamed(
-                            context, AppRoutes.welcome),
-                        child: RichText(
-                          text: const TextSpan(
-                            style: TextStyle(
-                                color: AppColors.textGrey, fontSize: 13),
-                            children: [
-                              TextSpan(text: 'Already have an account? '),
-                              TextSpan(
-                                text: 'Login',
-                                style: TextStyle(
-                                    color: AppColors.primaryDark,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                            ],
-                          ),
+                      const SizedBox(height: 16),
+                      // ---- Secondary CTA ----
+                      // Non-last slides offer a gold "Skip"; the last slide
+                      // offers the login shortcut, matching the design.
+                      Center(
+                        child: GestureDetector(
+                          onTap: _goToWelcome,
+                          child: isLast
+                              ? RichText(
+                                  text: const TextSpan(
+                                    style: TextStyle(
+                                        fontFamily: 'Inter',
+                                        color: AppColors.primaryDark,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600),
+                                    children: [
+                                      TextSpan(
+                                          text: 'Already have an account? '),
+                                      TextSpan(
+                                        text: 'Log in',
+                                        style: TextStyle(
+                                            color: AppColors.accentYellow,
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : const Text(
+                                  'Skip',
+                                  style: TextStyle(
+                                    color: AppColors.accentYellow,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                         ),
                       ),
                     ],
