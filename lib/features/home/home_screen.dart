@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:country_flags/country_flags.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_shadows.dart';
 import '../../core/routes/app_routes.dart';
 import '../../core/widgets/app_icon.dart';
 import '../../core/widgets/app_bottom_nav.dart';
@@ -156,6 +157,7 @@ class HomeScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.primaryDark,
         borderRadius: BorderRadius.circular(20),
+        boxShadow: AppShadows.card,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -304,6 +306,7 @@ class HomeScreen extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.white,
             borderRadius: BorderRadius.circular(14),
+            boxShadow: AppShadows.card,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -334,6 +337,7 @@ class HomeScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
+        boxShadow: AppShadows.card,
       ),
       child: Row(
         children: [
@@ -389,6 +393,7 @@ class HomeScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(16),
+        boxShadow: AppShadows.card,
       ),
       child: Column(
         children: [
@@ -467,6 +472,7 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
         borderRadius: BorderRadius.circular(16),
+        boxShadow: AppShadows.card,
       ),
       child: Row(
         children: [
@@ -523,6 +529,7 @@ class HomeScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(14),
+        boxShadow: AppShadows.card,
       ),
       child: Row(
         children: [
