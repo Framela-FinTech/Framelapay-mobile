@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/routes/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_shadows.dart';
 import '../../../core/widgets/app_icon.dart';
 import '../../../data/models/support_models.dart';
 import '../../../data/repositories/support_repository.dart';
@@ -502,6 +503,7 @@ class _Card extends StatelessWidget {
         color: AppColors.white,
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: AppColors.divider),
+        boxShadow: AppShadows.card,
       ),
       child: child,
     );

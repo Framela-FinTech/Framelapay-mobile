@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/app_shadows.dart';
 import '../../core/widgets/app_bottom_nav.dart';
 import '../../core/widgets/app_icon.dart';
 import '../../data/models/activity_transaction.dart';
@@ -495,6 +496,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(8),
+        boxShadow: AppShadows.card,
       ),
       child: Row(
         children: [

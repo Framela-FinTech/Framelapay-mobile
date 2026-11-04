@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_shadows.dart';
 import '../../../core/widgets/app_icon.dart';
 
 /// Small yellow status pill used for "Verified" / "Active" badges in the
@@ -46,6 +47,7 @@ class KycUploadCard extends StatelessWidget {
         color: AppColors.white,
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: AppColors.divider),
+        boxShadow: AppShadows.card,
       ),
       child: Column(
         children: [
