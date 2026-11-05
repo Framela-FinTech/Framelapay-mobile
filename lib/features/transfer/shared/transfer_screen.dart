@@ -25,9 +25,9 @@ class TransferScreen extends StatelessWidget {
               Row(
                 children: [
                   _tab('Send Money', selected: true),
-                  _tab('Add Money',
-                      onTap: () => Navigator.pushNamed(
-                          context, AppRoutes.addMoneySelectWallet)),
+                  _tab('Receive Money',
+                      onTap: () =>
+                          Navigator.pushNamed(context, AppRoutes.receive)),
                   _tab('History'),
                 ],
               ),

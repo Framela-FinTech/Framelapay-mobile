@@ -29,6 +29,8 @@ import '../../features/wallet/choose_method_screen.dart';
 import '../../features/wallet/fund_wallet_details_screen.dart';
 import '../../features/wallet/fund_card_screen.dart';
 import '../../features/wallet/add_money_success_screen.dart';
+import '../../features/wallet/receive_money_screen.dart';
+import '../../features/wallet/receive_details_screen.dart';
 import '../../features/profile/profile_screen.dart';
 import '../../features/profile/widgets/profile_placeholder_screen.dart';
 import '../../features/profile/settings/settings_screen.dart';
@@ -143,6 +145,10 @@ class AppRoutes {
   static const fundWalletDetails = '/fund-wallet-details';
   static const fundCard = '/fund-card';
   static const addMoneySuccess = '/add-money-success';
+
+  // Receive Money flow.
+  static const receive = '/receive';
+  static const receiveDetails = '/receive/details';
 
   // Profile section.
   static const personalInformation = '/personal-information';
@@ -315,6 +321,12 @@ class AppRoutes {
       case addMoneySuccess:
         final wallet = settings.arguments as CurrencyWallet;
         return _page(AddMoneySuccessScreen(wallet: wallet));
+
+      case receive:
+        return _page(const ReceiveMoneyScreen());
+      case receiveDetails:
+        final wallet = settings.arguments as CurrencyWallet;
+        return _page(ReceiveDetailsScreen(wallet: wallet));
 
       // ---- Profile section ----
       case profile:
