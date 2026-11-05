@@ -81,9 +81,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _goToWelcome() =>
       Navigator.pushReplacementNamed(context, AppRoutes.welcome);
 
-  void _goToLogin() =>
-      Navigator.pushReplacementNamed(context, AppRoutes.login);
-
   @override
   void dispose() {
     _timer?.cancel();
@@ -210,7 +207,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       // offers the login shortcut, matching the design.
                       Center(
                         child: GestureDetector(
-                          onTap: isLast ? _goToLogin : _goToWelcome,
+                          onTap: _goToWelcome,
                           child: isLast
                               ? RichText(
                                   text: const TextSpan(
