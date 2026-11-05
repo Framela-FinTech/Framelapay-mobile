@@ -146,12 +146,11 @@ class ReviewTransferScreen extends StatelessWidget {
   }
 
   /// Builds the neutral auth/processing continuation for the stablecoin flow.
-  /// These are the same steps the processing screen showed before; the
-  /// completion target is the stablecoin transaction-details screen, which
-  /// still takes a `TransferRecipient` — so behavior is unchanged.
+  /// Processing hands off to the "Transfer completed" summary, whose
+  /// "View Transfer" opens the full transaction-details breakdown.
   TransferAuthFlow _stablecoinAuthFlow() {
     return TransferAuthFlow(
-      completionRoute: AppRoutes.transactionDetails,
+      completionRoute: AppRoutes.stablecoinCompleted,
       completionArgs: recipient,
       processingSteps: const [
         ProcessingStep(

@@ -90,6 +90,7 @@ import '../../features/transfer/shared/verify_fingerprint_screen.dart';
 import '../../features/transfer/shared/enter_passcode_screen.dart';
 import '../../features/transfer/shared/processing_transfer_screen.dart';
 import '../../features/transfer/shared/transaction_details_screen.dart';
+import '../../features/transfer/shared/stablecoin_completed_screen.dart';
 
 import '../../features/transfer/fiat/transfer_details_screen.dart';
 import '../../features/transfer/fiat/select_recipient_screen.dart';
@@ -230,6 +231,7 @@ class AppRoutes {
   static const verifyFingerprint = '/verify-fingerprint';
   static const enterPasscode = '/enter-passcode';
   static const processingTransfer = '/processing-transfer';
+  static const stablecoinCompleted = '/stablecoin-completed';
   static const transactionDetails = '/transaction-details';
 
   // Fiat flows (Bank / Card / Wallet) — shared + method-specific screens.
@@ -505,6 +507,9 @@ class AppRoutes {
       case processingTransfer:
         final flow = settings.arguments as TransferAuthFlow;
         return _page(ProcessingTransferScreen(flow: flow));
+      case stablecoinCompleted:
+        final recipient = settings.arguments as TransferRecipient;
+        return _page(StablecoinCompletedScreen(recipient: recipient));
       case transactionDetails:
         final recipient = settings.arguments as TransferRecipient;
         return _page(TransactionDetailsScreen(recipient: recipient));
