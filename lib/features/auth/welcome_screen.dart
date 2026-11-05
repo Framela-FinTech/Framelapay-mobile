@@ -32,7 +32,7 @@ class WelcomeScreen extends StatelessWidget {
               const Spacer(flex: 2),
               // Title
               const Text(
-                'Send money across\nborders,simply.',
+                'Send money across\nborders, simply.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: AppColors.primaryDark,
@@ -43,7 +43,7 @@ class WelcomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               const Text(
-                'Fast,secure and transparent international transfer.',
+                'Fast, secure and transparent international transfer.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: AppColors.primaryDark,
@@ -65,7 +65,8 @@ class WelcomeScreen extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14)),
                 ),
-                onPressed: () {},
+                onPressed: () =>
+                    Navigator.pushReplacementNamed(context, AppRoutes.login),
                 child: const Text(
                   'Log In',
                   style: TextStyle(

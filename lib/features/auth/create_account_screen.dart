@@ -126,20 +126,24 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               ),
               const SizedBox(height: 20),
               Center(
-                child: RichText(
-                  text: const TextSpan(
-                    style:
-                        TextStyle(color: AppColors.primaryDark, fontSize: 13),
-                    children: [
-                      TextSpan(text: 'Already have an account? '),
-                      TextSpan(
-                        text: 'Log in',
-                        style: TextStyle(
-                          color: AppColors.accentYellow,
-                          fontWeight: FontWeight.w600,
+                child: GestureDetector(
+                  onTap: () => Navigator.pushReplacementNamed(
+                      context, AppRoutes.login),
+                  child: RichText(
+                    text: const TextSpan(
+                      style:
+                          TextStyle(color: AppColors.primaryDark, fontSize: 13),
+                      children: [
+                        TextSpan(text: 'Already have an account? '),
+                        TextSpan(
+                          text: 'Log in',
+                          style: TextStyle(
+                            color: AppColors.accentYellow,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
