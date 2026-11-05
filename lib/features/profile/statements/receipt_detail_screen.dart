@@ -87,7 +87,7 @@ class ReceiptDetailScreen extends StatelessWidget {
                 children: [
                   const Expanded(
                     child: Text(
-                      'Share Receipt',
+                      'Share Receipts',
                       style: TextStyle(
                           fontSize: 18, fontWeight: FontWeight.w700),
                     ),
