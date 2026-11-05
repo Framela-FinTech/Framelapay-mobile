@@ -40,7 +40,8 @@ class AppColors {
 
   // ---- Surfaces & lines ----
   static const Color inputFill = Color(0xFFF5F6FA); // light input fill
-  static const Color pageGrey = Color(0xFFF7F8FA); // light app background
+  static const Color pageGrey =
+      Color(0xFFF2F4F7); // light app background, sampled from Figma
   static const Color divider = Color(0xFFCBD5E1); // Figma: Framela/Stroke
   static const Color stroke = Color(0xFFCBD5E1); // Framela/Stroke
 
