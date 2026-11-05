@@ -128,7 +128,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               Center(
                 child: GestureDetector(
                   onTap: () => Navigator.pushReplacementNamed(
-                      context, AppRoutes.login),
+                      context, AppRoutes.welcome),
                   child: RichText(
                     text: const TextSpan(
                       style:
