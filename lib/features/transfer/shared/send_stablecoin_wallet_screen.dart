@@ -1,133 +1,138 @@
 import 'package:flutter/material.dart';
-import '../../../core/theme/app_colors.dart';
 import '../../../core/routes/app_routes.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_shadows.dart';
+import '../../../core/widgets/app_icon.dart';
 
-class SendStablecoinWalletScreen extends StatefulWidget {
+/// Step 1 of the stablecoin flow — pick the wallet to send from.
+///
+/// Figma shows this as a plain tap-to-navigate list: no radio, no Continue.
+/// Choosing a wallet goes straight on to the network picker.
+class SendStablecoinWalletScreen extends StatelessWidget {
   const SendStablecoinWalletScreen({super.key});
 
-  @override
-  State<SendStablecoinWalletScreen> createState() =>
-      _SendStablecoinWalletScreenState();
-}
-
-class _SendStablecoinWalletScreenState
-    extends State<SendStablecoinWalletScreen> {
-  String _selected = 'USDC';
+  // Brand marks aren't in the icon pack yet, so the coin glyph is tinted to
+  // each token's brand colour as a stand-in.
+  static const _usdcBlue = Color(0xFF2775CA);
+  static const _usdtGreen = Color(0xFF26A17B);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.pageGrey,
       appBar: AppBar(
         backgroundColor: AppColors.white,
         elevation: 0,
-        leading: const BackButton(color: Colors.black),
+        leading: const BackButton(color: AppColors.primaryDark),
         title: const Text('Send Stablecoin',
-            style: TextStyle(color: Colors.black, fontSize: 16)),
+            style: TextStyle(
+                color: AppColors.primaryDark,
+                fontSize: 20,
+                fontWeight: FontWeight.w700)),
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Your wallets',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 15)),
-                    const SizedBox(height: 12),
-                    _walletTile('USDC', 'USD Coin', '2,500.00 USDC'),
-                    _walletTile('USDT', 'Tether', '2,500.00 USDC'),
-                    const SizedBox(height: 16),
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: AppColors.inputFill,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Text(
-                        "Stablecoin transfer may use blockchain networks. You'll choose a network next.",
-                        style:
-                            TextStyle(color: AppColors.textGrey, fontSize: 12),
-                      ),
-                    ),
-                  ],
-                ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(20, 18, 20, 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Your wallets',
+                  style: TextStyle(
+                      color: AppColors.primaryDark,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16)),
+              const SizedBox(height: 12),
+              _WalletCard(
+                code: 'USDC',
+                name: 'USD Coin',
+                balance: '2,500.00 USDC',
+                tint: _usdcBlue,
+                onTap: () =>
+                    Navigator.pushNamed(context, AppRoutes.chooseNetwork),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryDark,
-                    foregroundColor: Colors.white,
-                  ),
-                  onPressed: () =>
-                      Navigator.pushNamed(context, AppRoutes.chooseNetwork),
-                  child: const Text('Continue'),
-                ),
+              const SizedBox(height: 12),
+              _WalletCard(
+                code: 'USDT',
+                name: 'Tether',
+                balance: '2,500.00 USDT',
+                tint: _usdtGreen,
+                onTap: () =>
+                    Navigator.pushNamed(context, AppRoutes.chooseNetwork),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
+}
 
-  Widget _walletTile(String code, String name, String balance) {
-    final selected = _selected == code;
+class _WalletCard extends StatelessWidget {
+  final String code;
+  final String name;
+  final String balance;
+  final Color tint;
+  final VoidCallback onTap;
+
+  const _WalletCard({
+    required this.code,
+    required this.name,
+    required this.balance,
+    required this.tint,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => setState(() => _selected = code),
       borderRadius: BorderRadius.circular(14),
+      onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.inputFill,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: selected ? AppColors.accentYellow : Colors.transparent,
-            width: 1.5,
-          ),
+          boxShadow: AppShadows.card,
         ),
         child: Row(
           children: [
-            CircleAvatar(
-              backgroundColor: AppColors.primaryDark,
-              child: Text(code[0],
-                  style: const TextStyle(color: Colors.white, fontSize: 12)),
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: tint.withValues(alpha: 0.10),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: AppIcon('coins', size: 26, color: tint),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: 14),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('$code\n$name',
+                  Text(code,
                       style: const TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 13)),
+                          color: AppColors.primaryDark,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600)),
+                  Text(name,
+                      style: const TextStyle(
+                          color: AppColors.textGrey, fontSize: 13)),
+                  const SizedBox(height: 6),
+                  const Text('Available balance',
+                      style: TextStyle(
+                          color: AppColors.textGrey, fontSize: 13)),
+                  Text(balance,
+                      style: const TextStyle(
+                          color: AppColors.primaryDark,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600)),
                 ],
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                const Text('Available balance',
-                    style: TextStyle(color: AppColors.textGrey, fontSize: 10)),
-                Text(balance,
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w600, fontSize: 12)),
-              ],
-            ),
             const SizedBox(width: 8),
-            Radio<String>(
-              value: code,
-              groupValue: _selected,
-              activeColor: AppColors.accentYellow,
-              onChanged: (v) => setState(() => _selected = v!),
-            ),
+            const AppIcon('chevron-right',
+                size: 22, color: AppColors.primaryDark),
           ],
         ),
       ),
