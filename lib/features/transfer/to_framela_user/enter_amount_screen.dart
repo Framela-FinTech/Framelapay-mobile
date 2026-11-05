@@ -9,8 +9,9 @@ import '../shared/widgets/recipient_summary_card.dart';
 class EnterAmountScreen extends StatelessWidget {
   const EnterAmountScreen({super.key});
 
-  static const _paleBlue = kStablecoinPaleBlue;
-  static const _linkBlue = kStablecoinLinkBlue;
+  /// The fee strip is the panel blue; "Use max" uses the deeper Primary 40.
+  static const _panelBlue = AppColors.infoPanel;
+  static const _linkBlue = AppColors.primary40;
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +87,7 @@ class EnterAmountScreen extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                 decoration: BoxDecoration(
-                  color: _paleBlue,
+                  color: _panelBlue,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: const Row(

@@ -12,7 +12,7 @@ class AssetNetworkBar extends StatelessWidget {
   final VoidCallback? onChange;
 
   /// Stand-in for the USDC brand mark until the real asset lands.
-  static const _usdcBlue = Color(0xFF2775CA);
+  static const _usdcBlue = AppColors.usdcBlue;
 
   const AssetNetworkBar({
     super.key,

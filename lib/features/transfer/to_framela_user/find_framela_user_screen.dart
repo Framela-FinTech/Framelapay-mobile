@@ -160,7 +160,7 @@ class FindFramelaUserScreen extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         // Figma: a pale blue panel, distinct from the white contact cards.
-        color: const Color(0xFFDCE7F7),
+        color: AppColors.infoPanel,
         borderRadius: BorderRadius.circular(14),
       ),
       child: Row(

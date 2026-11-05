@@ -98,7 +98,8 @@ class ReviewTransferScreen extends StatelessWidget {
           _row(
             'You send',
             amount,
-            leading: const AppIcon('coins', size: 28, color: Color(0xFF2775CA)),
+            leading:
+                const AppIcon('coins', size: 28, color: AppColors.usdcBlue),
           ),
           const Divider(height: 1, color: AppColors.divider),
           _row(
@@ -121,7 +122,7 @@ class ReviewTransferScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: kStablecoinPaleBlue,
+        color: AppColors.infoPanel,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(

@@ -53,7 +53,7 @@ class _ChooseNetworkScreenState extends State<ChooseNetworkScreen> {
               Container(
                 padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: AppColors.accentYellow.withValues(alpha: 0.10),
+                  color: AppColors.warningSoft,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Row(

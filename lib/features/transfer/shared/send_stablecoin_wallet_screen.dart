@@ -12,9 +12,9 @@ class SendStablecoinWalletScreen extends StatelessWidget {
   const SendStablecoinWalletScreen({super.key});
 
   // Brand marks aren't in the icon pack yet, so the coin glyph is tinted to
-  // each token's brand colour as a stand-in.
-  static const _usdcBlue = Color(0xFF2775CA);
-  static const _usdtGreen = Color(0xFF26A17B);
+  // each token's colour as a stand-in.
+  static const _usdcBlue = AppColors.usdcBlue;
+  static const _usdtGreen = AppColors.usdtGreen;
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +100,7 @@ class _WalletCard extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: tint.withValues(alpha: 0.10),
+                color: AppColors.iconTileSoft,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: AppIcon('coins', size: 26, color: tint),

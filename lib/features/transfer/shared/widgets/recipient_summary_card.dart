@@ -4,9 +4,9 @@ import '../../../../core/theme/app_shadows.dart';
 import '../../../../core/widgets/app_icon.dart';
 import '../../../../data/models/transfer_recipient.dart';
 
-/// Figma uses a pale blue for the chips on the stablecoin summary cards.
-const Color kStablecoinPaleBlue = Color(0xFFDCE7F7);
-const Color kStablecoinLinkBlue = Color(0xFF2563EB);
+/// Chip fill and link ink on the stablecoin summary cards, sampled from Figma.
+const Color kStablecoinPaleBlue = AppColors.infoChip;
+const Color kStablecoinLinkBlue = AppColors.primary50;
 
 /// Small pill used for "FramelaPay user" / "selected".
 class StablecoinChip extends StatelessWidget {

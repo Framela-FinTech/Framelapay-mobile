@@ -170,8 +170,8 @@ class _SuccessTick extends StatelessWidget {
     return Container(
       width: 104,
       height: 104,
-      decoration: BoxDecoration(
-        color: AppColors.success.withValues(alpha: 0.10),
+      decoration: const BoxDecoration(
+        color: AppColors.successSoft,
         shape: BoxShape.circle,
       ),
       child: Center(

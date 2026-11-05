@@ -53,4 +53,20 @@ class AppColors {
   // ---- Accent icon tints (centralized so widgets never hardcode raw hex) ----
   static const Color iconBlue = Color(0xFF2B78C4); // Figma: Primary 50
   static const Color iconPurple = Color(0xFF7048E8); // no Figma token; retained
+
+  // ---- Soft informational surfaces ----
+  // Sampled from the Figma transfer boards. These are flat fills, not alpha
+  // tints of the ramp, so they are tokens in their own right.
+  static const Color infoPanel = Color(0xFFD6E5F7); // notice / fee strips
+  static const Color infoChip = Color(0xFFE6F1FE); // status chips
+  static const Color infoSoft = Color(0xFFEAF2FB); // large icon haloes
+  static const Color iconTileSoft = Color(0xFFF4F8FD); // coin / icon tiles
+  static const Color warningSoft = Color(0xFFFEF7E3); // caution panels
+  static const Color successSoft = Color(0xFFEDFDF5); // success halo
+
+  // ---- Stablecoin marks ----
+  // Sampled from the Figma coin glyphs; these are the board's own variants,
+  // not Circle's / Tether's official brand hexes.
+  static const Color usdcBlue = Color(0xFF3E73C4);
+  static const Color usdtGreen = Color(0xFF50AF95);
 }

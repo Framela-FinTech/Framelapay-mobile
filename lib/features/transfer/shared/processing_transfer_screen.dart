@@ -4,8 +4,7 @@ import '../../../core/theme/app_shadows.dart';
 import '../../../data/models/processing_step.dart';
 import '../../../data/models/transfer_auth_flow.dart';
 
-/// Figma's pale blue, used for the spinner halo and the closing notice.
-const Color _paleBlue = Color(0xFFDCE7F7);
+// Figma uses a lighter blue behind the spinner than in the closing notice.
 
 /// Shared "Processing Transfer" screen for BOTH the stablecoin and fiat flows.
 ///
@@ -62,7 +61,7 @@ class _ProcessingTransferScreenState extends State<ProcessingTransferScreen> {
                 width: 110,
                 height: 110,
                 decoration: const BoxDecoration(
-                  color: _paleBlue,
+                  color: AppColors.infoSoft,
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Icons.sync,
@@ -97,7 +96,7 @@ class _ProcessingTransferScreenState extends State<ProcessingTransferScreen> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: _paleBlue,
+                  color: AppColors.infoPanel,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Row(
