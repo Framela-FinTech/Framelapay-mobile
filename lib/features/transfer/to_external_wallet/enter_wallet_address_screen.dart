@@ -33,7 +33,10 @@ class EnterWalletAddressScreen extends StatelessWidget {
                       style: TextStyle(
                           fontWeight: FontWeight.w600, fontSize: 13)),
                   const Spacer(),
-                  TextButton(onPressed: () {}, child: const Text('Change')),
+                  TextButton(
+                      // Back to the network picker to change asset/network.
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Change')),
                 ],
               ),
               const SizedBox(height: 20),

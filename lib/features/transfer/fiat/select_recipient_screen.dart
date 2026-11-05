@@ -73,7 +73,8 @@ class _SelectRecipientScreenState extends State<SelectRecipientScreen> {
                             style: TextStyle(
                                 fontWeight: FontWeight.w700, fontSize: 15)),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () => Navigator.pushNamed(
+                              context, AppRoutes.beneficiariesList),
                           child: const Text('View All'),
                         ),
                       ],

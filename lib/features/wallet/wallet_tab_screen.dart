@@ -324,7 +324,9 @@ class _WalletTabScreenState extends State<WalletTabScreen> {
       children: [
         const Text('Recent Activity',
             style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
-        TextButton(onPressed: () {}, child: const Text('View All')),
+        TextButton(
+            onPressed: () => Navigator.pushNamed(context, AppRoutes.activity),
+            child: const Text('View All')),
       ],
     );
   }

@@ -49,7 +49,7 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 12),
               _buildRatesCard(),
               const SizedBox(height: 24),
-              _buildReferralCard(),
+              _buildReferralCard(context),
               const SizedBox(height: 24),
               _buildSectionHeader(
                 'Recent Activity',
@@ -458,7 +458,7 @@ class HomeScreen extends StatelessWidget {
 
   // ---------- Referral ----------
 
-  Widget _buildReferralCard() {
+  Widget _buildReferralCard(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
@@ -511,7 +511,7 @@ class HomeScreen extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
             ),
-            onPressed: () {},
+            onPressed: () => Navigator.pushNamed(context, AppRoutes.referral),
             child: const Text('Refer now', style: TextStyle(fontSize: 12)),
           ),
         ],

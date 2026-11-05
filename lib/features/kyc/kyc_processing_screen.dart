@@ -65,7 +65,8 @@ class _KycProcessingScreenState extends State<KycProcessingScreen> {
                       const TextStyle(color: AppColors.textGrey, fontSize: 13)),
               const SizedBox(height: 24),
               TextButton(
-                onPressed: () {},
+                // Back to the capture screen this was pushed from.
+                onPressed: () => Navigator.pop(context),
                 child: const Text('Having trouble? Retake photo',
                     style: TextStyle(color: AppColors.accentYellow)),
               ),

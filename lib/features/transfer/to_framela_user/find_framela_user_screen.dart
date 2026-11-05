@@ -74,7 +74,8 @@ class FindFramelaUserScreen extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                           fontSize: 17)),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () => Navigator.pushNamed(
+                        context, AppRoutes.beneficiariesList),
                     child: const Text('View all',
                         style: TextStyle(
                             color: AppColors.accentYellow,

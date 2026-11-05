@@ -52,7 +52,8 @@ class VerifyWalletAddressScreen extends StatelessWidget {
                           style: TextStyle(
                               color: AppColors.textGrey, fontSize: 12)),
                       trailing: TextButton(
-                          onPressed: () {}, child: const Text('Edit')),
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('Edit')),
                     ),
                     const Divider(height: 32),
                     _row('Asset', 'USDC · USD Coin'),

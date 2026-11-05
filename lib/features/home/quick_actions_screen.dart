@@ -18,31 +18,35 @@ class QuickActionsScreen extends StatelessWidget {
   // two-column list of icon-tile + label rows. Tile routes are unchanged.
   static const _transfer = <_QuickAction>[
     _QuickAction('Send Money', 'send', route: AppRoutes.transferHub),
-    _QuickAction('Beneficiaries', 'folder-user'),
-    _QuickAction('Crypto', 'BTC'),
-    _QuickAction('Transactions History', 'receipt'),
+    _QuickAction('Beneficiaries', 'folder-user',
+        route: AppRoutes.beneficiariesList),
+    _QuickAction('Crypto', 'BTC', route: AppRoutes.sendStablecoinWallet),
+    _QuickAction('Transactions History', 'receipt',
+        route: AppRoutes.activity),
   ];
 
   static const _manage = <_QuickAction>[
-    _QuickAction('Refer & Earn', 'gift'),
+    _QuickAction('Refer & Earn', 'gift', route: AppRoutes.referral),
+    // No exchange-rates screen exists yet, so this tile stays inert.
     _QuickAction('Exchange rates', 'chart-up'),
-    _QuickAction('Transactions Receipts', 'receipt'),
-    _QuickAction('Security', 'shield'),
+    _QuickAction('Transactions Receipts', 'receipt',
+        route: AppRoutes.transactionReceipts),
+    _QuickAction('Security', 'shield', route: AppRoutes.securityHome),
   ];
 
   static const _support = <_QuickAction>[
-    _QuickAction('Help & Support', 'lifebuoy'),
-    _QuickAction('FAQs', 'question-circle'),
+    _QuickAction('Help & Support', 'lifebuoy', route: AppRoutes.helpSupport),
+    _QuickAction('FAQs', 'question-circle', route: AppRoutes.helpCentre),
     _QuickAction('Notifications', 'bell', route: AppRoutes.notifications),
-    _QuickAction('Settings', 'settings'),
+    _QuickAction('Settings', 'settings', route: AppRoutes.settingsHome),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F8FA),
+      backgroundColor: AppColors.pageGrey,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF7F8FA),
+        backgroundColor: AppColors.pageGrey,
         elevation: 0,
         leading: const BackButton(color: Colors.black),
         title: const Text('Quick Actions',
