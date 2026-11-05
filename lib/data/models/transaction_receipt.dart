@@ -1,3 +1,5 @@
+import 'activity_transaction.dart';
+
 /// Lifecycle state of a receipt — drives the status pill and the footer note.
 enum ReceiptStatus { completed, pending, failed }
 
@@ -44,6 +46,53 @@ class TransactionReceipt {
   });
 
   String get listSubtitle => 'Ref $reference · $date';
+
+  /// Builds the receipt shown when a History row is tapped.
+  ///
+  /// [ActivityTransaction] carries far less than a real receipt does, so the
+  /// rows here are derived from what a list row knows. Once receipts come from
+  /// the backend this is replaced by a fetch on the transaction id.
+  factory TransactionReceipt.fromActivity(ActivityTransaction transaction) {
+    final parts = transaction.subtitle.split(' · ');
+    final method = parts.first;
+    final unsigned = transaction.amount.replaceFirst(RegExp(r'^[+-]'), '');
+    final digits = transaction.date.replaceAll(RegExp(r'[^0-9]'), '');
+
+    final status = switch (transaction.status) {
+      ActivityTransactionStatus.completed => ReceiptStatus.completed,
+      ActivityTransactionStatus.pending => ReceiptStatus.pending,
+      ActivityTransactionStatus.failed => ReceiptStatus.failed,
+    };
+    final note = switch (status) {
+      ReceiptStatus.completed => 'Transaction successful',
+      ReceiptStatus.pending => 'Processing transaction',
+      ReceiptStatus.failed => 'Transaction unsuccessful',
+    };
+
+    return TransactionReceipt(
+      name: transaction.title,
+      amount: transaction.amount,
+      currencyAmount: '${transaction.currency} $unsigned',
+      reference: digits,
+      transactionId: 'FRM-$digits',
+      date: transaction.date,
+      status: status,
+      headlineAmount: unsigned,
+      caption: transaction.title,
+      statusNote: note,
+      rows: [
+        ReceiptRow(transaction.incoming ? 'Received' : 'Sent', unsigned),
+        ReceiptRow('Category', transaction.category),
+        ReceiptRow('Payment method', method),
+        ReceiptRow('Currency', transaction.currency),
+        ReceiptRow('Date and time', transaction.date),
+        if (status == ReceiptStatus.failed)
+          const ReceiptRow('Failure reason', 'Rate expired before confirmation'),
+        if (status == ReceiptStatus.pending)
+          const ReceiptRow('Estimated completion', 'Within 1 hour'),
+      ],
+    );
+  }
 }
 
 /// Mock receipts used until a backend is wired in — one per receipt state.

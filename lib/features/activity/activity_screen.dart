@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../core/routes/app_routes.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_shadows.dart';
 import '../../core/widgets/app_bottom_nav.dart';
 import '../../core/widgets/app_icon.dart';
 import '../../data/models/activity_transaction.dart';
+import '../../data/models/transaction_receipt.dart';
 import '../../data/repositories/activity_repository.dart';
 
 class ActivityScreen extends StatefulWidget {
@@ -112,9 +114,14 @@ class _ActivityScreenState extends State<ActivityScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.white,
         elevation: 0,
-        automaticallyImplyLeading: false,
-        title: const Text('Transfer',
-            style: TextStyle(color: AppColors.primaryDark, fontSize: 16)),
+        // Reached both as a bottom-nav tab (nothing to pop) and by push from
+        // the transfer hub, so let Flutter decide whether to show the back arrow.
+        iconTheme: const IconThemeData(color: AppColors.primaryDark),
+        title: const Text('History',
+            style: TextStyle(
+                color: AppColors.primaryDark,
+                fontSize: 20,
+                fontWeight: FontWeight.w700)),
       ),
       bottomNavigationBar: const AppBottomNav(currentIndex: 3),
       body: SafeArea(
@@ -130,11 +137,6 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     _searchField(),
                     const SizedBox(height: 10),
                     _filterRow(),
-                    const SizedBox(height: 8),
-                    _filterButton(
-                      _period == 'All' ? 'Choose period' : _period,
-                      _showPeriodSheet,
-                    ),
                     const SizedBox(height: 14),
                     if (_hasFilters)
                       Row(
@@ -160,44 +162,52 @@ class _ActivityScreenState extends State<ActivityScreen> {
     );
   }
 
+  /// White bar carrying the three modes; the active one is a dark pill.
   Widget _modeTabs() {
     return Container(
-      padding: const EdgeInsets.all(4),
+      padding: const EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: AppColors.primaryDark,
-        borderRadius: BorderRadius.circular(6),
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         children: [
-          _modeTab('Send Money', false),
-          _modeTab('Add Money', false),
-          _modeTab('History', true),
+          _modeTab('Send Money', 'arrow-up', false),
+          _modeTab('Receive Money', 'arrow-down', false),
+          _modeTab('History', 'clock', true),
         ],
       ),
     );
   }
 
-  Widget _modeTab(String label, bool selected) {
+  Widget _modeTab(String label, String icon, bool selected) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
-          color: selected ? AppColors.primaryDark : AppColors.white,
-          borderRadius: BorderRadius.circular(4),
+          color: selected ? AppColors.primaryDark : Colors.transparent,
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (selected)
-              const Padding(
-                padding: EdgeInsets.only(right: 4),
-                child: AppIcon('clock', size: 12, color: AppColors.white),
-              ),
-            Text(label,
-                style: TextStyle(
-                    color: selected ? AppColors.white : AppColors.primaryDark,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600)),
+            Padding(
+              padding: const EdgeInsets.only(right: 5),
+              child: AppIcon(icon,
+                  size: 14,
+                  color:
+                      selected ? AppColors.white : AppColors.primaryDark),
+            ),
+            Flexible(
+              child: Text(label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      color:
+                          selected ? AppColors.white : AppColors.primaryDark,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600)),
+            ),
           ],
         ),
       ),
@@ -472,89 +482,112 @@ class _ActivityScreenState extends State<ActivityScreen> {
     );
   }
 
+  /// The month header doubles as the period picker's trigger — its chevron is
+  /// what opens "Choose period".
   Widget _monthHeader(String month) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
-      child: Row(
-        children: [
-          Text(month,
-              style: const TextStyle(
-                  color: AppColors.primaryDark,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700)),
-          const AppIcon('chevron-down', size: 15, color: AppColors.primaryDark),
-        ],
+      child: InkWell(
+        onTap: _showPeriodSheet,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(_period == 'All' ? month : _period,
+                style: const TextStyle(
+                    color: AppColors.primaryDark,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700)),
+            const AppIcon('chevron-down',
+                size: 18, color: AppColors.primaryDark),
+          ],
+        ),
       ),
     );
   }
 
   Widget _transactionTile(ActivityTransaction transaction) {
     final statusColor = _statusColor(transaction.status);
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: AppShadows.card,
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 28,
-            height: 28,
-            decoration: BoxDecoration(
-              color: AppColors.inputFill,
-              borderRadius: BorderRadius.circular(7),
-            ),
-            child: AppIcon(transaction.icon,
-                size: 16, color: AppColors.primaryDark),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () => Navigator.pushNamed(
+          context,
+          AppRoutes.receiptDetail,
+          arguments: TransactionReceipt.fromActivity(transaction),
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: AppShadows.card,
           ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(transaction.title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                        color: AppColors.primaryDark,
-                        fontSize: 9,
-                        fontWeight: FontWeight.w700)),
-                const SizedBox(height: 3),
-                Text(transaction.subtitle,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                        color: AppColors.textGrey, fontSize: 8)),
-              ],
-            ),
-          ),
-          const SizedBox(width: 6),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+          child: Row(
             children: [
-              Text(transaction.amount,
-                  style: TextStyle(
-                      color: transaction.incoming
-                          ? AppColors.success
-                          : AppColors.primaryDark,
-                      fontSize: 9,
-                      fontWeight: FontWeight.w700)),
-              const SizedBox(height: 3),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                width: 40,
+                height: 40,
                 decoration: BoxDecoration(
-                  color: statusColor.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(4),
+                  color: AppColors.inputFill,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                child: Text(_statusLabel(transaction.status),
-                    style: TextStyle(color: statusColor, fontSize: 7)),
+                child: AppIcon(transaction.icon,
+                    size: 20, color: AppColors.primaryDark),
               ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(transaction.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            color: AppColors.primaryDark,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700)),
+                    const SizedBox(height: 3),
+                    Text(transaction.subtitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            color: AppColors.textGrey, fontSize: 12)),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  // Figma keeps every amount navy — direction is carried by the
+                  // leading +/- sign, not by colour.
+                  Text(transaction.amount,
+                      style: const TextStyle(
+                          color: AppColors.primaryDark,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700)),
+                  const SizedBox(height: 4),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 9, vertical: 3),
+                    decoration: BoxDecoration(
+                      color: statusColor.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    child: Text(_statusLabel(transaction.status),
+                        style: TextStyle(
+                            color: statusColor,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600)),
+                  ),
+                ],
+              ),
+              const AppIcon('chevron-right',
+                  size: 20, color: AppColors.primaryDark),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -565,20 +598,43 @@ class _ActivityScreenState extends State<ActivityScreen> {
       child: Center(
         child: Column(
           children: [
-            const AppIcon('search', size: 42, color: AppColors.primaryDark),
-            const SizedBox(height: 14),
+            Container(
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                color: AppColors.primaryDark.withValues(alpha: 0.08),
+                shape: BoxShape.circle,
+              ),
+              child: const AppIcon('search',
+                  size: 32, color: AppColors.primaryDark),
+            ),
+            const SizedBox(height: 18),
             const Text('No matching transactions',
                 style: TextStyle(
                     color: AppColors.primaryDark,
-                    fontSize: 14,
+                    fontSize: 17,
                     fontWeight: FontWeight.w700)),
-            const SizedBox(height: 6),
+            const SizedBox(height: 8),
             const Text('Try another search or clear your filters.',
-                style: TextStyle(color: AppColors.textGrey, fontSize: 11)),
-            const SizedBox(height: 18),
-            OutlinedButton(
-              onPressed: _resetFilters,
-              child: const Text('Clear Filters'),
+                style: TextStyle(color: AppColors.textGrey, fontSize: 14)),
+            const SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: AppColors.white,
+                  minimumSize: const Size.fromHeight(56),
+                  side: const BorderSide(color: AppColors.divider),
+                  foregroundColor: AppColors.primaryDark,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                onPressed: _resetFilters,
+                child: const Text('Clear Filters',
+                    style: TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.w700)),
+              ),
             ),
           ],
         ),
@@ -607,7 +663,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 Text(title,
                     style: const TextStyle(
                         color: AppColors.primaryDark,
-                        fontSize: 14,
+                        fontSize: 17,
                         fontWeight: FontWeight.w700)),
                 IconButton(
                   onPressed: () => Navigator.pop(context),
@@ -615,20 +671,62 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 ),
               ],
             ),
-            ...options.map((option) => ListTile(
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(option, style: const TextStyle(fontSize: 12)),
-                  trailing: option == selected
-                      ? const AppIcon('check-circle',
-                          color: AppColors.accentYellow)
-                      : null,
-                  onTap: () => Navigator.pop(context, option),
-                )),
+            // Figma: the active option is a cream pill with a gold outline and
+            // a gold tick; the rest are plain rows separated by hairlines.
+            for (var i = 0; i < options.length; i++)
+              _choiceRow(
+                option: options[i],
+                isSelected: options[i] == selected,
+                // No divider under the pill, or after the final row.
+                showDivider: i != options.length - 1 &&
+                    options[i] != selected &&
+                    options[i + 1] != selected,
+              ),
           ],
         ),
       ),
     );
     if (result != null) onSelected(result);
+  }
+
+  Widget _choiceRow({
+    required String option,
+    required bool isSelected,
+    required bool showDivider,
+  }) {
+    return Column(
+      children: [
+        InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () => Navigator.pop(context, option),
+          child: Container(
+            height: 56,
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            decoration: isSelected
+                ? BoxDecoration(
+                    color: AppColors.accentYellow.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.accentYellow),
+                  )
+                : null,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(option,
+                      style: const TextStyle(
+                          color: AppColors.primaryDark, fontSize: 14)),
+                ),
+                if (isSelected)
+                  const Icon(Icons.check,
+                      size: 22, color: AppColors.accentYellow),
+              ],
+            ),
+          ),
+        ),
+        if (showDivider)
+          const Divider(height: 1, color: AppColors.divider),
+      ],
+    );
   }
 }
 
@@ -648,7 +746,7 @@ Color _statusColor(ActivityTransactionStatus status) {
     case ActivityTransactionStatus.completed:
       return AppColors.success;
     case ActivityTransactionStatus.pending:
-      return AppColors.accentYellow;
+      return AppColors.warning;
     case ActivityTransactionStatus.failed:
       return AppColors.error;
   }
