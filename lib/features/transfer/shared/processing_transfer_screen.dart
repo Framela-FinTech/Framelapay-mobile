@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/widgets/app_icon.dart';
+import '../../../core/theme/app_shadows.dart';
 import '../../../data/models/processing_step.dart';
 import '../../../data/models/transfer_auth_flow.dart';
+
+/// Figma's pale blue, used for the spinner halo and the closing notice.
+const Color _paleBlue = Color(0xFFDCE7F7);
 
 /// Shared "Processing Transfer" screen for BOTH the stablecoin and fiat flows.
 ///
@@ -37,39 +40,84 @@ class _ProcessingTransferScreenState extends State<ProcessingTransferScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final steps = widget.flow.processingSteps;
     return Scaffold(
+      backgroundColor: AppColors.pageGrey,
       appBar: AppBar(
         backgroundColor: AppColors.white,
         elevation: 0,
-        leading: const BackButton(color: Colors.black),
+        leading: const BackButton(color: AppColors.primaryDark),
         title: const Text('Processing Transfer',
-            style: TextStyle(color: Colors.black, fontSize: 16)),
+            style: TextStyle(
+                color: AppColors.primaryDark,
+                fontSize: 20,
+                fontWeight: FontWeight.w700)),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.fromLTRB(20, 24, 20, 24),
           child: Column(
             children: [
-              const SizedBox(height: 24),
-              const SizedBox(
-                width: 60,
-                height: 60,
-                child: CircularProgressIndicator(
-                    strokeWidth: 4, color: AppColors.accentYellow),
+              Container(
+                width: 110,
+                height: 110,
+                decoration: const BoxDecoration(
+                  color: _paleBlue,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.sync,
+                    size: 54, color: AppColors.primaryDark),
               ),
               const SizedBox(height: 20),
-              const Text("We're processing your transfer",
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
+              const Text("We're Processing Your Transfer",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: AppColors.primaryDark,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 24)),
               const SizedBox(height: 6),
               const Text('You can safely close the app.',
-                  style: TextStyle(color: AppColors.textGrey, fontSize: 12)),
-              const SizedBox(height: 32),
-              ...widget.flow.processingSteps.map(_step),
-              const SizedBox(height: 24),
-              const Text("We'll notify you once the transfer is completed.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: AppColors.textGrey, fontSize: 12)),
-              const SizedBox(height: 24),
+                  style: TextStyle(color: AppColors.textGrey, fontSize: 15)),
+              const SizedBox(height: 26),
+              Container(
+                padding: const EdgeInsets.all(18),
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: AppShadows.card,
+                ),
+                child: Column(
+                  children: [
+                    for (var i = 0; i < steps.length; i++)
+                      _step(steps[i], isLast: i == steps.length - 1),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: _paleBlue,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(Icons.info_outline,
+                        size: 24, color: AppColors.primaryDark),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        "You can safely close the app. We'll notify you when the transfer is completed.",
+                        style: TextStyle(
+                            color: AppColors.primaryDark,
+                            fontSize: 15,
+                            height: 1.4),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -77,43 +125,86 @@ class _ProcessingTransferScreenState extends State<ProcessingTransferScreen> {
     );
   }
 
-  Widget _step(ProcessingStep step) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+  /// One timeline row: status marker and its connector on the left, the
+  /// step's text on the right.
+  Widget _step(ProcessingStep step, {required bool isLast}) {
+    return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppIcon(
-              step.done ? 'check-circle' : 'radio-button',
-              style: step.done ? AppIconStyle.bold : AppIconStyle.linear,
-              color: step.done ? AppColors.success : AppColors.textGrey,
-              size: 20),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(step.title,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 14)),
-                    ),
-                    if (step.time.isNotEmpty)
-                      Text(step.time,
-                          style: const TextStyle(
-                              color: AppColors.textGrey, fontSize: 11)),
-                  ],
+          Column(
+            children: [
+              _marker(step),
+              if (!isLast)
+                Expanded(
+                  child: Container(width: 1, color: AppColors.divider),
                 ),
-                Text(step.subtitle,
-                    style: const TextStyle(
-                        color: AppColors.textGrey, fontSize: 12)),
-              ],
+            ],
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: isLast ? 0 : 22),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(step.title,
+                            style: const TextStyle(
+                                color: AppColors.primaryDark,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 17)),
+                      ),
+                      if (step.time.isNotEmpty)
+                        Text(step.time,
+                            style: const TextStyle(
+                                color: AppColors.textGrey, fontSize: 15)),
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Text(step.subtitle,
+                      style: const TextStyle(
+                          color: AppColors.textGrey, fontSize: 15)),
+                ],
+              ),
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _marker(ProcessingStep step) {
+    if (step.done) {
+      return Container(
+        width: 30,
+        height: 30,
+        decoration: const BoxDecoration(
+            color: AppColors.success, shape: BoxShape.circle),
+        child: const Icon(Icons.check, size: 18, color: Colors.white),
+      );
+    }
+    if (step.inProgress) {
+      return Container(
+        width: 30,
+        height: 30,
+        decoration: BoxDecoration(
+            color: AppColors.accentYellow.withValues(alpha: 0.55),
+            shape: BoxShape.circle),
+        child: const Icon(Icons.schedule,
+            size: 18, color: AppColors.primaryDark),
+      );
+    }
+    return Container(
+      width: 30,
+      height: 30,
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        shape: BoxShape.circle,
+        border: Border.all(color: AppColors.divider, width: 1.5),
       ),
     );
   }

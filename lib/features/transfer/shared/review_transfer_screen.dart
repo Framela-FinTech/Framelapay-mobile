@@ -165,9 +165,13 @@ class ReviewTransferScreen extends StatelessWidget {
             done: true),
         ProcessingStep(
             title: 'Awaiting confirmation',
-            subtitle: 'This may take a few minutes.'),
+            time: 'In progress',
+            subtitle: 'This may take a few minutes.',
+            inProgress: true),
         ProcessingStep(
-            title: 'Finalizing transfer', subtitle: 'Almost there...'),
+            title: 'Finalizing transfer',
+            time: 'Next',
+            subtitle: 'Almost there...'),
       ],
     );
   }
