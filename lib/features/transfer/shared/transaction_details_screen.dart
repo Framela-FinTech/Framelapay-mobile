@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/share_receipt_sheet.dart';
 import '../../../data/models/transfer_recipient.dart';
 
 class TransactionDetailsScreen extends StatelessWidget {
@@ -73,7 +74,7 @@ class TransactionDetailsScreen extends StatelessWidget {
                   backgroundColor: AppColors.primaryDark,
                   foregroundColor: Colors.white,
                 ),
-                onPressed: () {},
+                onPressed: () => showShareReceiptSheet(context),
                 child: const Text('Share Receipt'),
               ),
               const SizedBox(height: 12),

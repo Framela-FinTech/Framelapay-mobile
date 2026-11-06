@@ -2,8 +2,32 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/routes/app_routes.dart';
 
-class EnterWalletAddressScreen extends StatelessWidget {
+class EnterWalletAddressScreen extends StatefulWidget {
   const EnterWalletAddressScreen({super.key});
+
+  @override
+  State<EnterWalletAddressScreen> createState() =>
+      _EnterWalletAddressScreenState();
+}
+
+class _EnterWalletAddressScreenState extends State<EnterWalletAddressScreen> {
+  /// Spendable balance behind "Use max" — a stand-in until wallets are live.
+  static const _availableBalance = '1,250.00';
+
+  final _amountController = TextEditingController();
+
+  @override
+  void dispose() {
+    _amountController.dispose();
+    super.dispose();
+  }
+
+  void _useMax() {
+    _amountController.text = _availableBalance;
+    _amountController.selection = TextSelection.fromPosition(
+      TextPosition(offset: _amountController.text.length),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +90,7 @@ class EnterWalletAddressScreen extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
               const SizedBox(height: 12),
               TextField(
+                controller: _amountController,
                 keyboardType: TextInputType.number,
                 style:
                     const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
@@ -79,10 +104,11 @@ class EnterWalletAddressScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Available balance: 1,250.00 USDC',
+                  const Text('Available balance: $_availableBalance USDC',
                       style:
                           TextStyle(color: AppColors.textGrey, fontSize: 12)),
-                  TextButton(onPressed: () {}, child: const Text('Use max')),
+                  TextButton(
+                      onPressed: _useMax, child: const Text('Use max')),
                 ],
               ),
               const SizedBox(height: 8),

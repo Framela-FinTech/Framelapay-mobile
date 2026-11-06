@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../core/routes/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_shadows.dart';
+import '../../../core/widgets/share_receipt_sheet.dart';
 import '../../../data/models/transaction_receipt.dart';
 import '../../transfer/fiat/widgets/fiat_form_widgets.dart';
 
@@ -33,7 +34,7 @@ class ReceiptDetailScreen extends StatelessWidget {
                 children: [
                   PrimaryButton(
                     'Share Receipt',
-                    onPressed: () => _showShareSheet(context),
+                    onPressed: () => showShareReceiptSheet(context),
                   ),
                   const SizedBox(height: 12),
                   SizedBox(
@@ -68,69 +69,6 @@ class ReceiptDetailScreen extends StatelessWidget {
     );
   }
 
-  /// Share-format picker (Figma: PDF / Image).
-  void _showShareSheet(BuildContext context) {
-    showModalBottomSheet<void>(
-      context: context,
-      backgroundColor: AppColors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (sheetContext) => SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 18, 20, 8),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                children: [
-                  const Expanded(
-                    child: Text(
-                      'Share Receipts',
-                      style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.pop(sheetContext),
-                    icon: const Icon(Icons.close,
-                        color: AppColors.primaryDark, size: 22),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              _shareOption(sheetContext, 'PDF'),
-              const Divider(height: 1, color: AppColors.divider),
-              _shareOption(sheetContext, 'Image'),
-              const SizedBox(height: 8),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _shareOption(BuildContext sheetContext, String label) {
-    return InkWell(
-      onTap: () {
-        Navigator.pop(sheetContext);
-        ScaffoldMessenger.of(sheetContext).showSnackBar(
-          SnackBar(content: Text('Receipt shared as $label')),
-        );
-      },
-      child: SizedBox(
-        height: 56,
-        width: double.infinity,
-        child: Center(
-          child: Text(
-            label,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 class _ReceiptCard extends StatelessWidget {

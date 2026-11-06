@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/share_receipt_sheet.dart';
 import '../../../data/models/fiat_transfer.dart';
 import 'widgets/fiat_form_widgets.dart';
 
@@ -81,7 +82,8 @@ class FiatTransactionDetailsScreen extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
                 child: Column(
                   children: [
-                    PrimaryButton('Share Receipt', onPressed: () {}),
+                    PrimaryButton('Share Receipt',
+                        onPressed: () => showShareReceiptSheet(context)),
                     const SizedBox(height: 8),
                     TextButton(
                       onPressed: () => _goHome(context),

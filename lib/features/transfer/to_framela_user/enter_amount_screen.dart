@@ -6,12 +6,35 @@ import '../../../data/models/transfer_recipient.dart';
 import '../shared/widgets/asset_network_bar.dart';
 import '../shared/widgets/recipient_summary_card.dart';
 
-class EnterAmountScreen extends StatelessWidget {
+class EnterAmountScreen extends StatefulWidget {
   const EnterAmountScreen({super.key});
 
+  @override
+  State<EnterAmountScreen> createState() => _EnterAmountScreenState();
+}
+
+class _EnterAmountScreenState extends State<EnterAmountScreen> {
   /// The fee strip is the panel blue; "Use max" uses the deeper Primary 40.
   static const _panelBlue = AppColors.infoPanel;
   static const _linkBlue = AppColors.primary40;
+
+  /// Spendable balance behind "Use max" — a stand-in until wallets are live.
+  static const _availableBalance = '1,250.00';
+
+  final _amountController = TextEditingController();
+
+  @override
+  void dispose() {
+    _amountController.dispose();
+    super.dispose();
+  }
+
+  void _useMax() {
+    _amountController.text = _availableBalance;
+    _amountController.selection = TextSelection.fromPosition(
+      TextPosition(offset: _amountController.text.length),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,11 +92,11 @@ class EnterAmountScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Available balance: 1,250.00 USDC',
+                  const Text('Available balance: $_availableBalance USDC',
                       style: TextStyle(
                           color: AppColors.primaryDark, fontSize: 15)),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: _useMax,
                     child: const Text('Use max',
                         style: TextStyle(
                             color: _linkBlue,
@@ -135,14 +158,15 @@ class EnterAmountScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          const Expanded(
+          Expanded(
             child: TextField(
+              controller: _amountController,
               keyboardType: TextInputType.number,
-              style: TextStyle(
+              style: const TextStyle(
                   color: AppColors.primaryDark,
                   fontSize: 22,
                   fontWeight: FontWeight.w600),
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: '0.00',
                 hintStyle: TextStyle(
                     color: AppColors.primaryDark,

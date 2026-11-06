@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/routes/app_routes.dart';
 import '../../../core/widgets/app_icon.dart';
+import '../../../core/widgets/share_receipt_sheet.dart';
 import '../../../data/models/fiat_transfer.dart';
 import 'widgets/fiat_form_widgets.dart';
 
@@ -101,7 +102,7 @@ class TransferCompletedScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(14),
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () => showShareReceiptSheet(context),
                         child: const Text('Share Receipt'),
                       ),
                     ),
