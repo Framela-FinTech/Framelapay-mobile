@@ -58,27 +58,74 @@ class FiatReviewTransferScreen extends StatelessWidget {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 8),
-                    const SectionTitle('Transfer Summary'),
-                    const SizedBox(height: 8),
-                    SummaryRow('To', b?.fullName ?? '—'),
-                    SummaryRow('Bank', b?.bankName ?? '—'),
-                    SummaryRow('Exchange rate', t.formattedRate),
-                    SummaryRow('You send', t.formattedSendAmount),
-                    SummaryRow('Recipient receives', t.formattedReceiveAmount),
-                    SummaryRow('Fee', t.formattedFee),
-                    SummaryRow('Delivery', t.deliveryEstimate),
-                    SummaryRow('Purpose', t.purpose),
-                    const SizedBox(height: 16),
-                    const NoticeBanner(
-                      'Ensure all details are correct before you confirm.',
-                      type: NoticeType.warning,
+                    // The board puts each section's header and its Edit link
+                    // outside the card it introduces.
+                    SectionHeader(
+                      'Recipient',
+                      actionLabel: 'Edit',
+                      // `|| isFirst` guarantees termination: a bare name
+                      // predicate empties the stack if that route is gone.
+                      onAction: () => Navigator.popUntil(
+                        context,
+                        (r) =>
+                            r.settings.name == AppRoutes.fiatSelectRecipient || r.isFirst,
+                      ),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 10),
+                    InfoCard(
+                      children: [
+                        SummaryRow('Recipient',
+                            '${b?.displayName ?? '—'} · ${b?.bankName ?? '—'}'),
+                        const Divider(height: 1, color: AppColors.divider),
+                        SummaryRow('Account', b?.listSubtitle ?? '—'),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    SectionHeader(
+                      'Payment details',
+                      actionLabel: 'Edit',
+                      // `|| isFirst` guarantees termination: a bare name
+                      // predicate empties the stack if that route is gone.
+                      onAction: () => Navigator.popUntil(
+                        context,
+                        (r) =>
+                            r.settings.name == AppRoutes.fiatTransferDetails || r.isFirst,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    InfoCard(
+                      children: [
+                        SummaryRow('You send', t.formattedSendAmount),
+                        const Divider(height: 1, color: AppColors.divider),
+                        SummaryRow('Transfer fee', t.formattedFee),
+                        const Divider(height: 1, color: AppColors.divider),
+                        SummaryRow('Total you pay', t.formattedTotal),
+                        const Divider(height: 1, color: AppColors.divider),
+                        SummaryRow('Exchange rate', t.formattedRate),
+                        const Divider(height: 1, color: AppColors.divider),
+                        SummaryRow(
+                            'Recipient receives', t.formattedReceiveAmount),
+                      ],
+                    ),
+                    const SizedBox(height: 14),
+                    InfoCard(
+                      children: [
+                        SummaryRow('Payment method', t.methodLabel),
+                        const Divider(height: 1, color: AppColors.divider),
+                        SummaryRow('Purpose', t.purpose),
+                        const Divider(height: 1, color: AppColors.divider),
+                        SummaryRow('Estimated delivery', t.deliveryEstimate),
+                      ],
+                    ),
+                    const SizedBox(height: 18),
+                    const NoticeBanner(
+                      'Check the recipient and amounts before you confirm.',
+                      background: AppColors.infoNotice,
+                    ),
                   ],
                 ),
               ),

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/routes/app_routes.dart';
-import '../../../core/widgets/app_icon.dart';
-import '../../../core/widgets/share_receipt_sheet.dart';
 import '../../../data/models/fiat_transfer.dart';
 import 'widgets/fiat_form_widgets.dart';
 
@@ -21,22 +18,22 @@ class TransferCompletedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = transfer;
+    final b = t.beneficiary;
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) _goHome(context);
       },
       child: Scaffold(
-        backgroundColor: AppColors.white,
+        backgroundColor: AppColors.pageGrey,
         body: SafeArea(
           child: Column(
             children: [
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.fromLTRB(20, 40, 20, 24),
                   child: Column(
                     children: [
-                      const SizedBox(height: 40),
                       Container(
                         width: 72,
                         height: 72,
@@ -45,35 +42,48 @@ class TransferCompletedScreen extends StatelessWidget {
                         child: const Icon(Icons.check,
                             color: Colors.white, size: 36),
                       ),
-                      const SizedBox(height: 20),
-                      Text(t.formattedReceiveAmount,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w800, fontSize: 28)),
-                      const SizedBox(height: 8),
-                      const Text('has been successfully sent to',
-                          style: TextStyle(
-                              color: AppColors.textGrey, fontSize: 12)),
-                      const SizedBox(height: 4),
-                      Text(t.beneficiary?.fullName ?? '—',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 15)),
-                      const SizedBox(height: 12),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      const SizedBox(height: 18),
+                      const ScreenHeading(
+                        'Transfer completed',
+                        helper:
+                            "Your recipient's bank has received the payout.",
+                        center: true,
+                      ),
+                      const SizedBox(height: 22),
+                      InfoCard(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 22),
                         children: [
-                          Text('Transaction ID: ${t.transactionId}',
+                          Text(t.formattedReceiveAmount,
                               style: const TextStyle(
-                                  color: AppColors.textGrey, fontSize: 12)),
-                          const SizedBox(width: 6),
-                          InkWell(
-                            onTap: () => Clipboard.setData(
-                                ClipboardData(text: t.transactionId)),
-                            child: const AppIcon('copy',
-                                size: 14, color: AppColors.textGrey),
-                          ),
+                                  color: AppColors.primaryDark,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 28)),
+                          const SizedBox(height: 10),
+                          const Text('Sent to',
+                              style: TextStyle(
+                                  color: AppColors.textGrey, fontSize: 14)),
+                          const SizedBox(height: 4),
+                          Text(b?.displayName ?? '—',
+                              style: const TextStyle(
+                                  color: AppColors.primaryDark,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16)),
+                          const SizedBox(height: 4),
+                          Text(b?.bankAccountLine ?? '—',
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  color: AppColors.textGrey, fontSize: 13)),
                         ],
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 14),
+                      InfoCard(
+                        children: [
+                          SummaryRow('Transaction reference', t.transactionId),
+                          const Divider(height: 1, color: AppColors.divider),
+                          SummaryRow(t.status, t.dateTime),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -83,33 +93,17 @@ class TransferCompletedScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     PrimaryButton(
-                      'View Transfer',
+                      'View Receipt',
                       onPressed: () => Navigator.pushNamed(
                         context,
                         AppRoutes.fiatTransactionDetails,
                         arguments: t,
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          minimumSize: const Size.fromHeight(56),
-                          side: const BorderSide(color: AppColors.divider),
-                          foregroundColor: AppColors.primaryDark,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                        ),
-                        onPressed: () => showShareReceiptSheet(context),
-                        child: const Text('Share Receipt'),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextButton(
+                    const SizedBox(height: 12),
+                    SecondaryButton(
+                      'Back Home',
                       onPressed: () => _goHome(context),
-                      child: const Text('Back to Home'),
                     ),
                   ],
                 ),

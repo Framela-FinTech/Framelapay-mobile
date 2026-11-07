@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/receipt_card.dart';
 import '../../../core/widgets/share_receipt_sheet.dart';
 import '../../../data/models/fiat_transfer.dart';
 import 'widgets/fiat_form_widgets.dart';
 
-/// Screen 14 — fiat transaction details. Separate from the stablecoin details
-/// screen because the row set differs (bank/payment-method vs network/wallet).
-/// Back gesture goes Home.
+/// Screen 14 — the shareable receipt for a completed fiat transfer.
+/// Renders the same branded card the Statements receipts use.
 class FiatTransactionDetailsScreen extends StatelessWidget {
   final FiatTransfer transfer;
   const FiatTransactionDetailsScreen({super.key, required this.transfer});
 
-  void _goHome(BuildContext context) {
-    // Walk back down to the Home root (the single cleared root). Never uses
-    // removeUntil so it can't leave a rootless stack; isFirst can't exit.
-    Navigator.popUntil(context, (route) => route.isFirst);
-  }
+  void _goHome(BuildContext context) =>
+      Navigator.popUntil(context, (route) => route.isFirst);
 
   @override
   Widget build(BuildContext context) {
@@ -27,53 +24,35 @@ class FiatTransactionDetailsScreen extends StatelessWidget {
         if (!didPop) _goHome(context);
       },
       child: Scaffold(
-        backgroundColor: AppColors.white,
-        appBar: AppBar(
-          backgroundColor: AppColors.white,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          title: const Text('Transaction Details',
-              style: TextStyle(color: Colors.black, fontSize: 16)),
-        ),
+        backgroundColor: AppColors.pageGrey,
+        appBar: whiteAppBar('Receipt'),
         body: SafeArea(
           child: Column(
             children: [
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 16),
-                      Container(
-                        width: 64,
-                        height: 64,
-                        decoration: const BoxDecoration(
-                            color: AppColors.success, shape: BoxShape.circle),
-                        child: const Icon(Icons.check,
-                            color: Colors.white, size: 32),
-                      ),
-                      const SizedBox(height: 16),
-                      const Text('Transfer completed',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 20)),
-                      const SizedBox(height: 4),
-                      Text(t.transactionId,
-                          style: const TextStyle(
-                              color: AppColors.textGrey, fontSize: 12)),
-                      const SizedBox(height: 24),
-                      SummaryRow('Transaction Id', t.transactionId),
-                      SummaryRow('From', t.senderName),
-                      SummaryRow('You sent', t.formattedSendAmount),
-                      SummaryRow('Fee', t.formattedFee),
-                      SummaryRow('Exchange rate', t.formattedRate),
-                      SummaryRow(
-                          'Recipient receives', t.formattedReceiveAmount),
-                      SummaryRow('Recipient', b?.fullName ?? '—'),
-                      SummaryRow('Bank', b?.bankName ?? '—'),
-                      SummaryRow('Payment method', t.methodLabel),
-                      const SummaryRow('Delivery', 'Completed'),
-                      SummaryRow('Date & Time', t.dateTime),
-                      const SizedBox(height: 24),
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+                  child: ReceiptCard(
+                    statusLabel: t.status,
+                    statusColor: AppColors.success,
+                    statusBackground: AppColors.successNotice,
+                    headlineAmount: t.formattedReceiveAmount,
+                    caption: 'Money sent · ${b?.displayName ?? '—'}',
+                    reference: t.transactionId,
+                    note: 'Transaction successful',
+                    rows: [
+                      ReceiptLine('From', t.senderName),
+                      ReceiptLine('To',
+                          '${b?.displayName ?? '—'} · ${b?.bankName ?? '—'}'),
+                      ReceiptLine(
+                          'Account', '•••• ${b?.accountTail ?? '—'}'),
+                      ReceiptLine('You sent', t.formattedSendAmount),
+                      ReceiptLine('Transfer fee', t.formattedFee),
+                      ReceiptLine('Total paid', t.formattedTotal),
+                      ReceiptLine('Exchange rate', t.formattedRate),
+                      ReceiptLine('Purpose', t.purpose),
+                      ReceiptLine('Payment method', t.methodLabel),
+                      ReceiptLine('Date and time', t.dateTime),
                     ],
                   ),
                 ),
@@ -82,12 +61,14 @@ class FiatTransactionDetailsScreen extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
                 child: Column(
                   children: [
-                    PrimaryButton('Share Receipt',
-                        onPressed: () => showShareReceiptSheet(context)),
-                    const SizedBox(height: 8),
-                    TextButton(
+                    PrimaryButton(
+                      'Share Receipt',
+                      onPressed: () => showShareReceiptSheet(context),
+                    ),
+                    const SizedBox(height: 12),
+                    SecondaryButton(
+                      'Back Home',
                       onPressed: () => _goHome(context),
-                      child: const Text('Back to Home'),
                     ),
                   ],
                 ),
