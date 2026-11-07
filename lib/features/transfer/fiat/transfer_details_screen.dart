@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/routes/app_routes.dart';
+import '../../../core/widgets/app_icon.dart';
 import '../../../data/models/fiat_transfer.dart';
 import '../../../data/models/transfer_country.dart';
 import '../../../data/repositories/country_repository.dart';
@@ -91,93 +92,57 @@ class _TransferDetailsScreenState extends State<TransferDetailsScreen> {
         : '1 ${_destination!.currencyCode} = ${_fmt(_quote!.rate)} ${_receiving!.currencyCode}';
     final feeText =
         _quote == null ? '—' : '${_destination!.currencySymbol}${_fmt(_quote!.fee)}';
+    // Figma adds a "Total you pay" line: the send amount plus the fee.
+    final sendAmount = double.tryParse(_amountController.text.trim()) ?? 0;
+    final totalText = _quote == null
+        ? '—'
+        : '${_destination!.currencySymbol}${_fmt(sendAmount + _quote!.fee)}';
     final receiveText = _quote == null
         ? '—'
         : '${_receiving!.currencySymbol}${_fmt(_quote!.receiveAmount)}';
 
     return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: whiteAppBar('Transfer'),
+      backgroundColor: AppColors.pageGrey,
+      appBar: whiteAppBar('Destination'),
       body: SafeArea(
         child: _loading
             ? const Center(child: CircularProgressIndicator())
-            : Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 8),
-                          const ScreenHeading(
-                            'Where are you sending money?',
-                            helper:
-                                'Enter the details of the person you want to send money to.',
-                          ),
-                          const SizedBox(height: 20),
-                          const FieldLabel('Destination Country'),
-                          AppDropdownField(
-                            hint: 'Select destination country',
-                            value: _destination?.name,
-                            items: names,
-                            onChanged: (v) {
-                              setState(() => _destination = _countries
-                                  .firstWhere((c) => c.name == v));
-                              _recompute();
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                          const FieldLabel('Receiving Country'),
-                          AppDropdownField(
-                            hint: 'Select destination country',
-                            value: _receiving?.name,
-                            items: names,
-                            onChanged: (v) {
-                              setState(() => _receiving = _countries
-                                  .firstWhere((c) => c.name == v));
-                              _recompute();
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                          const FieldLabel('Amount you send'),
-                          AppTextInput(
-                            controller: _amountController,
-                            keyboardType: const TextInputType.numberWithOptions(
-                                decimal: true),
-                            prefixText:
-                                '${_destination?.currencySymbol ?? r'$'} ',
-                            hint: '500.00',
-                          ),
-                          const SizedBox(height: 16),
-                          Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: AppColors.inputFill,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Column(
-                              children: [
-                                SummaryRow('FX Rate', rateText),
-                                SummaryRow('Transfer Fee', feeText),
-                                const Divider(),
-                                SummaryRow('Recipient gets', receiveText,
-                                    bold: true),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          const NoticeBanner(
-                            'No hidden fees. Exchange rate and fees are shown before you confirm.',
-                          ),
-                          const SizedBox(height: 24),
-                        ],
-                      ),
+            : SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const ScreenHeading(
+                      'Where Are You Sending Money?',
+                      helper:
+                          'Choose the destination and enter your send amount.',
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-                    child: PrimaryButton(
+                    const SizedBox(height: 22),
+                    const FieldLabel('Receiving country'),
+                    AppDropdownField(
+                      hint: 'Select receiving country',
+                      value: _receiving?.name,
+                      items: names,
+                      onChanged: (v) {
+                        setState(() =>
+                            _receiving = _countries.firstWhere((c) => c.name == v));
+                        _recompute();
+                      },
+                    ),
+                    const SizedBox(height: 18),
+                    const FieldLabel('Amount you send'),
+                    _amountRow(),
+                    const SizedBox(height: 22),
+                    const SectionTitle('Transfer breakdown'),
+                    const SizedBox(height: 10),
+                    _breakdownCard(rateText, feeText, totalText, receiveText),
+                    const SizedBox(height: 18),
+                    const NoticeBanner(
+                      'No hidden fees. Your final rate and fees are shown in the '
+                      'quote before you confirm.',
+                    ),
+                    const SizedBox(height: 40),
+                    PrimaryButton(
                       'Continue',
                       onPressed: _quote == null
                           ? null
@@ -187,9 +152,98 @@ class _TransferDetailsScreenState extends State<TransferDetailsScreen> {
                                 arguments: _buildTransfer(),
                               ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+      ),
+    );
+  }
+
+  /// Amount field with the send-currency picker on its right, split by a rule.
+  /// Figma folds the old separate "Destination Country" dropdown into this.
+  Widget _amountRow() {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.divider),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _amountController,
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
+              style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primaryDark),
+              onChanged: (_) => _recompute(),
+              decoration: InputDecoration(
+                prefixText: _destination?.currencySymbol ?? r'$',
+                prefixStyle: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.primaryDark),
+                hintText: '500.00',
+                border: InputBorder.none,
+                contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16, vertical: 18),
+              ),
+            ),
+          ),
+          Container(width: 1, height: 28, color: AppColors.divider),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                value: _destination?.currencyCode,
+                icon: const AppIcon('chevron-down',
+                    size: 22, color: AppColors.primaryDark),
+                style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.primaryDark),
+                items: _countries
+                    .map((c) => c.currencyCode)
+                    .toSet()
+                    .map((code) => DropdownMenuItem<String>(
+                        value: code, child: Text(code)))
+                    .toList(),
+                onChanged: (code) {
+                  if (code == null) return;
+                  setState(() => _destination = _countries
+                      .firstWhere((c) => c.currencyCode == code));
+                  _recompute();
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _breakdownCard(
+      String rate, String fee, String total, String receives) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.divider),
+      ),
+      child: Column(
+        children: [
+          SummaryRow('Indicative exchange rate', rate),
+          const Divider(height: 1, color: AppColors.divider),
+          SummaryRow('Transfer fee', fee),
+          const Divider(height: 1, color: AppColors.divider),
+          SummaryRow('Total you pay', total),
+          const Divider(height: 1, color: AppColors.divider),
+          SummaryRow('Recipient gets', receives, bold: true),
+        ],
       ),
     );
   }

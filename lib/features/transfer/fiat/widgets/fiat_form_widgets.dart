@@ -7,7 +7,7 @@ import '../../../../core/widgets/app_icon.dart';
 /// (radii, fills, paddings) and keeps each screen file short enough to avoid
 /// overflow at 360x640.
 
-/// Screen heading (20 w700) with a textGrey helper line 6 below it.
+/// Screen heading (24 w800) with a textGrey helper line below it.
 class ScreenHeading extends StatelessWidget {
   final String title;
   final String? helper;
@@ -19,18 +19,21 @@ class ScreenHeading extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(title,
-            style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 20)),
+            style: const TextStyle(
+                color: AppColors.primaryDark,
+                fontWeight: FontWeight.w800,
+                fontSize: 24)),
         if (helper != null) ...[
-          const SizedBox(height: 6),
+          const SizedBox(height: 4),
           Text(helper!,
-              style: const TextStyle(color: AppColors.textGrey, fontSize: 12)),
+              style: const TextStyle(color: AppColors.textGrey, fontSize: 15)),
         ],
       ],
     );
   }
 }
 
-/// Section title (15 w700).
+/// Section title (17 w700).
 class SectionTitle extends StatelessWidget {
   final String text;
   const SectionTitle(this.text, {super.key});
@@ -38,11 +41,14 @@ class SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(text,
-        style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15));
+        style: const TextStyle(
+            color: AppColors.primaryDark,
+            fontWeight: FontWeight.w700,
+            fontSize: 17));
   }
 }
 
-/// Small field label (13 w600) shown above inputs/dropdowns.
+/// Small field label (15 w600) shown above inputs/dropdowns.
 class FieldLabel extends StatelessWidget {
   final String text;
   const FieldLabel(this.text, {super.key});
@@ -52,7 +58,10 @@ class FieldLabel extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Text(text,
-          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+          style: const TextStyle(
+              color: AppColors.primaryDark,
+              fontWeight: FontWeight.w600,
+              fontSize: 15)),
     );
   }
 }
@@ -82,23 +91,34 @@ class AppTextInput extends StatelessWidget {
       keyboardType: keyboardType,
       maxLength: maxLength,
       obscureText: obscureText,
-      style: const TextStyle(fontSize: 14),
+      style: const TextStyle(fontSize: 16, color: AppColors.primaryDark),
       decoration: InputDecoration(
         counterText: '',
         prefixText: prefixText,
-        prefixStyle: const TextStyle(fontSize: 14, color: Colors.black),
+        prefixStyle:
+            const TextStyle(fontSize: 16, color: AppColors.primaryDark),
         hintText: hint,
-        hintStyle: const TextStyle(fontSize: 14, color: AppColors.textGrey),
+        hintStyle: const TextStyle(fontSize: 16, color: AppColors.textGrey),
         filled: true,
-        fillColor: AppColors.inputFill,
+        // Figma: white field with a hairline outline, not a grey fill.
+        fillColor: AppColors.white,
         contentPadding: const EdgeInsets.all(16),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
+        border: _fieldBorder(),
+        enabledBorder: _fieldBorder(),
+        focusedBorder: _fieldBorder(focused: true),
       ),
     );
   }
+}
+
+/// Shared outline for the white form fields.
+OutlineInputBorder _fieldBorder({bool focused = false}) {
+  return OutlineInputBorder(
+    borderRadius: BorderRadius.circular(12),
+    borderSide: BorderSide(
+      color: focused ? AppColors.primaryDark : AppColors.divider,
+    ),
+  );
 }
 
 /// Filled dropdown (radius 12, inputFill, trailing arrow) over String items.
@@ -121,18 +141,17 @@ class AppDropdownField extends StatelessWidget {
       value: value,
       isExpanded: true,
       icon: const AppIcon('chevron-down',
-          size: 20, color: AppColors.textGrey),
-      style: const TextStyle(fontSize: 14, color: Colors.black),
+          size: 22, color: AppColors.primaryDark),
+      style: const TextStyle(fontSize: 16, color: AppColors.primaryDark),
       hint: Text(hint,
-          style: const TextStyle(fontSize: 14, color: AppColors.textGrey)),
+          style: const TextStyle(fontSize: 16, color: AppColors.textGrey)),
       decoration: InputDecoration(
         filled: true,
-        fillColor: AppColors.inputFill,
+        fillColor: AppColors.white,
         contentPadding: const EdgeInsets.all(16),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide.none,
-        ),
+        border: _fieldBorder(),
+        enabledBorder: _fieldBorder(),
+        focusedBorder: _fieldBorder(focused: true),
       ),
       items: items
           .map((e) => DropdownMenuItem<String>(value: e, child: Text(e)))
@@ -154,19 +173,20 @@ class SummaryRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 13),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(label,
-              style: const TextStyle(color: AppColors.textGrey, fontSize: 13)),
+              style: const TextStyle(color: AppColors.textGrey, fontSize: 15)),
           Row(
             children: [
               Text(value,
                   style: TextStyle(
-                      fontWeight: bold ? FontWeight.w700 : FontWeight.w600,
-                      fontSize: 13)),
+                      color: AppColors.primaryDark,
+                      fontWeight: bold ? FontWeight.w800 : FontWeight.w700,
+                      fontSize: 15)),
               if (trailing != null) ...[
                 const SizedBox(width: 8),
                 trailing!,
@@ -191,54 +211,64 @@ class NoticeBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color bg;
-    Color fg;
+    late final Color bg;
+    late final Color fg;
+    late final IconData icon;
     switch (type) {
       case NoticeType.warning:
-        bg = const Color(0xFFFFF4E5);
-        fg = Colors.black87;
-        break;
+        bg = AppColors.warningSoft;
+        fg = AppColors.primaryDark;
+        icon = Icons.warning_amber_rounded;
       case NoticeType.success:
-        bg = const Color(0xFFE3F7EC);
+        bg = AppColors.successSoft;
         fg = AppColors.success;
-        break;
+        icon = Icons.check_circle_outline;
       case NoticeType.info:
-        bg = AppColors.inputFill;
-        fg = AppColors.textGrey;
-        break;
+        bg = AppColors.infoPanel;
+        fg = AppColors.primaryDark;
+        icon = Icons.error_outline;
     }
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: bg,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Column(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (title != null) ...[
-            Row(
+          Icon(icon,
+              size: 22,
+              color: type == NoticeType.warning
+                  ? AppColors.accentYellow
+                  : fg),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (type == NoticeType.warning)
-                  const AppIcon('info-triangle',
-                      size: 14, color: Colors.orange),
-                if (type == NoticeType.warning) const SizedBox(width: 6),
-                Text(title!,
+                if (title != null) ...[
+                  Text(title!,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                          color: fg)),
+                  const SizedBox(height: 2),
+                ],
+                Text(text,
                     style: TextStyle(
-                        fontWeight: FontWeight.w700, fontSize: 12, color: fg)),
+                        fontSize: 14, height: 1.35, color: fg)),
               ],
             ),
-            const SizedBox(height: 4),
-          ],
-          Text(text, style: TextStyle(fontSize: 11, color: fg)),
+          ),
         ],
       ),
     );
   }
 }
 
-/// Rate/resend timer pill (accentYellow @ ~15%, radius 12, padding 10/6).
+/// Rate/resend timer pill on the soft caution fill (radius 12, padding 10/6).
 class TimerPill extends StatelessWidget {
   final String text;
   const TimerPill(this.text, {super.key});
@@ -248,7 +278,7 @@ class TimerPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: AppColors.accentYellow.withOpacity(0.15),
+        color: AppColors.warningSoft,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -296,7 +326,11 @@ AppBar whiteAppBar(String title) {
   return AppBar(
     backgroundColor: AppColors.white,
     elevation: 0,
-    leading: const BackButton(color: Colors.black),
-    title: Text(title, style: const TextStyle(color: Colors.black, fontSize: 16)),
+    leading: const BackButton(color: AppColors.primaryDark),
+    title: Text(title,
+        style: const TextStyle(
+            color: AppColors.primaryDark,
+            fontSize: 20,
+            fontWeight: FontWeight.w700)),
   );
 }
