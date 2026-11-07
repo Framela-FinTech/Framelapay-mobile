@@ -21,10 +21,10 @@ class FiatTransfer {
   // Receive side (what the recipient gets).
   final String receiveCurrencyCode; // NGN
   final String receiveCurrencySymbol; // ₦
-  final double receiveAmount; // 810250.00
+  final double receiveAmount; // 783750.00
 
   final double fee; // 2.50, in send currency
-  final double fxRate; // 1620.50 receive units per 1 send unit
+  final double fxRate; // 1567.50 receive units per 1 send unit
 
   final FiatBeneficiary? beneficiary;
   final String purpose;
@@ -47,14 +47,14 @@ class FiatTransfer {
     this.sendAmount = 500.00,
     this.receiveCurrencyCode = 'NGN',
     this.receiveCurrencySymbol = '₦',
-    this.receiveAmount = 810250.00,
+    this.receiveAmount = 783750.00,
     this.fee = 2.50,
-    this.fxRate = 1620.50,
+    this.fxRate = 1567.50,
     this.beneficiary,
     this.purpose = 'Family support',
     this.status = 'Completed',
-    this.transactionId = 'FRM123456789',
-    this.dateTime = '17 May 2026, 10:45 AM',
+    this.transactionId = 'FRM-20261010-10429',
+    this.dateTime = '10 Oct 2026 · 10:45 AM WAT',
     this.deliveryEstimate = 'Estimated Today',
     this.sourceWalletCode,
     this.cardLabel,

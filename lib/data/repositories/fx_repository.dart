@@ -24,7 +24,7 @@ class MockFxRepository implements FxRepository {
   // Kept intentionally simple; a real backend returns live rates.
   static const Map<String, double> _usdRates = {
     'USD': 1.0,
-    'NGN': 1620.50,
+    'NGN': 1567.50,
     'GHS': 15.20,
     'GBP': 0.79,
     'UAH': 41.30,

@@ -41,10 +41,17 @@ class FiatBeneficiary {
     return '*****$accountTail';
   }
 
-  /// Short masked form used in list subtitles, e.g. "Nigeria ***1234".
-  String get listSubtitle {
-    return '$country ***$accountTail';
-  }
+  /// True when this is an in-network FramelaPay tag rather than a bank
+  /// account, e.g. "FRM-104829".
+  bool get isFramelaTag => accountNumber.toUpperCase().startsWith('FRM');
+
+  /// Short form used in list subtitles, e.g. "Nigeria · •••• 6789". A
+  /// FramelaPay tag is shown whole, since it is an identifier, not a secret.
+  String get listSubtitle =>
+      isFramelaTag ? '$country · $accountNumber' : '$country · •••• $accountTail';
+
+  /// Bank + masked account on one line, e.g. "GTBank · Account ending 6789".
+  String get bankAccountLine => '$bankName · Account ending $accountTail';
 
   FiatBeneficiary copyWith({
     String? fullName,

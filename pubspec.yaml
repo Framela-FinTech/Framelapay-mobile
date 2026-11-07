@@ -37,8 +37,9 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/ 
+    - assets/images/
     - assets/icons/
+    - assets/icons/banks/
   fonts:
   - family: PlusJakartaSans
     fonts:

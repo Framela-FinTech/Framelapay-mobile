@@ -19,30 +19,31 @@ class MockBeneficiaryRepository implements BeneficiaryRepository {
   @override
   Future<List<FiatBeneficiary>> getBeneficiaries() async {
     await Future.delayed(const Duration(milliseconds: 300));
+    // The saved-recipient set drawn on the Home Transfer board.
     return const [
       FiatBeneficiary(
-        fullName: 'Robert Fox',
-        bankName: 'Access Bank',
-        accountNumber: '0012123456',
-        country: 'Ghana',
-      ),
-      FiatBeneficiary(
-        fullName: 'Robert Fox',
-        bankName: 'GTBank',
-        accountNumber: '0022123456',
-        country: 'Ghana',
-      ),
-      FiatBeneficiary(
-        fullName: 'Robert Fox',
+        fullName: 'Ken Okafor',
         bankName: 'Zenith Bank',
-        accountNumber: '0032123456',
+        accountNumber: '0071236789',
+        country: 'Nigeria',
+      ),
+      FiatBeneficiary(
+        fullName: 'Amara Okafor',
+        bankName: 'Access Bank',
+        accountNumber: '0098764201',
         country: 'Ghana',
       ),
       FiatBeneficiary(
+        fullName: 'Michael Ade',
+        bankName: 'GTBank',
+        accountNumber: '0054324201',
+        country: 'Ukraine',
+      ),
+      FiatBeneficiary(
         fullName: 'Robert Fox',
-        bankName: 'First Bank',
-        accountNumber: '0042123456',
-        country: 'Ghana',
+        bankName: 'FramelaPay',
+        accountNumber: 'FRM-104829',
+        country: 'FramelaPay',
       ),
     ];
   }
@@ -60,7 +61,7 @@ class MockBeneficiaryRepository implements BeneficiaryRepository {
     return FiatBeneficiary(
       fullName: fullName?.isNotEmpty == true ? fullName! : 'Ken Okafor',
       bankName: bankName.isNotEmpty ? bankName : 'GTBank',
-      accountNumber: accountNumber.isNotEmpty ? accountNumber : '0071231234',
+      accountNumber: accountNumber.isNotEmpty ? accountNumber : '0071236789',
       country: 'Nigeria',
       relationship: relationship,
       purpose: purpose,

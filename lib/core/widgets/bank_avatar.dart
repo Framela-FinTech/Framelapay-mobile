@@ -8,6 +8,10 @@ import 'app_icon.dart';
 /// resolve to the same entry. A bank missing from this map renders the generic
 /// glyph instead of a broken image, so adding a logo is a one-line change and
 /// never a prerequisite for shipping a new bank.
+/// Only banks whose logo file is actually present are listed. The rest render
+/// the glyph deliberately — a wrong or placeholder mark is worse than none.
+/// Still unsourced: FCMB, Fidelity, Heritage, Parallex, Polaris, Providus,
+/// Titan Trust, Unity. Drop a file in and add its line here.
 const Map<String, String> kBankLogos = {
   'gtbank': 'assets/icons/banks/gtbank.png',
   'zenithbank': 'assets/icons/banks/zenith.png',
@@ -18,20 +22,12 @@ const Map<String, String> kBankLogos = {
   'opay': 'assets/icons/banks/opay.png',
   'moniepoint': 'assets/icons/banks/moniepoint.png',
   'sterlingbank': 'assets/icons/banks/sterling.png',
-  'fidelitybank': 'assets/icons/banks/fidelity.png',
   'unionbank': 'assets/icons/banks/union.png',
   'wemabank': 'assets/icons/banks/wema.png',
   'stanbicibtc': 'assets/icons/banks/stanbic.png',
-  'fcmb': 'assets/icons/banks/fcmb.png',
-  'polarisbank': 'assets/icons/banks/polaris.png',
   'keystonebank': 'assets/icons/banks/keystone.png',
-  'providusbank': 'assets/icons/banks/providus.png',
   'jaizbank': 'assets/icons/banks/jaiz.png',
-  'unitybank': 'assets/icons/banks/unity.png',
-  'heritagebank': 'assets/icons/banks/heritage.png',
-  'titantrustbank': 'assets/icons/banks/titan.png',
   'globusbank': 'assets/icons/banks/globus.png',
-  'parallexbank': 'assets/icons/banks/parallex.png',
   'premiumtrustbank': 'assets/icons/banks/premiumtrust.png',
   'suntrustbank': 'assets/icons/banks/suntrust.png',
 };
