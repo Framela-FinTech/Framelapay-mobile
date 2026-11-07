@@ -189,24 +189,33 @@ class SummaryRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 13),
+      // The value is Expanded + right-aligned rather than the row being
+      // spaceBetween: a long value (an account line, a timestamped
+      // reference) otherwise overflows horizontally at 360dp.
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(label,
               style: const TextStyle(color: AppColors.textGrey, fontSize: 15)),
-          Row(
-            children: [
-              Text(value,
-                  style: TextStyle(
-                      color: AppColors.primaryDark,
-                      fontWeight: bold ? FontWeight.w800 : FontWeight.w700,
-                      fontSize: 15)),
-              if (trailing != null) ...[
-                const SizedBox(width: 8),
-                trailing!,
+          const SizedBox(width: 12),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Flexible(
+                  child: Text(value,
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                          color: AppColors.primaryDark,
+                          fontWeight: bold ? FontWeight.w800 : FontWeight.w700,
+                          fontSize: 15)),
+                ),
+                if (trailing != null) ...[
+                  const SizedBox(width: 8),
+                  trailing!,
+                ],
               ],
-            ],
+            ),
           ),
         ],
       ),

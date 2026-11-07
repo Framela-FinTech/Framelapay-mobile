@@ -114,13 +114,14 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 13),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(label,
               style: const TextStyle(color: AppColors.textGrey, fontSize: 15)),
-          Flexible(
+          const SizedBox(width: 12),
+          Expanded(
             child: Row(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Flexible(
                   child: Text(value,
