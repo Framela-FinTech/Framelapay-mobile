@@ -4,7 +4,8 @@ import '../../../core/routes/app_routes.dart';
 import '../../../data/models/fiat_transfer.dart';
 import 'widgets/fiat_form_widgets.dart';
 
-/// Screen 5 — confirmation that the recipient account was verified.
+/// Screen 5 — "Confirm Recipient": the verified account, for a last look
+/// before the quote.
 class AccountVerifiedScreen extends StatelessWidget {
   final FiatTransfer transfer;
   const AccountVerifiedScreen({super.key, required this.transfer});
@@ -13,56 +14,49 @@ class AccountVerifiedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final b = transfer.beneficiary;
     return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: whiteAppBar('Add Recipient'),
+      backgroundColor: AppColors.pageGrey,
+      appBar: whiteAppBar('Confirm Recipient'),
       body: SafeArea(
         child: Column(
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
                 child: Column(
                   children: [
-                    const SizedBox(height: 16),
                     Container(
                       width: 64,
                       height: 64,
                       decoration: const BoxDecoration(
                           color: AppColors.success, shape: BoxShape.circle),
-                      child: const Icon(Icons.check,
-                          color: Colors.white, size: 32),
+                      child:
+                          const Icon(Icons.check, color: Colors.white, size: 32),
                     ),
                     const SizedBox(height: 16),
-                    const Text('Account verified',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 20)),
-                    const SizedBox(height: 6),
-                    const Text('Please confirm the details below.',
-                        style: TextStyle(
-                            color: AppColors.textGrey, fontSize: 12)),
-                    const SizedBox(height: 24),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: AppColors.inputFill,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Column(
-                        children: [
-                          SummaryRow('Recipient Name', b?.fullName ?? '—'),
-                          SummaryRow('Bank', b?.bankName ?? '—'),
-                          SummaryRow(
-                              'Account Number', b?.maskedAccount ?? '—'),
-                          SummaryRow('Country', b?.country ?? '—'),
-                        ],
-                      ),
+                    const ScreenHeading(
+                      'Account verified',
+                      helper: 'Please confirm the recipient details.',
+                      center: true,
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 22),
+                    InfoCard(
+                      children: [
+                        SummaryRow('Recipient', b?.displayName ?? '—'),
+                        const Divider(height: 1, color: AppColors.divider),
+                        SummaryRow('Bank', b?.bankName ?? '—'),
+                        const Divider(height: 1, color: AppColors.divider),
+                        SummaryRow('Account number', b?.accountNumber ?? '—'),
+                        const Divider(height: 1, color: AppColors.divider),
+                        SummaryRow('Country', b?.country ?? '—'),
+                      ],
+                    ),
+                    const SizedBox(height: 18),
                     const NoticeBanner(
-                      'This account has been verified and is ready to receive money.',
+                      'Account details checked. Confirm this is the person you '
+                      'intend to pay.',
                       type: NoticeType.success,
+                      background: AppColors.successNotice,
                     ),
-                    const SizedBox(height: 24),
                   ],
                 ),
               ),
@@ -79,10 +73,10 @@ class AccountVerifiedScreen extends StatelessWidget {
                       arguments: transfer,
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  TextButton(
+                  const SizedBox(height: 12),
+                  SecondaryButton(
+                    'Edit Details',
                     onPressed: () => Navigator.pop(context),
-                    child: const Text('Edit Details'),
                   ),
                 ],
               ),

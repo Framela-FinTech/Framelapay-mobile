@@ -83,6 +83,8 @@ class AppTextInput extends StatelessWidget {
   final String? prefixText;
   final int? maxLength;
   final bool obscureText;
+  final Widget? prefixIcon;
+  final ValueChanged<String>? onChanged;
   const AppTextInput({
     super.key,
     this.hint,
@@ -91,6 +93,8 @@ class AppTextInput extends StatelessWidget {
     this.prefixText,
     this.maxLength,
     this.obscureText = false,
+    this.prefixIcon,
+    this.onChanged,
   });
 
   @override
@@ -100,9 +104,11 @@ class AppTextInput extends StatelessWidget {
       keyboardType: keyboardType,
       maxLength: maxLength,
       obscureText: obscureText,
+      onChanged: onChanged,
       style: const TextStyle(fontSize: 16, color: AppColors.primaryDark),
       decoration: InputDecoration(
         counterText: '',
+        prefixIcon: prefixIcon,
         prefixText: prefixText,
         prefixStyle:
             const TextStyle(fontSize: 16, color: AppColors.primaryDark),

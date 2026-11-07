@@ -6,8 +6,12 @@ import '../../../data/repositories/bank_repository.dart';
 import '../../../data/repositories/beneficiary_repository.dart';
 import 'widgets/fiat_form_widgets.dart';
 
-/// Screen 4 — full "Add recipient" form. Verifies the account via the mock
-/// [BeneficiaryRepository] and continues to the "Account verified" screen.
+/// Screen 4 — "Sending Purpose". Completes the recipient's details, verifies
+/// the account via the mock [BeneficiaryRepository], and continues to the
+/// "Confirm Recipient" screen.
+///
+/// The board draws a Relationship field twice; that is a slip in the design,
+/// so it appears once here.
 class AddRecipientFullScreen extends StatefulWidget {
   final FiatTransfer transfer;
   const AddRecipientFullScreen({super.key, required this.transfer});
@@ -93,75 +97,64 @@ class _AddRecipientFullScreenState extends State<AddRecipientFullScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.pageGrey,
-      appBar: whiteAppBar('Add Recipient'),
+      appBar: whiteAppBar('Sending Purpose'),
       body: SafeArea(
         child: _loading
             ? const Center(child: CircularProgressIndicator())
-            : Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 8),
-                          const ScreenHeading(
-                            'Add recipient',
-                            helper:
-                                'Please enter the recipient details accurately.',
-                          ),
-                          const SizedBox(height: 20),
-                          const FieldLabel('Full Name'),
-                          AppTextInput(
-                            controller: _nameController,
-                            hint: 'John Dee',
-                          ),
-                          const SizedBox(height: 16),
-                          const FieldLabel('Bank'),
-                          AppDropdownField(
-                            hint: 'Select bank',
-                            value: _bank,
-                            items: _banks,
-                            onChanged: (v) => setState(() => _bank = v),
-                          ),
-                          const SizedBox(height: 16),
-                          const FieldLabel('Account Number'),
-                          AppTextInput(
-                            controller: _accountController,
-                            keyboardType: TextInputType.number,
-                            hint: '123456789',
-                          ),
-                          const SizedBox(height: 16),
-                          const FieldLabel('Relationship'),
-                          AppDropdownField(
-                            hint: 'Select relationship',
-                            value: _relationship,
-                            items: _relationships,
-                            onChanged: (v) =>
-                                setState(() => _relationship = v),
-                          ),
-                          const SizedBox(height: 16),
-                          const FieldLabel('Purpose of Transfer'),
-                          AppDropdownField(
-                            hint: 'Select purpose',
-                            value: _purpose,
-                            items: _purposes,
-                            onChanged: (v) => setState(() => _purpose = v),
-                          ),
-                          const SizedBox(height: 24),
-                        ],
-                      ),
+            : SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const ScreenHeading(
+                      'Why Are You Sending Money?',
+                      helper:
+                          "Enter the recipient's bank details accurately.",
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-                    child: PrimaryButton(
+                    const SizedBox(height: 22),
+                    const FieldLabel('Full name'),
+                    AppTextInput(
+                      controller: _nameController,
+                      hint: 'Ken Okafor',
+                    ),
+                    const SizedBox(height: 18),
+                    const FieldLabel('Bank'),
+                    AppDropdownField(
+                      hint: 'Select bank',
+                      value: _bank,
+                      items: _banks,
+                      onChanged: (v) => setState(() => _bank = v),
+                    ),
+                    const SizedBox(height: 18),
+                    const FieldLabel('Account number'),
+                    AppTextInput(
+                      controller: _accountController,
+                      keyboardType: TextInputType.number,
+                      hint: '0123456789',
+                    ),
+                    const SizedBox(height: 18),
+                    const FieldLabel('Relationship'),
+                    AppDropdownField(
+                      hint: 'Select relationship',
+                      value: _relationship,
+                      items: _relationships,
+                      onChanged: (v) => setState(() => _relationship = v),
+                    ),
+                    const SizedBox(height: 18),
+                    const FieldLabel('Purpose of transfer'),
+                    AppDropdownField(
+                      hint: 'Select purpose',
+                      value: _purpose,
+                      items: _purposes,
+                      onChanged: (v) => setState(() => _purpose = v),
+                    ),
+                    const SizedBox(height: 28),
+                    PrimaryButton(
                       _verifying ? 'Verifying...' : 'Verify Account',
                       onPressed: _verifying ? null : _verify,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
       ),
     );

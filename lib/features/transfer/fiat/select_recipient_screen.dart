@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/routes/app_routes.dart';
 import '../../../core/widgets/app_icon.dart';
+import '../../../core/widgets/bank_avatar.dart';
 import '../../../data/models/fiat_transfer.dart';
 import '../../../data/models/fiat_beneficiary.dart';
 import '../../../data/repositories/beneficiary_repository.dart';
@@ -19,6 +20,7 @@ class SelectRecipientScreen extends StatefulWidget {
 class _SelectRecipientScreenState extends State<SelectRecipientScreen> {
   final BeneficiaryRepository _repo = MockBeneficiaryRepository();
   List<FiatBeneficiary> _beneficiaries = [];
+  String _query = '';
   bool _loading = true;
 
   @override
@@ -36,6 +38,18 @@ class _SelectRecipientScreenState extends State<SelectRecipientScreen> {
     });
   }
 
+  /// Name, bank or account — whichever the person remembers.
+  List<FiatBeneficiary> get _visible {
+    final q = _query.trim().toLowerCase();
+    if (q.isEmpty) return _beneficiaries;
+    return _beneficiaries
+        .where((b) =>
+            b.displayName.toLowerCase().contains(q) ||
+            b.bankName.toLowerCase().contains(q) ||
+            b.accountNumber.toLowerCase().contains(q))
+        .toList();
+  }
+
   void _pick(FiatBeneficiary b) {
     Navigator.pushNamed(
       context,
@@ -46,6 +60,7 @@ class _SelectRecipientScreenState extends State<SelectRecipientScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final visible = _visible;
     return Scaffold(
       backgroundColor: AppColors.pageGrey,
       appBar: whiteAppBar('Select Recipient'),
@@ -53,37 +68,44 @@ class _SelectRecipientScreenState extends State<SelectRecipientScreen> {
         child: _loading
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 8),
                     const ScreenHeading(
                       'Who are you sending money to?',
-                      helper:
-                          'Enter the details of the person you want to send money to.',
+                      helper: 'Choose a saved recipient or add someone new.',
                     ),
                     const SizedBox(height: 20),
-                    const AppTextInput(hint: 'Search recipient'),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text('Existing Beneficiary',
+                    AppTextInput(
+                      hint: 'Search recipient',
+                      prefixIcon: const Padding(
+                        padding: EdgeInsets.only(left: 14, right: 8),
+                        child: AppIcon('search',
+                            size: 20, color: AppColors.textGrey),
+                      ),
+                      onChanged: (v) => setState(() => _query = v),
+                    ),
+                    const SizedBox(height: 22),
+                    SectionHeader(
+                      'Saved Beneficiaries',
+                      actionLabel: 'View all',
+                      actionColor: AppColors.accentYellow,
+                      onAction: () => Navigator.pushNamed(
+                          context, AppRoutes.beneficiariesList),
+                    ),
+                    const SizedBox(height: 12),
+                    if (visible.isEmpty)
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 24),
+                        child: Text('No recipient matches that search.',
                             style: TextStyle(
-                                fontWeight: FontWeight.w700, fontSize: 15)),
-                        TextButton(
-                          onPressed: () => Navigator.pushNamed(
-                              context, AppRoutes.beneficiariesList),
-                          child: const Text('View All'),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    ..._beneficiaries.map(_beneficiaryTile),
-                    const SizedBox(height: 8),
+                                color: AppColors.textGrey, fontSize: 14)),
+                      )
+                    else
+                      ...visible.map(_beneficiaryTile),
+                    const SizedBox(height: 4),
                     _addNewTile(),
-                    const SizedBox(height: 24),
                   ],
                 ),
               ),
@@ -91,88 +113,73 @@ class _SelectRecipientScreenState extends State<SelectRecipientScreen> {
     );
   }
 
-  Widget _beneficiaryTile(FiatBeneficiary b) {
-    return InkWell(
-      onTap: () => _pick(b),
-      borderRadius: BorderRadius.circular(14),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.divider),
-        ),
-        child: Row(
-          children: [
-            const CircleAvatar(
-              radius: 20,
-              backgroundColor: AppColors.primaryDark,
-              child: AppIcon('folder-user', color: Colors.white, size: 18),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(b.fullName,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 14)),
-                  const SizedBox(height: 2),
-                  Text(b.listSubtitle,
-                      style: const TextStyle(
-                          color: AppColors.textGrey, fontSize: 12)),
-                ],
+  Widget _tile({required Widget avatar,
+      required String title,
+      required String subtitle,
+      required VoidCallback onTap}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: AppColors.divider),
+          ),
+          child: Row(
+            children: [
+              avatar,
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title,
+                        style: const TextStyle(
+                            color: AppColors.primaryDark,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15)),
+                    const SizedBox(height: 2),
+                    Text(subtitle,
+                        style: const TextStyle(
+                            color: AppColors.textGrey, fontSize: 13)),
+                  ],
+                ),
               ),
-            ),
-            const AppIcon('chevron-right', color: AppColors.textGrey),
-          ],
+              const AppIcon('chevron-right', color: AppColors.textGrey),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _addNewTile() {
-    return InkWell(
-      onTap: () => Navigator.pushNamed(
-        context,
-        AppRoutes.fiatAddRecipientShort,
-        arguments: widget.transfer,
-      ),
-      borderRadius: BorderRadius.circular(14),
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.divider),
+  Widget _beneficiaryTile(FiatBeneficiary b) => _tile(
+        avatar: BankAvatar(b.bankName),
+        title: b.displayName,
+        subtitle: b.listSubtitle,
+        onTap: () => _pick(b),
+      );
+
+  Widget _addNewTile() => _tile(
+        avatar: Container(
+          width: 40,
+          height: 40,
+          decoration: const BoxDecoration(
+            color: AppColors.inputFill,
+            shape: BoxShape.circle,
+          ),
+          child: const Icon(Icons.add, color: AppColors.primaryDark, size: 20),
         ),
-        child: const Row(
-          children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundColor: AppColors.accentYellow,
-              child: Icon(Icons.add, color: AppColors.primaryDark, size: 18),
-            ),
-            SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Add New Recipient',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 14)),
-                  SizedBox(height: 2),
-                  Text('Send to a new person',
-                      style: TextStyle(
-                          color: AppColors.textGrey, fontSize: 12)),
-                ],
-              ),
-            ),
-            AppIcon('chevron-right', color: AppColors.textGrey),
-          ],
+        title: 'Add New Recipient',
+        subtitle: 'Send to a new person',
+        onTap: () => Navigator.pushNamed(
+          context,
+          AppRoutes.fiatAddRecipientShort,
+          arguments: widget.transfer,
         ),
-      ),
-    );
-  }
+      );
 }

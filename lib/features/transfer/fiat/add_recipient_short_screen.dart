@@ -6,11 +6,8 @@ import '../../../data/models/fiat_beneficiary.dart';
 import '../../../data/repositories/bank_repository.dart';
 import 'widgets/fiat_form_widgets.dart';
 
-/// Screen 3 — short "Add recipient" form (Bank + Account Number).
-/// Continues to the full form (screen 4), carrying what's entered.
-///
-/// Note: the design labels the account-number field "Account Name"; it is
-/// treated as the Account Number here (see report).
+/// Screen 3 — "Recipient Details" (Bank + Account number).
+/// Continues to the sending-purpose form (screen 4), carrying what's entered.
 class AddRecipientShortScreen extends StatefulWidget {
   final FiatTransfer transfer;
   const AddRecipientShortScreen({super.key, required this.transfer});
@@ -71,45 +68,38 @@ class _AddRecipientShortScreenState extends State<AddRecipientShortScreen> {
       body: SafeArea(
         child: _loading
             ? const Center(child: CircularProgressIndicator())
-            : Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 8),
-                          const ScreenHeading(
-                            'Add recipient',
-                            helper:
-                                'Please enter the recipient details accurately.',
-                          ),
-                          const SizedBox(height: 20),
-                          const FieldLabel('Bank'),
-                          AppDropdownField(
-                            hint: 'Select bank',
-                            value: _bank,
-                            items: _banks,
-                            onChanged: (v) => setState(() => _bank = v),
-                          ),
-                          const SizedBox(height: 16),
-                          const FieldLabel('Account Number'),
-                          AppTextInput(
-                            controller: _accountController,
-                            keyboardType: TextInputType.number,
-                            hint: '123456789',
-                          ),
-                          const SizedBox(height: 24),
-                        ],
-                      ),
+            : SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const ScreenHeading(
+                      'Recipient Details',
+                      helper:
+                          "Enter the recipient's bank details accurately.",
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-                    child: PrimaryButton('Verify Account', onPressed: _continue),
-                  ),
-                ],
+                    const SizedBox(height: 22),
+                    const FieldLabel('Bank'),
+                    AppDropdownField(
+                      hint: 'Select bank',
+                      value: _bank,
+                      items: _banks,
+                      onChanged: (v) => setState(() => _bank = v),
+                    ),
+                    const SizedBox(height: 18),
+                    const FieldLabel('Account number'),
+                    AppTextInput(
+                      controller: _accountController,
+                      keyboardType: TextInputType.number,
+                      hint: '0123456789',
+                    ),
+                    // The board puts the CTA directly under the fields rather
+                    // than pinned, which also stops the footer squeezing the
+                    // form when the keyboard opens.
+                    const SizedBox(height: 28),
+                    PrimaryButton('Verify Account', onPressed: _continue),
+                  ],
+                ),
               ),
       ),
     );

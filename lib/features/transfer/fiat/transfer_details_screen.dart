@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/routes/app_routes.dart';
 import '../../../core/widgets/app_icon.dart';
+import '../../../core/widgets/country_dropdown.dart';
 import '../../../data/models/fiat_transfer.dart';
 import '../../../data/models/transfer_country.dart';
 import '../../../data/repositories/country_repository.dart';
@@ -86,7 +87,6 @@ class _TransferDetailsScreenState extends State<TransferDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final names = _countries.map((c) => c.name).toList();
     final rateText = _quote == null
         ? '—'
         : '1 ${_destination!.currencyCode} = ${_fmt(_quote!.rate)} ${_receiving!.currencyCode}';
@@ -119,13 +119,13 @@ class _TransferDetailsScreenState extends State<TransferDetailsScreen> {
                     ),
                     const SizedBox(height: 22),
                     const FieldLabel('Receiving country'),
-                    AppDropdownField(
+                    CountryDropdownField(
                       hint: 'Select receiving country',
-                      value: _receiving?.name,
-                      items: names,
-                      onChanged: (v) {
-                        setState(() =>
-                            _receiving = _countries.firstWhere((c) => c.name == v));
+                      value: _receiving,
+                      items: _countries,
+                      onChanged: (c) {
+                        if (c == null) return;
+                        setState(() => _receiving = c);
                         _recompute();
                       },
                     ),
