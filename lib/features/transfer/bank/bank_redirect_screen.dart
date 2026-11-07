@@ -35,41 +35,44 @@ class _BankRedirectScreenState extends State<BankRedirectScreen> {
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: whiteAppBar('Bank Transfer'),
-      body: SafeArea(
+      body: const SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.fromLTRB(20, 20, 20, 24),
+          // spaceBetween so the lock caption sits at the foot of the screen
+          // rather than floating under the heading.
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                width: 72,
-                height: 72,
-                decoration: const BoxDecoration(
-                    color: AppColors.inputFill, shape: BoxShape.circle),
-                child: const AppIcon('bank',
-                    color: AppColors.primaryDark, size: 32),
+              SizedBox.shrink(),
+              Column(
+                children: [
+                  IconBadge(
+                    icon: 'bank',
+                    halo: AppColors.iconTileSoft,
+                    size: 132,
+                    glyphSize: 60,
+                  ),
+                  SizedBox(height: 24),
+                  ScreenHeading(
+                    'Redirecting you to your bank',
+                    helper:
+                        "You'll complete the transfer securely in your bank's app.",
+                    center: true,
+                  ),
+                ],
               ),
-              const SizedBox(height: 20),
-              const Text('Redirecting you to your bank',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 20)),
-              const SizedBox(height: 8),
-              const Text(
-                  "You'll complete the transfer securely in your bank's app.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: AppColors.textGrey, fontSize: 12)),
-              const SizedBox(height: 24),
-              const SizedBox(
-                width: 28,
-                height: 28,
-                child: CircularProgressIndicator(
-                    strokeWidth: 3, color: AppColors.accentYellow),
+              Column(
+                children: [
+                  AppIcon('lock', size: 20, color: AppColors.textGrey),
+                  SizedBox(height: 8),
+                  Text(
+                      'You will return to Framela automatically after '
+                      'completing the transfer',
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(color: AppColors.textGrey, fontSize: 12)),
+                ],
               ),
-              const SizedBox(height: 24),
-              const Text(
-                  'You will return to Framela automatically after completing the transfer',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: AppColors.textGrey, fontSize: 11)),
             ],
           ),
         ),

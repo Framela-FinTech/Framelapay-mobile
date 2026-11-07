@@ -73,38 +73,45 @@ class _FxQuoteScreenState extends State<FxQuoteScreen> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 16),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: AppColors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: AppColors.divider),
-                      ),
-                      child: Column(
-                        children: [
-                          SummaryRow('You send', t.formattedSendAmount),
-                          SummaryRow('Recipient gets', t.formattedReceiveAmount),
-                          SummaryRow('Transfer fee', t.formattedFee),
-                          SummaryRow('FX rate', t.formattedRate),
-                          const Divider(),
-                          SummaryRow('Total', t.formattedTotal, bold: true),
-                        ],
-                      ),
+                    const IconBadge(
+                      icon: 'coin-swap',
+                      halo: AppColors.infoHalo,
+                      glyphColor: AppColors.primary50,
                     ),
-                    const SizedBox(height: 16),
-                    Center(child: TimerPill('Rate locked for $_timerText')),
-                    const SizedBox(height: 8),
-                    const Center(
-                      child: Text('Rate may change when the timer expires.',
+                    const SizedBox(height: 14),
+                    ScreenHeading(
+                      'Your transfer quote',
+                      helper:
+                          '${t.sendCurrencyCode} to ${t.receiveCurrencyCode} · ${t.methodLabel}',
+                      center: true,
+                    ),
+                    const SizedBox(height: 22),
+                    InfoCard(
+                      children: [
+                        SummaryRow('You send', t.formattedSendAmount),
+                        const Divider(height: 1, color: AppColors.divider),
+                        SummaryRow('Transfer fee', t.formattedFee),
+                        const Divider(height: 1, color: AppColors.divider),
+                        SummaryRow('Total you pay', t.formattedTotal),
+                        const Divider(height: 1, color: AppColors.divider),
+                        SummaryRow('Exchange rate', t.formattedRate),
+                        const Divider(height: 1, color: AppColors.divider),
+                        SummaryRow('Recipient receives',
+                            t.formattedReceiveAmount, bold: true),
+                      ],
+                    ),
+                    const SizedBox(height: 18),
+                    QuoteLockPill('Quote expires in $_timerText'),
+                    const SizedBox(height: 10),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text('Refresh your quote if the timer expires.',
                           style: TextStyle(
-                              color: AppColors.textGrey, fontSize: 12)),
+                              color: AppColors.textGrey, fontSize: 13)),
                     ),
-                    const SizedBox(height: 24),
                   ],
                 ),
               ),
