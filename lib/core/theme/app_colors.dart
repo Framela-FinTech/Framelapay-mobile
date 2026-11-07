@@ -65,6 +65,15 @@ class AppColors {
   static const Color warningSoft = Color(0xFFFEF7E3); // caution panels
   static const Color successSoft = Color(0xFFEDFDF5); // success halo
 
+  // Sampled per-component from the Home Transfer board (row 1). These are
+  // deliberately distinct from the paler fills above, which stay as they are
+  // because ~15 screens on boards we have not sampled yet depend on them.
+  static const Color warningPill = Color(0xFFFCEAA1); // FX quote lock pill
+  static const Color warningPanel = Color(0xFFFDF3CC); // payment instruction
+  static const Color infoNotice = Color(0xFFE0EDFD); // review transfer notice
+  static const Color successNotice = Color(0xFFDCF5E7); // verified notice
+  static const Color infoHalo = Color(0xFFDBEAFE); // quote badge halo
+
   // ---- Stablecoin marks ----
   // Sampled from the Figma coin glyphs; these are the board's own variants,
   // not Circle's / Tether's official brand hexes.

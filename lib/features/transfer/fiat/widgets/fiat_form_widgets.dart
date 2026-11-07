@@ -8,17 +8,25 @@ import '../../../../core/widgets/app_icon.dart';
 /// overflow at 360x640.
 
 /// Screen heading (24 w800) with a textGrey helper line below it.
+///
+/// [center] matches the board's confirmation-style screens (FX quote, bank
+/// redirect, payment instruction), where the heading sits under a badge.
 class ScreenHeading extends StatelessWidget {
   final String title;
   final String? helper;
-  const ScreenHeading(this.title, {super.key, this.helper});
+  final bool center;
+  const ScreenHeading(this.title,
+      {super.key, this.helper, this.center = false});
 
   @override
   Widget build(BuildContext context) {
+    final align = center ? TextAlign.center : TextAlign.start;
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment:
+          center ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
         Text(title,
+            textAlign: align,
             style: const TextStyle(
                 color: AppColors.primaryDark,
                 fontWeight: FontWeight.w800,
@@ -26,6 +34,7 @@ class ScreenHeading extends StatelessWidget {
         if (helper != null) ...[
           const SizedBox(height: 4),
           Text(helper!,
+              textAlign: align,
               style: const TextStyle(color: AppColors.textGrey, fontSize: 15)),
         ],
       ],
@@ -206,8 +215,19 @@ class NoticeBanner extends StatelessWidget {
   final String text;
   final String? title;
   final NoticeType type;
+
+  /// Per-screen overrides for the fills sampled off the board. Pass an
+  /// [AppColors] token, never a raw hex. When null the [type] default applies,
+  /// so the call sites outside the fiat flow are unaffected.
+  final Color? background;
+  final Color? iconColor;
+
   const NoticeBanner(this.text,
-      {super.key, this.title, this.type = NoticeType.info});
+      {super.key,
+      this.title,
+      this.type = NoticeType.info,
+      this.background,
+      this.iconColor});
 
   @override
   Widget build(BuildContext context) {
@@ -228,21 +248,19 @@ class NoticeBanner extends StatelessWidget {
         fg = AppColors.primaryDark;
         icon = Icons.error_outline;
     }
+    final glyphColor = iconColor ??
+        (type == NoticeType.warning ? AppColors.accentYellow : fg);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: bg,
+        color: background ?? bg,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon,
-              size: 22,
-              color: type == NoticeType.warning
-                  ? AppColors.accentYellow
-                  : fg),
+          Icon(icon, size: 22, color: glyphColor),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -317,6 +335,162 @@ class PrimaryButton extends StatelessWidget {
         onPressed: onPressed,
         child: Text(label),
       ),
+    );
+  }
+}
+
+/// Secondary CTA: full width, height 56, white fill + hairline outline. Pairs
+/// under a [PrimaryButton] on the board's confirmation screens.
+class SecondaryButton extends StatelessWidget {
+  final String label;
+  final VoidCallback? onPressed;
+  const SecondaryButton(this.label, {super.key, this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: OutlinedButton(
+        style: OutlinedButton.styleFrom(
+          backgroundColor: AppColors.white,
+          foregroundColor: AppColors.primaryDark,
+          minimumSize: const Size.fromHeight(56),
+          side: const BorderSide(color: AppColors.divider),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+          // Matches the ElevatedButton theme so the two stacked CTAs on the
+          // board's confirmation screens read at the same size.
+          textStyle: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        onPressed: onPressed,
+        child: Text(label),
+      ),
+    );
+  }
+}
+
+/// White surface card (radius 16, hairline outline) used for every grouped
+/// block on the grey transfer pages.
+class InfoCard extends StatelessWidget {
+  final List<Widget> children;
+  final EdgeInsetsGeometry padding;
+  const InfoCard({
+    super.key,
+    required this.children,
+    this.padding = const EdgeInsets.symmetric(horizontal: 16),
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: padding,
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.divider),
+      ),
+      child: Column(children: children),
+    );
+  }
+}
+
+/// Circular icon badge (soft halo + glyph) above the heading on the board's
+/// confirmation screens.
+class IconBadge extends StatelessWidget {
+  final String icon;
+  final Color halo;
+  final double size;
+  final double glyphSize;
+  final Color glyphColor;
+  const IconBadge({
+    super.key,
+    required this.icon,
+    required this.halo,
+    this.size = 72,
+    this.glyphSize = 32,
+    this.glyphColor = AppColors.primaryDark,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(color: halo, shape: BoxShape.circle),
+      alignment: Alignment.center,
+      child: AppIcon(icon, size: glyphSize, color: glyphColor),
+    );
+  }
+}
+
+/// Full-width quote-expiry pill on the board's amber fill. Distinct from
+/// [TimerPill], which is a compact centred pill the Conversion board uses.
+class QuoteLockPill extends StatelessWidget {
+  final String text;
+  const QuoteLockPill(this.text, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: AppColors.warningPill,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          const AppIcon('lock', size: 16, color: AppColors.primaryDark),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(text,
+                style: const TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.primaryDark)),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Section title with an optional trailing text action. Sits *outside* the
+/// card it introduces, as the board draws it.
+class SectionHeader extends StatelessWidget {
+  final String title;
+  final String? actionLabel;
+  final VoidCallback? onAction;
+  final Color actionColor;
+  const SectionHeader(
+    this.title, {
+    super.key,
+    this.actionLabel,
+    this.onAction,
+    this.actionColor = AppColors.primary50,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SectionTitle(title),
+        if (actionLabel != null)
+          GestureDetector(
+            onTap: onAction,
+            child: Text(actionLabel!,
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: actionColor)),
+          ),
+      ],
     );
   }
 }
