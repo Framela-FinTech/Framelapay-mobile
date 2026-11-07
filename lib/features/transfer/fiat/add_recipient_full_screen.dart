@@ -92,7 +92,7 @@ class _AddRecipientFullScreenState extends State<AddRecipientFullScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.pageGrey,
       appBar: whiteAppBar('Add Recipient'),
       body: SafeArea(
         child: _loading

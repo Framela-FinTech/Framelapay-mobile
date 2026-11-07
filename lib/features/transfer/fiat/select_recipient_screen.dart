@@ -47,7 +47,7 @@ class _SelectRecipientScreenState extends State<SelectRecipientScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.pageGrey,
       appBar: whiteAppBar('Select Recipient'),
       body: SafeArea(
         child: _loading
@@ -99,8 +99,9 @@ class _SelectRecipientScreenState extends State<SelectRecipientScreen> {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: AppColors.inputFill,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: AppColors.divider),
         ),
         child: Row(
           children: [
@@ -142,8 +143,9 @@ class _SelectRecipientScreenState extends State<SelectRecipientScreen> {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: AppColors.inputFill,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: AppColors.divider),
         ),
         child: const Row(
           children: [

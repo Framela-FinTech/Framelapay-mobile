@@ -51,7 +51,7 @@ class FiatReviewTransferScreen extends StatelessWidget {
     final t = transfer;
     final b = t.beneficiary;
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.pageGrey,
       appBar: whiteAppBar('Review Transfer'),
       body: SafeArea(
         child: Column(

@@ -15,7 +15,7 @@ class PaymentInstructionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = transfer;
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.pageGrey,
       appBar: whiteAppBar('Payment Instruction'),
       body: SafeArea(
         child: Column(
@@ -32,8 +32,9 @@ class PaymentInstructionScreen extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: AppColors.inputFill,
+                        color: AppColors.white,
                         borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: AppColors.divider),
                       ),
                       child: Column(
                         children: [

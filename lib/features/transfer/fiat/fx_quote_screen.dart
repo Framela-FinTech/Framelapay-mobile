@@ -66,7 +66,7 @@ class _FxQuoteScreenState extends State<FxQuoteScreen> {
   Widget build(BuildContext context) {
     final t = widget.transfer;
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.pageGrey,
       appBar: whiteAppBar('FX Quote'),
       body: SafeArea(
         child: Column(
@@ -81,8 +81,9 @@ class _FxQuoteScreenState extends State<FxQuoteScreen> {
                     Container(
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: AppColors.inputFill,
+                        color: AppColors.white,
                         borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: AppColors.divider),
                       ),
                       child: Column(
                         children: [
