@@ -307,30 +307,50 @@ class NoticeBanner extends StatelessWidget {
   }
 }
 
-/// Rate/resend timer pill on the soft caution fill (radius 12, padding 10/6).
+/// Full-width rate-validity pill on the soft blue fill, with the remaining
+/// time emphasised. Used by the Convert Funds sheet — the fiat FX quote uses
+/// [QuoteLockPill], which the board draws in amber instead.
 class TimerPill extends StatelessWidget {
   final String text;
-  const TimerPill(this.text, {super.key});
+
+  /// Shown in `primary50` and bold after [text], as the board draws it.
+  final String? highlight;
+
+  const TimerPill(this.text, {super.key, this.highlight});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: AppColors.warningSoft,
+        color: AppColors.infoSoft,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
-        mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.timer_outlined,
-              size: 14, color: AppColors.primaryDark),
-          const SizedBox(width: 6),
-          Text(text,
-              style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.primaryDark)),
+          const Icon(Icons.schedule, size: 18, color: AppColors.primary50),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text.rich(
+              TextSpan(
+                text: text,
+                style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.primaryDark),
+                children: [
+                  if (highlight != null)
+                    TextSpan(
+                      text: highlight,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.primary50),
+                    ),
+                ],
+              ),
+            ),
+          ),
         ],
       ),
     );
