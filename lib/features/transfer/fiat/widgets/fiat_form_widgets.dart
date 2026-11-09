@@ -237,32 +237,38 @@ class NoticeBanner extends StatelessWidget {
   final Color? background;
   final Color? iconColor;
 
+  /// Overrides the glyph the [type] would pick — the card screens use a lock
+  /// rather than the info or warning mark.
+  final IconData? icon;
+
   const NoticeBanner(this.text,
       {super.key,
       this.title,
       this.type = NoticeType.info,
       this.background,
-      this.iconColor});
+      this.iconColor,
+      this.icon});
 
   @override
   Widget build(BuildContext context) {
     late final Color bg;
     late final Color fg;
-    late final IconData icon;
+    late final IconData typeIcon;
     switch (type) {
       case NoticeType.warning:
         bg = AppColors.warningSoft;
         fg = AppColors.primaryDark;
-        icon = Icons.warning_amber_rounded;
+        typeIcon = Icons.warning_amber_rounded;
       case NoticeType.success:
         bg = AppColors.successSoft;
         fg = AppColors.success;
-        icon = Icons.check_circle_outline;
+        typeIcon = Icons.check_circle_outline;
       case NoticeType.info:
         bg = AppColors.infoPanel;
         fg = AppColors.primaryDark;
-        icon = Icons.error_outline;
+        typeIcon = Icons.error_outline;
     }
+    final glyph = icon ?? typeIcon;
     final glyphColor = iconColor ??
         (type == NoticeType.warning ? AppColors.accentYellow : fg);
     return Container(
@@ -275,7 +281,7 @@ class NoticeBanner extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 22, color: glyphColor),
+          Icon(glyph, size: 22, color: glyphColor),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -393,10 +399,12 @@ class SecondaryButton extends StatelessWidget {
 class InfoCard extends StatelessWidget {
   final List<Widget> children;
   final EdgeInsetsGeometry padding;
+  final CrossAxisAlignment crossAxisAlignment;
   const InfoCard({
     super.key,
     required this.children,
     this.padding = const EdgeInsets.symmetric(horizontal: 16),
+    this.crossAxisAlignment = CrossAxisAlignment.center,
   });
 
   @override
@@ -409,7 +417,10 @@ class InfoCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.divider),
       ),
-      child: Column(children: children),
+      child: Column(
+        crossAxisAlignment: crossAxisAlignment,
+        children: children,
+      ),
     );
   }
 }

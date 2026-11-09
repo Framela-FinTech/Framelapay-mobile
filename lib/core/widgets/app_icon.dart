@@ -62,6 +62,7 @@ class AppIcon extends StatelessWidget {
     'arrow-down': Icons.arrow_downward,
     'bank': Icons.account_balance_outlined,
     'card': Icons.credit_card_outlined,
+    'mail': Icons.mail_outline,
     'coins': Icons.monetization_on_outlined,
     'shield': Icons.shield_outlined,
     'BTC': Icons.currency_bitcoin,
@@ -137,6 +138,7 @@ class AppIcon extends StatelessWidget {
     'verified': Icons.verified,
     'check-circle': Icons.check_circle,
     'card': Icons.credit_card,
+    'mail': Icons.mail,
     'shield-tick': Icons.verified_user,
     'camera': Icons.photo_camera,
   };
