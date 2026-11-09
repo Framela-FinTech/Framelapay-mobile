@@ -122,6 +122,25 @@ void main() {
         reason: 'History filter dropdown overflowed');
   });
 
+  // The period picker is a bottom sheet with two tabs; both need checking.
+  testWidgets('History period picker lays out at 360x640', (tester) async {
+    await pumpScreen(tester, const ActivityScreen());
+    await tester.tap(find.text('Oct 2026').first);
+    // pumpAndSettle so the sheet finishes animating in — a fixed pump leaves
+    // it off-screen, and taps on it then miss. Safe here: unlike the convert
+    // sheet, the period picker runs no periodic timer.
+    await tester.pumpAndSettle();
+    expect(find.text('Choose period'), findsOneWidget);
+    expect(find.text('Scroll to choose a month and year.'), findsOneWidget);
+    expect(tester.takeException(), isNull, reason: 'period Month tab overflowed');
+
+    await tester.tap(find.text('Time frame'));
+    await tester.pumpAndSettle();
+    expect(find.text('Apply Period'), findsOneWidget);
+    expect(tester.takeException(), isNull,
+        reason: 'period Time frame tab overflowed');
+  });
+
   // Modals have to be opened rather than pumped directly.
   final sheets = <String, void Function(BuildContext)>{
     'Convert Funds': (c) => showConvertFundsSheet(c, _wallets),

@@ -8,6 +8,7 @@ import '../../core/widgets/app_icon.dart';
 import '../../data/models/activity_transaction.dart';
 import '../../data/models/transaction_receipt.dart';
 import '../../data/repositories/activity_repository.dart';
+import '../transfer/fiat/widgets/fiat_form_widgets.dart';
 
 /// Which History filter chip owns the open dropdown.
 enum _FilterKind { category, status, currency }
@@ -426,8 +427,8 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     const Text('Choose period',
                         style: TextStyle(
                             color: AppColors.primaryDark,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700)),
+                            fontSize: 22,
+                            fontWeight: FontWeight.w800)),
                     IconButton(
                       onPressed: () => Navigator.pop(context),
                       icon:
@@ -438,7 +439,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 Row(
                   children: [
                     Expanded(
-                      child: _sheetTab('Month / Year', tab == 0,
+                      child: _sheetTab('Month', tab == 0,
                           () => setSheetState(() => tab = 0)),
                     ),
                     Expanded(
@@ -449,67 +450,81 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 ),
                 const SizedBox(height: 16),
                 if (tab == 0) ...[
+                  const Row(
+                    children: [
+                      Expanded(child: _WheelHeader('Month')),
+                      SizedBox(width: 12),
+                      Expanded(child: _WheelHeader('Year')),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
                   Row(
                     children: [
                       Expanded(
-                          child: _sheetDropdown(
-                              month,
-                              ['July', 'August', 'September', 'October'],
-                              (value) => setSheetState(() => month = value))),
-                      const SizedBox(width: 8),
+                        child: _pickerWheel(
+                          options: _monthNames,
+                          selected: month,
+                          onChanged: (v) => setSheetState(() => month = v),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
                       Expanded(
-                          child: _sheetDropdown(year, ['2025', '2026'],
-                              (value) => setSheetState(() => year = value))),
+                        child: _pickerWheel(
+                          options: _yearNames,
+                          selected: year,
+                          onChanged: (v) => setSheetState(() => year = v),
+                        ),
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 10),
                   const Text('Scroll to choose a month and year.',
                       style:
-                          TextStyle(color: AppColors.textGrey, fontSize: 10)),
+                          TextStyle(color: AppColors.textGrey, fontSize: 14)),
                 ] else ...[
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
+                  Row(
                     children: [
-                      'Last 3 months',
-                      'Last 6 months',
-                      'Custom',
-                    ].map((option) {
-                      final selected = timeframe == option;
-                      return ChoiceChip(
-                        label:
-                            Text(option, style: const TextStyle(fontSize: 10)),
-                        selected: selected,
-                        selectedColor: AppColors.accentYellow,
-                        onSelected: (_) =>
-                            setSheetState(() => timeframe = option),
-                      );
-                    }).toList(),
+                      for (final option in const [
+                        'Last 3 months',
+                        'Last 6 months',
+                        'Custom',
+                      ]) ...[
+                        Expanded(
+                          child: _timeframeChip(
+                            option,
+                            timeframe == option,
+                            () => setSheetState(() => timeframe = option),
+                          ),
+                        ),
+                        if (option != 'Custom') const SizedBox(width: 10),
+                      ],
+                    ],
                   ),
                   if (timeframe == 'Custom') ...[
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 18),
                     Row(
                       children: [
                         Expanded(child: _dateField('From')),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: 12),
                         Expanded(child: _dateField('To')),
                       ],
                     ),
                   ],
                 ],
-                const SizedBox(height: 18),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.pop(
-                        context, tab == 0 ? '$month $year' : timeframe),
-                    child: Text(tab == 0 ? 'Confirm' : 'Apply Period'),
+                const SizedBox(height: 24),
+                PrimaryButton(
+                  tab == 0 ? 'Confirm' : 'Apply Period',
+                  onPressed: () => Navigator.pop(
+                      context, tab == 0 ? '$month $year' : timeframe),
+                ),
+                // The board offers the reset only on the Time frame tab.
+                if (tab == 1) ...[
+                  const SizedBox(height: 12),
+                  SecondaryButton(
+                    'Reset Period',
+                    onPressed: () => Navigator.pop(context, 'All'),
                   ),
-                ),
-                OutlinedButton(
-                  onPressed: () => Navigator.pop(context, 'All'),
-                  child: const Text('Reset Period'),
-                ),
+                ],
               ],
             ),
           ),
@@ -527,32 +542,102 @@ class _ActivityScreenState extends State<ActivityScreen> {
         decoration: BoxDecoration(
           border: Border(
               bottom: BorderSide(
-                  color: selected ? AppColors.primaryDark : AppColors.divider,
-                  width: selected ? 2 : 1)),
+                  // The board underlines the active tab in amber.
+                  color: selected ? AppColors.accentYellow : AppColors.divider,
+                  width: selected ? 3 : 1)),
         ),
         child: Center(
           child: Text(label,
               style: TextStyle(
                   color: selected ? AppColors.primaryDark : AppColors.textGrey,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600)),
+                  fontSize: 16,
+                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500)),
         ),
       ),
     );
   }
 
-  Widget _sheetDropdown(
-      String value, List<String> options, ValueChanged<String> onChanged) {
-    return DropdownButtonFormField<String>(
-      value: value,
-      decoration: const InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8)),
-      items: options
-          .map((option) => DropdownMenuItem(value: option, child: Text(option)))
-          .toList(),
-      onChanged: (value) {
-        if (value != null) onChanged(value);
-      },
+  static const _monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
+  ];
+  static const _yearNames = ['2024', '2025', '2026'];
+
+  /// Scroll wheel with a cream band across the centre row, as the board draws
+  /// it, on a grey rounded column.
+  Widget _pickerWheel({
+    required List<String> options,
+    required String selected,
+    required ValueChanged<String> onChanged,
+  }) {
+    const itemExtent = 46.0;
+    final index = options.indexOf(selected).clamp(0, options.length - 1);
+    return Container(
+      height: itemExtent * 5,
+      decoration: BoxDecoration(
+        color: AppColors.pageGrey,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Stack(
+        children: [
+          Center(
+            child: Container(height: itemExtent, color: AppColors.warningSoft),
+          ),
+          ListWheelScrollView.useDelegate(
+            itemExtent: itemExtent,
+            diameterRatio: 2.2,
+            physics: const FixedExtentScrollPhysics(),
+            controller: FixedExtentScrollController(initialItem: index),
+            onSelectedItemChanged: (i) => onChanged(options[i]),
+            childDelegate: ListWheelChildBuilderDelegate(
+              childCount: options.length,
+              builder: (context, i) {
+                final isSelected = options[i] == selected;
+                return Center(
+                  child: Text(
+                    options[i],
+                    style: TextStyle(
+                      color: isSelected
+                          ? AppColors.primaryDark
+                          : AppColors.textGrey,
+                      fontSize: 16,
+                      fontWeight:
+                          isSelected ? FontWeight.w800 : FontWeight.w500,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// White chip with a hairline border; cream fill and amber outline when
+  /// chosen.
+  Widget _timeframeChip(String label, bool selected, VoidCallback onTap) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 14),
+        decoration: BoxDecoration(
+          color: selected ? AppColors.warningSoft : AppColors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+              color: selected ? AppColors.accentYellow : AppColors.divider),
+        ),
+        alignment: Alignment.center,
+        child: Text(label,
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                color: AppColors.primaryDark,
+                fontSize: 13,
+                fontWeight: selected ? FontWeight.w700 : FontWeight.w500)),
+      ),
     );
   }
 
@@ -816,4 +901,20 @@ Color _statusColor(ActivityTransactionStatus status) {
     case ActivityTransactionStatus.failed:
       return AppColors.error;
   }
+}
+
+/// Centred column heading above a picker wheel.
+class _WheelHeader extends StatelessWidget {
+  final String label;
+  const _WheelHeader(this.label);
+
+  @override
+  Widget build(BuildContext context) => Text(
+        label,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+            color: AppColors.primaryDark,
+            fontSize: 15,
+            fontWeight: FontWeight.w700),
+      );
 }
