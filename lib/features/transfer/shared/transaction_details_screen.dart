@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/receipt_card.dart';
 import '../../../core/widgets/share_receipt_sheet.dart';
 import '../../../data/models/transfer_recipient.dart';
+import '../fiat/widgets/fiat_form_widgets.dart';
 
+/// Stablecoin receipt — the same branded artifact the fiat flow and the
+/// Statements screens render, via the shared [ReceiptCard]. The board draws
+/// this with no app bar; the two actions below the card are the way out.
 class TransactionDetailsScreen extends StatelessWidget {
   final TransferRecipient recipient;
+  final String senderName;
   final String transactionId;
   final String assetSent;
   final String network;
@@ -15,95 +21,75 @@ class TransactionDetailsScreen extends StatelessWidget {
   const TransactionDetailsScreen({
     super.key,
     required this.recipient,
-    this.transactionId = 'FRM123456789',
+    this.senderName = 'Cynthia Nkechi',
+    this.transactionId = 'FRM-20261010-10429',
     this.assetSent = '350 USDC',
     this.network = 'Ethereum',
-    this.networkFee = '\$2.50 USDC',
+    this.networkFee = '\$2.50',
     this.paymentMethod = 'Stablecoin',
-    this.dateTime = '17 May 2026, 10:45 AM',
+    this.dateTime = '10 Oct 2026 · 10:45 AM WAT',
   });
+
+  void _goHome(BuildContext context) =>
+      Navigator.popUntil(context, (route) => route.isFirst);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.white,
-        elevation: 0,
-        leading: const BackButton(color: Colors.black),
-        title: const Text('Transaction Details',
-            style: TextStyle(color: Colors.black, fontSize: 16)),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) _goHome(context);
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.pageGrey,
+        body: SafeArea(
           child: Column(
             children: [
-              const SizedBox(height: 16),
-              Container(
-                width: 64,
-                height: 64,
-                decoration: const BoxDecoration(
-                    color: AppColors.success, shape: BoxShape.circle),
-                child: const Icon(Icons.check, color: Colors.white, size: 32),
-              ),
-              const SizedBox(height: 16),
-              const Text('Transfer completed',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
-              const SizedBox(height: 4),
-              Text(transactionId,
-                  style: const TextStyle(color: AppColors.textGrey, fontSize: 12)),
-              const SizedBox(height: 24),
-              _detailRow('Transaction Id', transactionId),
-              _detailRow('Asset sent', assetSent),
-              _detailRow('Network', network),
-              _detailRow('Network fee', networkFee),
-              // Branch: recipient-specific rows
-              if (recipient.isFramelaUser) ...[
-                _detailRow('Recipient', '${recipient.name} (${recipient.handle})'),
-              ] else ...[
-                _detailRow('Recipient', 'External wallet'),
-              ],
-              _detailRow('Wallet address', recipient.walletAddress),
-              _detailRow('Recipient receives', assetSent),
-              _detailRow('Payment method', paymentMethod),
-              _detailRow('Status', 'Completed'),
-              _detailRow('Date & Time', dateTime),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryDark,
-                  foregroundColor: Colors.white,
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+                  child: ReceiptCard(
+                    statusLabel: 'Completed',
+                    statusColor: AppColors.success,
+                    statusBackground: AppColors.successNotice,
+                    headlineAmount: assetSent,
+                    caption: 'Coin sent · ${recipient.displayName}',
+                    reference: transactionId,
+                    note: 'Sample receipt · Not an official financial record',
+                    rows: [
+                      ReceiptLine('From', senderName),
+                      ReceiptLine('To', recipient.displayName),
+                      ReceiptLine('Network', network),
+                      ReceiptLine('Asset sent', assetSent),
+                      ReceiptLine('Network fee', networkFee),
+                      ReceiptLine('Wallet address', recipient.shortAddress),
+                      ReceiptLine('Recipient receives', assetSent),
+                      ReceiptLine('Payment method', paymentMethod),
+                      ReceiptLine('Status', 'Completed'),
+                      ReceiptLine('Date and time', dateTime),
+                    ],
+                  ),
                 ),
-                onPressed: () => showShareReceiptSheet(context),
-                child: const Text('Share Receipt'),
               ),
-              const SizedBox(height: 12),
-              TextButton(
-                onPressed: () =>
-                    Navigator.popUntil(context, (route) => route.isFirst),
-               child: const Text('Back to Home')),
-              const SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+                child: Column(
+                  children: [
+                    PrimaryButton(
+                      'Share Receipt',
+                      onPressed: () => showShareReceiptSheet(context),
+                    ),
+                    const SizedBox(height: 12),
+                    SecondaryButton(
+                      'Back Home',
+                      onPressed: () => _goHome(context),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _detailRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label, style: const TextStyle(color: AppColors.textGrey, fontSize: 13)),
-          Flexible(
-            child: Text(value,
-                textAlign: TextAlign.right,
-                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
-          ),
-        ],
       ),
     );
   }

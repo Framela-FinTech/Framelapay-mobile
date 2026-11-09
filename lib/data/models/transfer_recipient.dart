@@ -14,4 +14,15 @@ class TransferRecipient {
   });
 
   bool get isFramelaUser => type == RecipientType.framelaUser;
+
+  /// Truncated address for receipts and summaries, e.g. "0x8a71....94cd".
+  String get shortAddress {
+    if (walletAddress.length <= 12) return walletAddress;
+    return '${walletAddress.substring(0, 6)}....'
+        '${walletAddress.substring(walletAddress.length - 4)}';
+  }
+
+  /// Name to show for the payee, whichever kind of recipient this is.
+  String get displayName =>
+      isFramelaUser ? (name ?? handle ?? 'FramelaPay user') : shortAddress;
 }
