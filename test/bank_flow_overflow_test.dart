@@ -14,6 +14,8 @@ import 'package:framela/data/models/fiat_transfer.dart';
 import 'package:framela/data/models/transfer_method.dart';
 import 'package:framela/features/transfer/bank/bank_redirect_screen.dart';
 import 'package:framela/features/transfer/bank/payment_instruction_screen.dart';
+import 'package:framela/features/transfer/card/card_verification_screen.dart';
+import 'package:framela/features/transfer/card/pay_with_card_screen.dart';
 import 'package:framela/features/transfer/fiat/account_verified_screen.dart';
 import 'package:framela/features/transfer/fiat/add_recipient_full_screen.dart';
 import 'package:framela/features/transfer/fiat/add_recipient_short_screen.dart';
@@ -38,6 +40,12 @@ const _beneficiary = FiatBeneficiary(
 const _transfer = FiatTransfer(
   method: TransferMethod.bank,
   beneficiary: _beneficiary,
+);
+
+const _cardTransfer = FiatTransfer(
+  method: TransferMethod.card,
+  beneficiary: _beneficiary,
+  cardLabel: 'Visa ****4242',
 );
 
 /// The default test font draws every glyph as a full em box, which is close
@@ -97,6 +105,9 @@ void main() {
     'FX Quote': const FxQuoteScreen(transfer: _transfer),
     'Bank Redirect': const BankRedirectScreen(transfer: _transfer),
     'Payment Instruction': const PaymentInstructionScreen(transfer: _transfer),
+    // The card flow shares every screen with bank except these two.
+    'Pay With Card': const PayWithCardScreen(transfer: _cardTransfer),
+    'Card Verification': const CardVerificationScreen(transfer: _cardTransfer),
     'Review Transfer': const FiatReviewTransferScreen(transfer: _transfer),
     'Transfer Completed': const TransferCompletedScreen(transfer: _transfer),
     'Receipt': const FiatTransactionDetailsScreen(transfer: _transfer),

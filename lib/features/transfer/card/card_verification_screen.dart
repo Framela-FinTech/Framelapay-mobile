@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/routes/app_routes.dart';
-import '../../../core/widgets/app_icon.dart';
 import '../../../data/models/fiat_transfer.dart';
 import '../fiat/widgets/fiat_form_widgets.dart';
 
 /// Screen 10 (Card) — 6-digit email verification before the review step.
+///
+/// The board labels the middle summary row "CArd"; shipped as "Card".
 class CardVerificationScreen extends StatefulWidget {
   final FiatTransfer transfer;
   const CardVerificationScreen({super.key, required this.transfer});
@@ -55,64 +56,58 @@ class _CardVerificationScreenState extends State<CardVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     final t = widget.transfer;
+    // Themed locally: pinput is also used by phone_verification_screen and
+    // verify_email_screen, which keep their own look.
     final defaultPinTheme = PinTheme(
-      width: 44,
-      height: 52,
-      textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+      width: 46,
+      height: 54,
+      textStyle: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w700,
+          color: AppColors.primaryDark),
       decoration: BoxDecoration(
-        color: AppColors.inputFill,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.divider),
       ),
     );
 
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.pageGrey,
       appBar: whiteAppBar('Card Verification'),
       body: SafeArea(
         child: Column(
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 16),
-                    Container(
-                      width: 64,
-                      height: 64,
-                      decoration: const BoxDecoration(
-                          color: AppColors.inputFill, shape: BoxShape.circle),
-                      child: const AppIcon('shield',
-                          color: AppColors.primaryDark, size: 32),
+                    const IconBadge(
+                      icon: 'mail',
+                      halo: AppColors.infoHalo,
+                      size: 88,
+                      glyphSize: 36,
                     ),
                     const SizedBox(height: 16),
-                    const Text('Enter verification code',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 20)),
-                    const SizedBox(height: 6),
-                    const Text(
-                        'Enter the 6-digit code sent to your E-mail to complete this payment',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: AppColors.textGrey, fontSize: 12)),
-                    const SizedBox(height: 20),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: AppColors.inputFill,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Column(
-                        children: [
-                          SummaryRow('Amount', t.formattedSendAmount),
-                          SummaryRow('Card', t.cardLabel ?? 'Visa ****4242'),
-                          SummaryRow(
-                              'Recipient', t.beneficiary?.fullName ?? '—'),
-                        ],
-                      ),
+                    const ScreenHeading(
+                      'Enter Verification Code',
+                      helper: 'Enter the 6-digit code sent to your E-mail to '
+                          'complete this payment',
+                      center: true,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 28),
+                    InfoCard(
+                      children: [
+                        SummaryRow('Amount', t.formattedSendAmount),
+                        const Divider(height: 1, color: AppColors.divider),
+                        SummaryRow('Card', t.cardLabel ?? 'Visa ****4242'),
+                        const Divider(height: 1, color: AppColors.divider),
+                        SummaryRow(
+                            'Recipient', t.beneficiary?.displayName ?? '—'),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
                     Pinput(
                       length: 6,
                       defaultPinTheme: defaultPinTheme,
@@ -120,14 +115,25 @@ class _CardVerificationScreenState extends State<CardVerificationScreen> {
                     ),
                     const SizedBox(height: 16),
                     _remaining > 0
-                        ? Text('Resend code in $_resendText',
-                            style: const TextStyle(
-                                color: AppColors.textGrey, fontSize: 12))
+                        ? Text.rich(
+                            TextSpan(
+                              text: 'Resend code in ',
+                              style: const TextStyle(
+                                  color: AppColors.textGrey, fontSize: 14),
+                              children: [
+                                TextSpan(
+                                  text: _resendText,
+                                  style: const TextStyle(
+                                      color: AppColors.primaryDark,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ],
+                            ),
+                          )
                         : TextButton(
                             onPressed: _startTimer,
                             child: const Text('Resend code'),
                           ),
-                    const SizedBox(height: 24),
                   ],
                 ),
               ),
@@ -135,7 +141,7 @@ class _CardVerificationScreenState extends State<CardVerificationScreen> {
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
               child: PrimaryButton(
-                'Verify payment',
+                'Verify Payment',
                 onPressed: () => Navigator.pushNamed(
                   context,
                   AppRoutes.fiatReviewTransfer,
