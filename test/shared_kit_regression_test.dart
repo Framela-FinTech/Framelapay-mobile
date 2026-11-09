@@ -19,8 +19,10 @@ import 'package:framela/features/profile/beneficiaries/add_beneficiary_screen.da
 import 'package:framela/features/profile/kyc/source_of_funds_screen.dart';
 import 'package:framela/features/profile/security/change_password_screen.dart';
 import 'package:framela/features/profile/statements/account_statements_screen.dart';
+import 'package:framela/features/profile/referral/referral_screen.dart';
 import 'package:framela/features/transfer/shared/choose_network_screen.dart';
 import 'package:framela/features/transfer/wallet/convert_funds_sheet.dart';
+import 'package:framela/features/transfer/wallet/select_wallet_screen.dart';
 import 'package:framela/features/wallet/fund_card_screen.dart';
 import 'package:framela/features/wallet/fund_wallet_details_screen.dart';
 import 'package:framela/features/wallet/receive_details_screen.dart';
@@ -73,6 +75,8 @@ void main() {
   }
 
   final screens = <String, Widget>{
+    'Send Money': const SelectWalletScreen(),
+    'Referral': const ReferralScreen(),
     'Choose Network': const ChooseNetworkScreen(),
     'Fund Wallet Details': const FundWalletDetailsScreen(wallet: _wallet),
     'Receive Details': const ReceiveDetailsScreen(wallet: _wallet),
