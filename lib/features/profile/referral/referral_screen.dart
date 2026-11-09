@@ -1,108 +1,102 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../core/routes/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/app_icon.dart';
+import '../../transfer/fiat/widgets/fiat_form_widgets.dart';
 
+/// Referral — share a code, earn rewards.
+///
+/// The board shows a single "Invite Friends" call to action; the previous
+/// build also carried a "Done" button whose `popUntil` used a bare route-name
+/// predicate, which empties the navigator when Referral is reached from Home
+/// or Quick Actions rather than from Profile. Dropping it matches the design
+/// and removes the hazard — the app bar's back button covers the same intent.
 class ReferralScreen extends StatelessWidget {
   const ReferralScreen({super.key});
+
+  static const _code = 'FERANMI25';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.pageGrey,
-      appBar: AppBar(
-        title: const Text('Referral'),
-        backgroundColor: AppColors.white,
-        elevation: 0,
-      ),
+      appBar: whiteAppBar('Referral'),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 48, 20, 24),
-          child: Column(
-            children: [
-              const _CircleIcon(
-                  icon: 'gift', color: AppColors.iconBlue),
-              const SizedBox(height: 22),
-              const Text('Invite friends to FramelaPay',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 23, fontWeight: FontWeight.w800)),
-              const SizedBox(height: 10),
-              const Text(
-                'Share your referral code and earn rewards when eligible friends complete their first transfer.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: AppColors.textGrey, fontSize: 14, height: 1.5),
-              ),
-              const SizedBox(height: 34),
-              InkWell(
-                onTap: () {
-                  Clipboard.setData(const ClipboardData(text: 'FERANMI25'));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Referral code copied')));
-                },
-                borderRadius: BorderRadius.circular(16),
-                child: Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 28),
-                  decoration: BoxDecoration(
-                    color: AppColors.pageGrey,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.divider),
-                  ),
-                  child: const Column(
-                    children: [
-                      AppIcon('copy', size: 40, color: AppColors.iconBlue),
-                      SizedBox(height: 14),
-                      Text('FERANMI25',
-                          style: TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.w800)),
-                      SizedBox(height: 8),
-                      Text('Tap to copy your referral code',
-                          style: TextStyle(
-                              color: AppColors.textGrey, fontSize: 13)),
-                    ],
-                  ),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 28, 20, 24),
+                child: Column(
+                  children: [
+                    const IconBadge(
+                      icon: 'gift',
+                      halo: AppColors.infoHalo,
+                      size: 88,
+                      glyphSize: 38,
+                      glyphColor: AppColors.iconBlue,
+                    ),
+                    const SizedBox(height: 20),
+                    const ScreenHeading(
+                      'Invite Friends To FramelaPay',
+                      helper:
+                          'Share your referral code and earn rewards when '
+                          'eligible friends complete their first transfer.',
+                      center: true,
+                    ),
+                    const SizedBox(height: 28),
+                    _codeCard(context),
+                  ],
                 ),
               ),
-              const SizedBox(height: 42),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Referral link ready to share'))),
-                  child: const Text('Share Referral Link'),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+              child: PrimaryButton(
+                'Invite Friends',
+                onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Referral link ready to share')),
                 ),
               ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: () => Navigator.popUntil(
-                      context, ModalRoute.withName(AppRoutes.profile)),
-                  child: const Text('Done'),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
-}
 
-class _CircleIcon extends StatelessWidget {
-  final String icon;
-  final Color color;
-  const _CircleIcon({required this.icon, required this.color});
-
-  @override
-  Widget build(BuildContext context) => Container(
-        width: 74,
-        height: 74,
-        decoration: const BoxDecoration(
-            color: AppColors.inputFill, shape: BoxShape.circle),
-        child: Center(child: AppIcon(icon, size: 36, color: color)),
-      );
+  Widget _codeCard(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Clipboard.setData(const ClipboardData(text: _code));
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Referral code copied')));
+      },
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 26),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.divider),
+        ),
+        child: const Column(
+          children: [
+            AppIcon('copy', size: 34, color: AppColors.iconBlue),
+            SizedBox(height: 14),
+            Text(_code,
+                style: TextStyle(
+                    color: AppColors.primaryDark,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800)),
+            SizedBox(height: 6),
+            Text('Tap to copy your referral code',
+                style: TextStyle(color: AppColors.textGrey, fontSize: 13)),
+          ],
+        ),
+      ),
+    );
+  }
 }
