@@ -169,8 +169,7 @@ class _WalletTabScreenState extends State<WalletTabScreen> {
                       context, AppRoutes.addMoneySelectWallet)),
               _action('arrow-down', 'Send Money',
                   () => Navigator.pushNamed(context, AppRoutes.transferHub)),
-              _action('coin-swap', 'Convert',
-                  () => showConvertFundsSheet(context, _wallets)),
+              _action('coin-swap', 'Convert', _convert),
             ],
           ),
         ],
@@ -274,7 +273,81 @@ class _WalletTabScreenState extends State<WalletTabScreen> {
     );
   }
 
+  /// The sheet returns a success message; this entry point used to discard it,
+  /// so converting from the Wallet tab gave no feedback and left balances stale.
+  Future<void> _convert() async {
+    final message = await showConvertFundsSheet(context, _wallets);
+    if (message == null || !mounted) return;
+    await _load();
+    if (!mounted) return;
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+  }
+
   // ---------- Currencies ----------
+
+  /// Opens a wallet in a currency the user does not yet hold. Previously this
+  /// header action was wired to an empty callback.
+  Future<void> _addCurrency() async {
+    final available = await _repo.getAvailableCurrencies();
+    if (!mounted) return;
+
+    if (available.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('You already hold every available currency.')));
+      return;
+    }
+
+    final picked = await showModalBottomSheet<CurrencyWallet>(
+      context: context,
+      backgroundColor: AppColors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (_) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(height: 18),
+            const Text('Add a currency',
+                style: TextStyle(
+                    color: AppColors.primaryDark,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 17)),
+            const SizedBox(height: 4),
+            const Text('Open a new wallet to hold and convert into.',
+                style: TextStyle(color: AppColors.textGrey, fontSize: 13)),
+            const SizedBox(height: 12),
+            for (final w in available)
+              ListTile(
+                leading: ClipOval(
+                  child: CountryFlag.fromCountryCode(w.countryCode,
+                      height: 34, width: 34),
+                ),
+                title: Text('${w.code} Wallet',
+                    style: const TextStyle(
+                        color: AppColors.primaryDark,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15)),
+                subtitle: Text(w.name,
+                    style: const TextStyle(
+                        color: AppColors.textGrey, fontSize: 13)),
+                onTap: () => Navigator.pop(context, w),
+              ),
+            const SizedBox(height: 12),
+          ],
+        ),
+      ),
+    );
+
+    if (picked == null || !mounted) return;
+    await _repo.openWallet(picked.code);
+    if (!mounted) return;
+    await _load();
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${picked.code} wallet added.')));
+  }
 
   Widget _currenciesHeader() {
     return Row(
@@ -283,7 +356,7 @@ class _WalletTabScreenState extends State<WalletTabScreen> {
         const Text('My currencies',
             style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
         TextButton.icon(
-          onPressed: () {},
+          onPressed: _addCurrency,
           icon: const Icon(Icons.add, size: 16),
           label: const Text('Add currency'),
         ),
