@@ -187,6 +187,9 @@ class _ConvertFundsSheetState extends State<_ConvertFundsSheet> {
                   const TextInputType.numberWithOptions(decimal: true),
               prefixText: '${_from.symbol} ',
               hint: '0.00',
+              // Without this the rate, fee and receive rows only refreshed on
+              // a wallet change, so typing an amount left them stale.
+              onChanged: (_) => _recompute(),
             ),
             const SizedBox(height: 16),
             SummaryRow('Exchange rate', rateText),

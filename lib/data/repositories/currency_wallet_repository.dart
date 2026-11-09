@@ -49,7 +49,9 @@ abstract class CurrencyWalletRepository {
 class MockCurrencyWalletRepository implements CurrencyWalletRepository {
   // Rates expressed as "units per 1 USD".
   static const Map<String, double> _usdRates = {
-    'NGN': 1620.50,
+    // Kept in step with MockFxRepository: the two disagreeing meant the
+    // convert sheet quoted a different NGN rate from Destination and FX Quote.
+    'NGN': 1567.50,
     'USD': 1.0,
     'GBP': 0.79,
     'EUR': 0.92,
