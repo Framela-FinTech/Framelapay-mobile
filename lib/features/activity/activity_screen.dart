@@ -9,6 +9,9 @@ import '../../data/models/activity_transaction.dart';
 import '../../data/models/transaction_receipt.dart';
 import '../../data/repositories/activity_repository.dart';
 
+/// Which History filter chip owns the open dropdown.
+enum _FilterKind { category, status, currency }
+
 class ActivityScreen extends StatefulWidget {
   const ActivityScreen({super.key});
 
@@ -25,6 +28,10 @@ class _ActivityScreenState extends State<ActivityScreen> {
   String _status = 'All status';
   String _currency = 'All currencies';
   String _period = 'All';
+
+  /// Which filter's dropdown is open, if any. The board anchors these panels
+  /// under the chip row rather than presenting them as bottom sheets.
+  _FilterKind? _openFilter;
   String _query = '';
 
   static const _categories = [
@@ -127,17 +134,61 @@ class _ActivityScreenState extends State<ActivityScreen> {
       body: SafeArea(
         child: _loading
             ? const Center(child: CircularProgressIndicator())
-            : SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _modeTabs(),
-                    const SizedBox(height: 12),
-                    _searchField(),
-                    const SizedBox(height: 10),
-                    _filterRow(),
-                    const SizedBox(height: 14),
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Fixed header so a filter panel can anchor directly beneath
+                  // the chip row, with the list dimmed behind it.
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _modeTabs(),
+                        const SizedBox(height: 12),
+                        _searchField(),
+                        const SizedBox(height: 10),
+                        _filterRow(),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        _listBody(filtered),
+                        if (_openFilter != null) ...[
+                          Positioned.fill(
+                            child: GestureDetector(
+                              onTap: () =>
+                                  setState(() => _openFilter = null),
+                              child: Container(
+                                  color: Colors.black.withValues(alpha: 0.4)),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: _filterPanel(),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+      ),
+      );
+  }
+
+  Widget _listBody(List<ActivityTransaction> filtered) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
                     if (_hasFilters)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,13 +202,11 @@ class _ActivityScreenState extends State<ActivityScreen> {
                           ),
                         ],
                       ),
-                    if (filtered.isEmpty)
-                      _emptyState()
-                    else
-                      _transactionGroups(filtered),
-                  ],
-                ),
-              ),
+          if (filtered.isEmpty)
+            _emptyState()
+          else
+            _transactionGroups(filtered),
+        ],
       ),
     );
   }
@@ -233,48 +282,30 @@ class _ActivityScreenState extends State<ActivityScreen> {
   Widget _filterRow() {
     return Row(
       children: [
-        Expanded(
-          child: _filterButton(
-              _category,
-              () => _showChoiceSheet(
-                  title: 'Choose category',
-                  options: _categories,
-                  selected: _category,
-                  onSelected: (value) => setState(() => _category = value))),
-        ),
+        Expanded(child: _filterButton(_FilterKind.category, _category)),
         const SizedBox(width: 6),
-        Expanded(
-          child: _filterButton(
-              _status,
-              () => _showChoiceSheet(
-                  title: 'Choose status',
-                  options: _statuses,
-                  selected: _status,
-                  onSelected: (value) => setState(() => _status = value))),
-        ),
+        Expanded(child: _filterButton(_FilterKind.status, _status)),
         const SizedBox(width: 6),
-        Expanded(
-          child: _filterButton(
-              _currency,
-              () => _showChoiceSheet(
-                  title: 'Choose currency',
-                  options: _currencies,
-                  selected: _currency,
-                  onSelected: (value) => setState(() => _currency = value))),
-        ),
+        Expanded(child: _filterButton(_FilterKind.currency, _currency)),
       ],
     );
   }
 
-  Widget _filterButton(String label, VoidCallback onTap) {
+  /// Chip that opens its panel. The board gives the open chip an amber
+  /// outline, a cream fill and an upward chevron.
+  Widget _filterButton(_FilterKind kind, String label) {
+    final open = _openFilter == kind;
     return OutlinedButton(
-      onPressed: onTap,
+      onPressed: () =>
+          setState(() => _openFilter = open ? null : kind),
       style: OutlinedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 10),
-        side: const BorderSide(color: AppColors.divider),
-        backgroundColor: AppColors.white,
-        foregroundColor: AppColors.textGrey,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+        side: BorderSide(
+            color: open ? AppColors.accentYellow : AppColors.divider),
+        backgroundColor: open ? AppColors.warningSoft : AppColors.white,
+        foregroundColor:
+            open ? AppColors.primaryDark : AppColors.textGrey,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -282,10 +313,91 @@ class _ActivityScreenState extends State<ActivityScreen> {
           Flexible(
             child: Text(label,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 9)),
+                style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: open ? FontWeight.w700 : FontWeight.w500)),
           ),
-          const AppIcon('chevron-down', size: 14, color: AppColors.textGrey),
+          const SizedBox(width: 2),
+          AppIcon(open ? 'chevron-up' : 'chevron-down',
+              size: 16,
+              color: open ? AppColors.primaryDark : AppColors.textGrey),
         ],
+      ),
+    );
+  }
+
+  /// The anchored panel for whichever chip is open.
+  Widget _filterPanel() {
+    late final String title;
+    late final List<String> options;
+    late final String selected;
+    late final ValueChanged<String> onSelected;
+
+    switch (_openFilter!) {
+      case _FilterKind.category:
+        title = 'Choose category';
+        options = _categories;
+        selected = _category;
+        onSelected = (v) => _category = v;
+      case _FilterKind.status:
+        title = 'Choose status';
+        options = _statuses;
+        selected = _status;
+        onSelected = (v) => _status = v;
+      case _FilterKind.currency:
+        title = 'Choose currency';
+        options = _currencies;
+        selected = _currency;
+        onSelected = (v) => _currency = v;
+    }
+
+    return Material(
+      color: AppColors.white,
+      borderRadius: BorderRadius.circular(16),
+      clipBehavior: Clip.antiAlias,
+      child: ConstrainedBox(
+        // Never taller than the area below the chips.
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.56,
+        ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(title,
+                      style: const TextStyle(
+                          color: AppColors.primaryDark,
+                          fontSize: 17,
+                          fontWeight: FontWeight.w700)),
+                  InkWell(
+                    onTap: () => setState(() => _openFilter = null),
+                    borderRadius: BorderRadius.circular(20),
+                    child: const AppIcon('close',
+                        color: AppColors.primaryDark),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 6),
+              for (var i = 0; i < options.length; i++)
+                _choiceRow(
+                  option: options[i],
+                  isSelected: options[i] == selected,
+                  // No divider around the pill, or after the final row.
+                  showDivider: i != options.length - 1 &&
+                      options[i] != selected &&
+                      options[i + 1] != selected,
+                  onTap: () => setState(() {
+                    onSelected(options[i]);
+                    _openFilter = null;
+                  }),
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -642,63 +754,17 @@ class _ActivityScreenState extends State<ActivityScreen> {
     );
   }
 
-  Future<void> _showChoiceSheet({
-    required String title,
-    required List<String> options,
-    required String selected,
-    required ValueChanged<String> onSelected,
-  }) async {
-    final result = await showModalBottomSheet<String>(
-      context: context,
-      backgroundColor: AppColors.white,
-      showDragHandle: true,
-      builder: (context) => SafeArea(
-        child: ListView(
-          shrinkWrap: true,
-          padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(title,
-                    style: const TextStyle(
-                        color: AppColors.primaryDark,
-                        fontSize: 17,
-                        fontWeight: FontWeight.w700)),
-                IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const AppIcon('close', color: AppColors.primaryDark),
-                ),
-              ],
-            ),
-            // Figma: the active option is a cream pill with a gold outline and
-            // a gold tick; the rest are plain rows separated by hairlines.
-            for (var i = 0; i < options.length; i++)
-              _choiceRow(
-                option: options[i],
-                isSelected: options[i] == selected,
-                // No divider under the pill, or after the final row.
-                showDivider: i != options.length - 1 &&
-                    options[i] != selected &&
-                    options[i + 1] != selected,
-              ),
-          ],
-        ),
-      ),
-    );
-    if (result != null) onSelected(result);
-  }
-
   Widget _choiceRow({
     required String option,
     required bool isSelected,
     required bool showDivider,
+    required VoidCallback onTap,
   }) {
     return Column(
       children: [
         InkWell(
           borderRadius: BorderRadius.circular(12),
-          onTap: () => Navigator.pop(context, option),
+          onTap: onTap,
           child: Container(
             height: 56,
             padding: const EdgeInsets.symmetric(horizontal: 14),

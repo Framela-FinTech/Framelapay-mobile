@@ -105,6 +105,7 @@ class AppIcon extends StatelessWidget {
     'close': Icons.close,
     'search': Icons.search,
     'chevron-down': Icons.keyboard_arrow_down,
+    'chevron-up': Icons.keyboard_arrow_up,
     'info-circle': Icons.info_outline,
     'info-triangle': Icons.warning_amber_outlined,
     'camera': Icons.photo_camera_outlined,

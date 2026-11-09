@@ -19,6 +19,7 @@ import 'package:framela/features/profile/beneficiaries/add_beneficiary_screen.da
 import 'package:framela/features/profile/kyc/source_of_funds_screen.dart';
 import 'package:framela/features/profile/security/change_password_screen.dart';
 import 'package:framela/features/profile/statements/account_statements_screen.dart';
+import 'package:framela/features/activity/activity_screen.dart';
 import 'package:framela/features/profile/referral/referral_screen.dart';
 import 'package:framela/data/models/transfer_recipient.dart';
 import 'package:framela/features/transfer/shared/choose_network_screen.dart';
@@ -82,6 +83,7 @@ void main() {
   final screens = <String, Widget>{
     'Send Money': const SelectWalletScreen(),
     'Referral': const ReferralScreen(),
+    'History': const ActivityScreen(),
     'Choose Network': const ChooseNetworkScreen(),
     'Enter Wallet Address': const EnterWalletAddressScreen(),
     'Verify Wallet Address': const VerifyWalletAddressScreen(),
@@ -107,6 +109,17 @@ void main() {
       await pumpScreen(tester, screen);
       expect(tester.takeException(), isNull, reason: '$name overflowed');
     });
+  });
+
+  // The History filter dropdowns anchor under the chip row rather than
+  // presenting as bottom sheets, so the open state needs its own check.
+  testWidgets('History filter dropdown lays out at 360x640', (tester) async {
+    await pumpScreen(tester, const ActivityScreen());
+    await tester.tap(find.text('All categories').first);
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(find.text('Choose category'), findsOneWidget);
+    expect(tester.takeException(), isNull,
+        reason: 'History filter dropdown overflowed');
   });
 
   // Modals have to be opened rather than pumped directly.
