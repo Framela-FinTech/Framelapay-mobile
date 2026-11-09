@@ -23,6 +23,7 @@ import 'package:framela/features/profile/referral/referral_screen.dart';
 import 'package:framela/features/transfer/shared/choose_network_screen.dart';
 import 'package:framela/features/transfer/wallet/convert_funds_sheet.dart';
 import 'package:framela/features/transfer/wallet/select_wallet_screen.dart';
+import 'package:framela/features/wallet/choose_wallet_balance_sheet.dart';
 import 'package:framela/features/wallet/fund_card_screen.dart';
 import 'package:framela/features/wallet/fund_wallet_details_screen.dart';
 import 'package:framela/features/wallet/receive_details_screen.dart';
@@ -94,27 +95,33 @@ void main() {
     });
   });
 
-  // The convert sheet is a modal, so it has to be opened rather than pumped.
-  // It is the only TimerPill consumer and shows the NGN rate that moved.
-  testWidgets('Convert Funds sheet lays out at 360x640', (tester) async {
-    tester.view.physicalSize = const Size(360, 640);
-    tester.view.devicePixelRatio = 1.0;
-    addTearDown(tester.view.reset);
+  // Modals have to be opened rather than pumped directly.
+  final sheets = <String, void Function(BuildContext)>{
+    'Convert Funds': (c) => showConvertFundsSheet(c, _wallets),
+    'Choose wallet balance': (c) => showChooseWalletBalanceSheet(c, _wallets),
+  };
 
-    await tester.pumpWidget(MaterialApp(
-      theme: AppTheme.lightTheme,
-      home: Scaffold(
-        body: Builder(
-          builder: (context) => TextButton(
-            onPressed: () => showConvertFundsSheet(context, _wallets),
-            child: const Text('open'),
+  sheets.forEach((name, open) {
+    testWidgets('$name sheet lays out at 360x640', (tester) async {
+      tester.view.physicalSize = const Size(360, 640);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(MaterialApp(
+        theme: AppTheme.lightTheme,
+        home: Scaffold(
+          body: Builder(
+            builder: (context) => TextButton(
+              onPressed: () => open(context),
+              child: const Text('open'),
+            ),
           ),
         ),
-      ),
-    ));
-    await tester.tap(find.text('open'));
-    await tester.pump(const Duration(milliseconds: 400));
-    await tester.pump(const Duration(milliseconds: 400));
-    expect(tester.takeException(), isNull, reason: 'convert sheet overflowed');
+      ));
+      await tester.tap(find.text('open'));
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pump(const Duration(milliseconds: 400));
+      expect(tester.takeException(), isNull, reason: '$name sheet overflowed');
+    });
   });
 }
