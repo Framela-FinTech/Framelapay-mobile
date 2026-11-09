@@ -1,97 +1,78 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/routes/app_routes.dart';
+import '../../../core/widgets/app_icon.dart';
 import '../../../data/models/transfer_recipient.dart';
+import '../fiat/widgets/fiat_form_widgets.dart';
 
+/// Confirm an external wallet address before review.
+///
+/// Like its sibling, this screen has no frame on the Home Transfer board —
+/// row 4 draws only the FramelaPay-user path — so it follows the house
+/// conventions rather than a specific design.
 class VerifyWalletAddressScreen extends StatelessWidget {
   const VerifyWalletAddressScreen({super.key});
 
+  static const _recipient = TransferRecipient(
+    type: RecipientType.externalWallet,
+    walletAddress: '0x71F3A2c4B6e98F29',
+  );
+
   @override
   Widget build(BuildContext context) {
-    const recipient = TransferRecipient(
-      type: RecipientType.externalWallet,
-      walletAddress: '0x71F3A2c4B6e9....8F29',
-    );
-
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.white,
-        elevation: 0,
-        leading: const BackButton(color: Colors.black),
-        title: const Text('Send USDC',
-            style: TextStyle(color: Colors.black, fontSize: 16)),
-      ),
+      backgroundColor: AppColors.pageGrey,
+      appBar: whiteAppBar('Verify Address'),
       body: SafeArea(
         child: Column(
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Verify wallet address',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 20)),
-                    const SizedBox(height: 4),
-                    const Text(
-                      'Confirm that the wallet address is correct and compatible with the selected network.',
-                      style: TextStyle(color: AppColors.textGrey, fontSize: 12),
+                    const ScreenHeading(
+                      'Verify wallet address',
+                      helper:
+                          'Confirm that the wallet address is correct and '
+                          'compatible with the selected network.',
                     ),
-                    const SizedBox(height: 16),
-                    ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      leading: const CircleAvatar(
-                          backgroundColor: AppColors.inputFill,
-                          child: Icon(Icons.account_balance_wallet_outlined,
-                              color: AppColors.primaryDark)),
-                      title: const Text('External wallet',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600, fontSize: 14)),
-                      subtitle: const Text('0x71F3A2c4B6e9....8F29',
-                          style: TextStyle(
-                              color: AppColors.textGrey, fontSize: 12)),
-                      trailing: TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('Edit')),
+                    const SizedBox(height: 22),
+                    _addressCard(context),
+                    const SizedBox(height: 18),
+                    InfoCard(
+                      children: [
+                        const SummaryRow('Asset', 'USDC · USD Coin'),
+                        const Divider(height: 1, color: AppColors.divider),
+                        const SummaryRow('Network', 'Ethereum · ERC-20'),
+                        const Divider(height: 1, color: AppColors.divider),
+                        SummaryRow(
+                            'Recipient address', _recipient.shortAddress),
+                        const Divider(height: 1, color: AppColors.divider),
+                        _checkRow('Network compatibility', 'Compatible'),
+                        const Divider(height: 1, color: AppColors.divider),
+                        _checkRow('Address format', 'Valid format'),
+                      ],
                     ),
-                    const Divider(height: 32),
-                    _row('Asset', 'USDC · USD Coin'),
-                    _row('Network', 'Ethereum · ERC-20'),
-                    _row('Recipient address', '0x8a71...94cd'),
-                    _verifiedRow('Network compatibility', 'Compatible'),
-                    _verifiedRow('Address format', 'Valid · Correct format'),
-                    const SizedBox(height: 16),
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFF4E5),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Text(
-                        'This transfer will be sent directly to the wallet address on the Ethereum network. Once sent, it cannot be reversed.',
-                        style: TextStyle(fontSize: 11, color: Colors.black87),
-                      ),
+                    const SizedBox(height: 18),
+                    const NoticeBanner(
+                      'This transfer goes directly to the wallet address on '
+                      'the Ethereum network. Once sent, it cannot be reversed.',
+                      type: NoticeType.warning,
                     ),
                   ],
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryDark,
-                    foregroundColor: Colors.white,
-                  ),
-                  onPressed: () => Navigator.pushNamed(
-                    context,
-                    AppRoutes.reviewTransfer,
-                    arguments: recipient,
-                  ),
-                  child: const Text('Continue'),
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+              child: PrimaryButton(
+                'Continue',
+                onPressed: () => Navigator.pushNamed(
+                  context,
+                  AppRoutes.reviewTransfer,
+                  arguments: _recipient,
                 ),
               ),
             ),
@@ -101,44 +82,62 @@ class VerifyWalletAddressScreen extends StatelessWidget {
     );
   }
 
-  Widget _row(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+  Widget _addressCard(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.divider),
+      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label,
-              style: const TextStyle(color: AppColors.textGrey, fontSize: 13)),
-          Text(value,
-              style:
-                  const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+          Container(
+            width: 40,
+            height: 40,
+            decoration: const BoxDecoration(
+                color: AppColors.iconTileSoft, shape: BoxShape.circle),
+            alignment: Alignment.center,
+            child:
+                const AppIcon('wallet', size: 20, color: AppColors.primary50),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('External wallet',
+                    style: TextStyle(
+                        color: AppColors.primaryDark,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15)),
+                const SizedBox(height: 2),
+                Text(_recipient.shortAddress,
+                    style: const TextStyle(
+                        color: AppColors.textGrey, fontSize: 13)),
+              ],
+            ),
+          ),
+          GestureDetector(
+            onTap: () => Navigator.pop(context),
+            child: const Text('Edit',
+                style: TextStyle(
+                    color: AppColors.primary50,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14)),
+          ),
         ],
       ),
     );
   }
 
-  Widget _verifiedRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label,
-              style: const TextStyle(color: AppColors.textGrey, fontSize: 13)),
-          Row(
-            children: [
-              const Icon(Icons.check_circle,
-                  color: AppColors.success, size: 16),
-              const SizedBox(width: 4),
-              Text(value,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13,
-                      color: AppColors.success)),
-            ],
-          ),
-        ],
-      ),
+  /// A summary row whose value carries a green tick.
+  static Widget _checkRow(String label, String value) {
+    return SummaryRow(
+      label,
+      value,
+      trailing: const Icon(Icons.check_circle,
+          color: AppColors.success, size: 18),
     );
   }
 }

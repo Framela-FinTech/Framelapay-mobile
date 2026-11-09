@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/routes/app_routes.dart';
+import '../../../core/widgets/app_icon.dart';
+import '../fiat/widgets/fiat_form_widgets.dart';
+import '../shared/widgets/asset_network_bar.dart';
 
+/// External-wallet send — recipient address plus amount.
+///
+/// The Home Transfer board draws only the FramelaPay-user path for this flow,
+/// so there is no frame to match this screen against. It follows the house
+/// conventions instead and reuses [AssetNetworkBar], the bar the matched
+/// sibling screens (Enter Recipient, Enter Amount, Review) already carry.
 class EnterWalletAddressScreen extends StatefulWidget {
   const EnterWalletAddressScreen({super.key});
 
@@ -13,11 +22,14 @@ class EnterWalletAddressScreen extends StatefulWidget {
 class _EnterWalletAddressScreenState extends State<EnterWalletAddressScreen> {
   /// Spendable balance behind "Use max" — a stand-in until wallets are live.
   static const _availableBalance = '1,250.00';
+  static const _networkFee = '0.50 USDC';
 
+  final _addressController = TextEditingController();
   final _amountController = TextEditingController();
 
   @override
   void dispose() {
+    _addressController.dispose();
     _amountController.dispose();
     super.dispose();
   }
@@ -27,127 +39,145 @@ class _EnterWalletAddressScreenState extends State<EnterWalletAddressScreen> {
     _amountController.selection = TextSelection.fromPosition(
       TextPosition(offset: _amountController.text.length),
     );
+    setState(() {});
+  }
+
+  void _pickRecent(String address) {
+    _addressController.text = address;
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.white,
-        elevation: 0,
-        leading: const BackButton(color: Colors.black),
-        title: const Text('Send Stablecoin',
-            style: TextStyle(color: Colors.black, fontSize: 16)),
-      ),
+      backgroundColor: AppColors.pageGrey,
+      appBar: whiteAppBar('Enter Recipient'),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  const CircleAvatar(
-                      backgroundColor: AppColors.inputFill,
-                      child: Icon(Icons.attach_money,
-                          color: AppColors.primaryDark)),
-                  const SizedBox(width: 10),
-                  const Text('USDC · Ethereum',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 13)),
-                  const Spacer(),
-                  TextButton(
-                      // Back to the network picker to change asset/network.
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('Change')),
-                ],
-              ),
-              const SizedBox(height: 20),
-              const Text('Enter recipient address',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
-              const SizedBox(height: 6),
-              const Text(
-                "Paste the wallet address or scan a QR code to get the recipient's address.",
-                style: TextStyle(color: AppColors.textGrey, fontSize: 12),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Wallet address',
-                  hintText: '0x...',
-                  suffixIcon: const Icon(Icons.qr_code_scanner),
-                  filled: true,
-                  fillColor: AppColors.inputFill,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AssetNetworkBar(onChange: () => Navigator.pop(context)),
+                    const SizedBox(height: 22),
+                    const ScreenHeading(
+                      'Enter recipient address',
+                      helper:
+                          'Paste the wallet address or scan a QR code to get '
+                          "the recipient's address.",
+                    ),
+                    const SizedBox(height: 18),
+                    const FieldLabel('Wallet address'),
+                    AppTextInput(
+                      controller: _addressController,
+                      hint: '0x...',
+                      onChanged: (_) => setState(() {}),
+                    ),
+                    const SizedBox(height: 22),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const FieldLabel('Amount'),
+                        GestureDetector(
+                          onTap: _useMax,
+                          child: const Text('Use max',
+                              style: TextStyle(
+                                  color: AppColors.accentYellow,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 14)),
+                        ),
+                      ],
+                    ),
+                    AppTextInput(
+                      controller: _amountController,
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
+                      hint: '0.00',
+                      onChanged: (_) => setState(() {}),
+                    ),
+                    const SizedBox(height: 14),
+                    InfoCard(
+                      children: [
+                        const SummaryRow(
+                            'Available balance', '$_availableBalance USDC'),
+                        const Divider(height: 1, color: AppColors.divider),
+                        const SummaryRow('Network fee', _networkFee),
+                      ],
+                    ),
+                    const SizedBox(height: 22),
+                    const SectionTitle('Recent addresses'),
+                    const SizedBox(height: 12),
+                    _walletTile('My MetaMask', '0x3a71...F3d9'),
+                    _walletTile('Coinbase Wallet', '0x89c4...2e10'),
+                  ],
                 ),
               ),
-              const SizedBox(height: 24),
-              const Text('Amount',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _amountController,
-                keyboardType: TextInputType.number,
-                style:
-                    const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
-                decoration: const InputDecoration(
-                  hintText: '0.00',
-                  suffixText: 'USDC',
-                  border: InputBorder.none,
-                ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+              child: PrimaryButton(
+                'Continue',
+                onPressed: _addressController.text.trim().isEmpty
+                    ? null
+                    : () => Navigator.pushNamed(
+                        context, AppRoutes.verifyWalletAddress),
               ),
-              const Divider(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('Available balance: $_availableBalance USDC',
-                      style:
-                          TextStyle(color: AppColors.textGrey, fontSize: 12)),
-                  TextButton(
-                      onPressed: _useMax, child: const Text('Use max')),
-                ],
-              ),
-              const SizedBox(height: 8),
-              const Text('Network Fee: 0.50 USDC',
-                  style: TextStyle(color: AppColors.textGrey, fontSize: 12)),
-              const SizedBox(height: 20),
-              const Text('Recent address',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
-              _walletTile('My MetaMask', '0x3a71...F3d9'),
-              _walletTile('Coinbase Wallet', '0x89c4...2e10'),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primaryDark,
-                  foregroundColor: Colors.white,
-                ),
-                onPressed: () => Navigator.pushNamed(
-                    context, AppRoutes.verifyWalletAddress),
-                child: const Text('Continue'),
-              ),
-              const SizedBox(height: 16),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
   Widget _walletTile(String name, String address) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      leading: const CircleAvatar(
-          backgroundColor: AppColors.inputFill,
-          child: Icon(Icons.account_balance_wallet_outlined,
-              color: AppColors.primaryDark)),
-      title: Text(name,
-          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
-      subtitle: Text(address,
-          style: const TextStyle(color: AppColors.textGrey, fontSize: 12)),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: InkWell(
+        onTap: () => _pickRecent(address),
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: AppColors.divider),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: const BoxDecoration(
+                    color: AppColors.iconTileSoft, shape: BoxShape.circle),
+                alignment: Alignment.center,
+                child: const AppIcon('wallet',
+                    size: 20, color: AppColors.primary50),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(name,
+                        style: const TextStyle(
+                            color: AppColors.primaryDark,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15)),
+                    const SizedBox(height: 2),
+                    Text(address,
+                        style: const TextStyle(
+                            color: AppColors.textGrey, fontSize: 13)),
+                  ],
+                ),
+              ),
+              const AppIcon('chevron-right', color: AppColors.textGrey),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

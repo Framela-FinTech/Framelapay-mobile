@@ -20,7 +20,11 @@ import 'package:framela/features/profile/kyc/source_of_funds_screen.dart';
 import 'package:framela/features/profile/security/change_password_screen.dart';
 import 'package:framela/features/profile/statements/account_statements_screen.dart';
 import 'package:framela/features/profile/referral/referral_screen.dart';
+import 'package:framela/data/models/transfer_recipient.dart';
 import 'package:framela/features/transfer/shared/choose_network_screen.dart';
+import 'package:framela/features/transfer/shared/transaction_details_screen.dart';
+import 'package:framela/features/transfer/to_external_wallet/enter_wallet_address_screen.dart';
+import 'package:framela/features/transfer/to_external_wallet/verify_wallet_address_screen.dart';
 import 'package:framela/features/transfer/wallet/convert_funds_sheet.dart';
 import 'package:framela/features/transfer/wallet/select_wallet_screen.dart';
 import 'package:framela/features/wallet/choose_wallet_balance_sheet.dart';
@@ -79,6 +83,16 @@ void main() {
     'Send Money': const SelectWalletScreen(),
     'Referral': const ReferralScreen(),
     'Choose Network': const ChooseNetworkScreen(),
+    'Enter Wallet Address': const EnterWalletAddressScreen(),
+    'Verify Wallet Address': const VerifyWalletAddressScreen(),
+    'Stablecoin Receipt': const TransactionDetailsScreen(
+      recipient: TransferRecipient(
+        type: RecipientType.framelaUser,
+        name: 'Ken Okafor',
+        handle: '@ken',
+        walletAddress: '0x8a71C4b2e9F094cd',
+      ),
+    ),
     'Fund Wallet Details': const FundWalletDetailsScreen(wallet: _wallet),
     'Receive Details': const ReceiveDetailsScreen(wallet: _wallet),
     'Fund Card': const FundCardScreen(wallet: _wallet),
