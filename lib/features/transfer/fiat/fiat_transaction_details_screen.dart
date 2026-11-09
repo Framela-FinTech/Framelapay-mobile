@@ -24,8 +24,9 @@ class FiatTransactionDetailsScreen extends StatelessWidget {
         if (!didPop) _goHome(context);
       },
       child: Scaffold(
+        // No app bar: the board draws the receipt as the card plus its two
+        // actions, matching the stablecoin receipt.
         backgroundColor: AppColors.pageGrey,
-        appBar: whiteAppBar('Receipt'),
         body: SafeArea(
           child: Column(
             children: [
