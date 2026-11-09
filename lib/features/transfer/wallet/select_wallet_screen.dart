@@ -1,3 +1,4 @@
+import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/routes/app_routes.dart';
@@ -45,6 +46,8 @@ class _SelectWalletScreenState extends State<SelectWalletScreen> {
     final message = await showConvertFundsSheet(context, _wallets);
     if (message != null && mounted) {
       setState(() => _conversionMessage = message);
+      // The balances the sheet just moved money between are now stale.
+      await _load();
     }
   }
 
@@ -62,7 +65,7 @@ class _SelectWalletScreenState extends State<SelectWalletScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.pageGrey,
       appBar: whiteAppBar('Send Money'),
       body: SafeArea(
         child: _loading
@@ -71,31 +74,27 @@ class _SelectWalletScreenState extends State<SelectWalletScreen> {
                 children: [
                   Expanded(
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 8),
-                          const ScreenHeading(
-                            'You are sending from your Framela wallet.',
-                            helper:
-                                'Choose the wallet (currency) you want to use for this transfer.',
-                          ),
-                          const SizedBox(height: 20),
-                          if (_conversionMessage != null) ...[
-                            NoticeBanner(
-                              _conversionMessage!,
-                              title: 'Conversion successful!',
-                              type: NoticeType.success,
-                            ),
-                            const SizedBox(height: 16),
-                          ],
+                          // The board carries this copy inside the banner
+                          // rather than as a screen heading.
+                          _infoBanner(),
+                          const SizedBox(height: 22),
                           const SectionTitle('Your wallets'),
                           const SizedBox(height: 12),
                           ..._wallets.map(_walletTile),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 6),
                           _convertCard(),
-                          const SizedBox(height: 24),
+                          if (_conversionMessage != null) ...[
+                            const SizedBox(height: 14),
+                            NoticeBanner(
+                              _conversionMessage!,
+                              title: 'Conversion successful',
+                              type: NoticeType.success,
+                            ),
+                          ],
                         ],
                       ),
                     ),
@@ -110,52 +109,141 @@ class _SelectWalletScreenState extends State<SelectWalletScreen> {
     );
   }
 
+  /// "You are sending from your Framela wallet." — a white glyph tile on the
+  /// soft blue panel. The board spells it "walet"; corrected here.
+  Widget _infoBanner() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: AppColors.infoPanel,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            alignment: Alignment.center,
+            child: const AppIcon('wallet',
+                size: 22, color: AppColors.primaryDark),
+          ),
+          const SizedBox(width: 12),
+          const Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('You are sending from your Framela wallet.',
+                    style: TextStyle(
+                        color: AppColors.primaryDark,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 15)),
+                SizedBox(height: 3),
+                Text(
+                    'Choose the wallet (currency) you want to use for this '
+                    'transfer.',
+                    style: TextStyle(
+                        color: AppColors.primaryDark,
+                        fontSize: 14,
+                        height: 1.35)),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _walletTile(CurrencyWallet w) {
     final selected = _selected == w.code;
-    return InkWell(
-      onTap: () => setState(() => _selected = w.code),
-      borderRadius: BorderRadius.circular(14),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: AppColors.inputFill,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: selected ? AppColors.accentYellow : Colors.transparent,
-            width: 1.5,
-          ),
-        ),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundColor: AppColors.primaryDark,
-              child: Text(w.code,
-                  style: const TextStyle(color: Colors.white, fontSize: 11)),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: InkWell(
+        onTap: () => setState(() => _selected = w.code),
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: selected ? AppColors.primaryDark : AppColors.divider,
+              width: selected ? 1.5 : 1,
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+          ),
+          child: Row(
+            children: [
+              ClipOval(
+                child: CountryFlag.fromCountryCode(w.countryCode,
+                    height: 40, width: 40),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(w.code,
+                        style: const TextStyle(
+                            color: AppColors.primaryDark,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16)),
+                    const SizedBox(height: 2),
+                    Text(w.name,
+                        style: const TextStyle(
+                            color: AppColors.textGrey, fontSize: 13)),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(w.formattedBalance,
                       style: const TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 14)),
+                          color: AppColors.primaryDark,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15)),
                   const SizedBox(height: 2),
-                  Text('${w.name} · Available balance',
-                      style: const TextStyle(
-                          color: AppColors.textGrey, fontSize: 12)),
+                  const Text('Available balance',
+                      style:
+                          TextStyle(color: AppColors.textGrey, fontSize: 12)),
                 ],
               ),
-            ),
-            Radio<String>(
-              value: w.code,
-              groupValue: _selected,
-              activeColor: AppColors.accentYellow,
-              onChanged: (v) => setState(() => _selected = v),
-            ),
-          ],
+              const SizedBox(width: 8),
+              // Drawn rather than a Radio: the board shows a plain navy ring
+              // with no fill, and Radio's deprecated groupValue API is being
+              // removed upstream.
+              Container(
+                width: 22,
+                height: 22,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: selected
+                        ? AppColors.primaryDark
+                        : AppColors.divider,
+                    width: 2,
+                  ),
+                ),
+                alignment: Alignment.center,
+                child: selected
+                    ? Container(
+                        width: 10,
+                        height: 10,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.primaryDark,
+                        ),
+                      )
+                    : null,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -164,21 +252,16 @@ class _SelectWalletScreenState extends State<SelectWalletScreen> {
   Widget _convertCard() {
     return InkWell(
       onTap: _openConvert,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(12),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: AppColors.inputFill,
-          borderRadius: BorderRadius.circular(16),
+          color: AppColors.infoPanel,
+          borderRadius: BorderRadius.circular(12),
         ),
         child: const Row(
           children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundColor: AppColors.accentYellow,
-              child: AppIcon('coin-swap',
-                  color: AppColors.primaryDark, size: 18),
-            ),
+            AppIcon('coin-swap', color: AppColors.primaryDark, size: 24),
             SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -186,15 +269,21 @@ class _SelectWalletScreenState extends State<SelectWalletScreen> {
                 children: [
                   Text('Need to move money between wallets?',
                       style: TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 14)),
-                  SizedBox(height: 2),
-                  Text('Convert one currency balance to another before sending.',
+                          color: AppColors.primaryDark,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15)),
+                  SizedBox(height: 3),
+                  Text(
+                      'Convert one currency balance to another before sending.',
                       style: TextStyle(
-                          color: AppColors.textGrey, fontSize: 12)),
+                          color: AppColors.primaryDark,
+                          fontSize: 14,
+                          height: 1.35)),
                 ],
               ),
             ),
-            AppIcon('chevron-right', color: AppColors.textGrey),
+            SizedBox(width: 8),
+            AppIcon('chevron-right', color: AppColors.primaryDark),
           ],
         ),
       ),
