@@ -30,6 +30,10 @@ import 'package:framela/data/models/conversion_result.dart';
 import 'package:framela/data/models/exchange_rate.dart';
 import 'package:framela/features/exchange/currency_pair_updated_screen.dart';
 import 'package:framela/features/exchange/exchange_rates_screen.dart';
+import 'package:framela/data/models/rate_alert.dart';
+import 'package:framela/features/exchange/rate_alert_created_screen.dart';
+import 'package:framela/features/exchange/rate_alert_form_screen.dart';
+import 'package:framela/features/exchange/rate_alerts_screen.dart';
 import 'package:framela/features/exchange/rate_pair_detail_screen.dart';
 import 'package:framela/features/exchange/select_currency_pair_screen.dart';
 import 'package:framela/features/transfer/wallet/conversion_completed_screen.dart';
@@ -68,6 +72,13 @@ const _pair = CurrencyPair(
   quoteCode: 'NGN',
   quoteName: 'Nigerian Naira',
   quoteCountry: 'NG',
+);
+
+const _alert = RateAlert(
+  id: 'a1',
+  pair: _pair,
+  condition: AlertCondition.atOrAbove,
+  targetRate: 1520,
 );
 
 const _wallets = [
@@ -116,6 +127,10 @@ void main() {
     'Select Currency Pair': const SelectCurrencyPairScreen(),
     'Currency Pair Updated': const CurrencyPairUpdatedScreen(pair: _pair),
     'Rate Pair Detail': const RatePairDetailScreen(pair: _pair),
+    'My Rate Alerts': const RateAlertsScreen(),
+    'Set Rate Alert': const RateAlertFormScreen(),
+    'Alert Details': const RateAlertFormScreen(alert: _alert),
+    'Rate Alert Created': const RateAlertCreatedScreen(alert: _alert),
     'Convert Select Wallet': const ConvertSelectWalletScreen(),
     'Convert Funds screen': const ConvertFundsScreen(),
     'Conversion Completed': const ConversionCompletedScreen(result: _result),

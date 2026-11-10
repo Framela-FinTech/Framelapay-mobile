@@ -99,10 +99,20 @@ class _ExchangeRatesScreenState extends State<ExchangeRatesScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-                    child: PrimaryButton(
-                      'Convert Funds',
-                      onPressed: () => Navigator.pushNamed(
-                          context, AppRoutes.convertSelectWallet),
+                    child: Column(
+                      children: [
+                        PrimaryButton(
+                          'Convert Funds',
+                          onPressed: () => Navigator.pushNamed(
+                              context, AppRoutes.convertSelectWallet),
+                        ),
+                        const SizedBox(height: 12),
+                        SecondaryButton(
+                          'My Rate Alerts',
+                          onPressed: () => Navigator.pushNamed(
+                              context, AppRoutes.rateAlerts),
+                        ),
+                      ],
                     ),
                   ),
                 ],

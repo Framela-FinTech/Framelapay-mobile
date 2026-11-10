@@ -116,6 +116,10 @@ import '../../features/exchange/exchange_rates_screen.dart';
 import '../../features/exchange/select_currency_pair_screen.dart';
 import '../../features/exchange/currency_pair_updated_screen.dart';
 import '../../features/exchange/rate_pair_detail_screen.dart';
+import '../../features/exchange/rate_alerts_screen.dart';
+import '../../features/exchange/rate_alert_form_screen.dart';
+import '../../features/exchange/rate_alert_created_screen.dart';
+import '../../data/models/rate_alert.dart';
 import '../../data/models/currency_wallet.dart';
 
 /// Every route name lives here — one source of truth.
@@ -271,6 +275,9 @@ class AppRoutes {
   static const selectCurrencyPair = '/exchange-rates/select-pair';
   static const currencyPairUpdated = '/exchange-rates/pair-updated';
   static const ratePairDetail = '/exchange-rates/pair';
+  static const rateAlerts = '/exchange-rates/alerts';
+  static const rateAlertForm = '/exchange-rates/alerts/edit';
+  static const rateAlertCreated = '/exchange-rates/alerts/created';
 
   static const convertSelectWallet = '/convert-select-wallet';
   static const convertFunds = '/convert-funds';
@@ -597,6 +604,18 @@ class AppRoutes {
       case ratePairDetail:
         return _page(
             RatePairDetailScreen(pair: settings.arguments as CurrencyPair));
+
+      case rateAlerts:
+        return _page(const RateAlertsScreen());
+
+      case rateAlertForm:
+        // Null argument creates a new alert; a RateAlert edits that one.
+        return _page(
+            RateAlertFormScreen(alert: settings.arguments as RateAlert?));
+
+      case rateAlertCreated:
+        return _page(
+            RateAlertCreatedScreen(alert: settings.arguments as RateAlert));
 
       case convertSelectWallet:
         return _page(const ConvertSelectWalletScreen());

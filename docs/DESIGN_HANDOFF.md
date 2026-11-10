@@ -20,7 +20,7 @@ Figma URL in the repo and the MCP Figma tools have nothing to point at, so
 | `Beneficiary.png` | 9172×4400 | untouched |
 | `Conversion.png` | 6238×3120 | **done** |
 | `Edit Profile Picture.png` | 5710×3260 | untouched |
-| `Exchange.png` | 8462×5754 | **rates done; rate alerts outstanding** |
+| `Exchange.png` | 8462×5754 | **done** |
 | `Help.png` | 10016×7732 | untouched |
 | `KYC.png` | 8964×3596 | untouched |
 | `Personal Information Edit.png` | 6268×8626 | untouched |
@@ -224,17 +224,16 @@ it. Change the form, not the wrappers.
 `Exchange.png` turned out **not** to re-specify these screens — it is a
 separate Exchange Rates feature. The split above stands.
 
-### Exchange rates — PARTLY DONE
+### Exchange rates — DONE
 
 `lib/features/exchange/` — a greenfield feature, not a restyle. Built: the
 rates browser, the currency-pair picker and its confirmation, and the pair
 detail screen. Reached from the previously dead "Exchange rates" quick action.
 
-**Outstanding: the six rate-alert screens** — My Rate Alerts, Set Rate Alert
-(plus its two open-dropdown states), Alert Details, and "Rate alert created".
-The board draws them; nothing is built. The "My Rate Alerts" and "Set Rate
-Alert" buttons are deliberately **omitted** from the finished screens rather
-than shipped dead — add them with that pass.
+Rate alerts are built too. The board's six alert frames are three screens:
+`rate_alert_form_screen` serves "Set Rate Alert", its two open-dropdown
+states *and* "Alert Details", since editing is the same form with a status
+pill and Save/Pause/Delete instead of Set/Convert.
 
 The chart is hand-painted in `widgets/rate_chart.dart` (no charting
 dependency). `test/rate_chart_test.dart` pins its edge cases: a flat series
@@ -428,19 +427,29 @@ overflow; they prove nothing about fidelity to the board.
 
 ## 10. Suggested next steps
 
-`Home Transfer.png`, `History.png` and `Conversion.png` are done;
-`Exchange.png` has its rates half built. Ten boards remain untouched.
+`Home Transfer.png`, `History.png`, `Conversion.png` and `Exchange.png` are
+done. Ten boards remain, listed below smallest first.
 
-1. **`KYC.png`, `Settings.png`, `Help.png`** — large surfaces, all still on
-   pre-design-pass markers.
-2. **`Exchange.png`'s rate alerts** — six screens, already specified, and the
-   two buttons that lead to them are currently omitted.
-3. **`Beneficiary.png`** — the beneficiaries list, details, edit and remove
-   screens were out of row 2's scope and are untouched.
-4. **Close the asset gaps** — 8 bank logos and the two card marks, once real
+Working smallest board first:
+
+1. `Transfer Status.png` (2413×1605)
+2. `Edit Profile Picture.png` (5710×3260)
+3. `Trusted Device.png` (6924×3806)
+4. `Settings.png` (6088×4410)
+5. `KYC.png` (8964×3596)
+6. `Beneficiary.png` (9172×4400) — the beneficiaries list, details, edit and
+   remove screens were out of row 2's scope
+7. `Personal Information Edit.png` (6268×8626)
+8. `Help.png` (10016×7732)
+9. `Restriction & Appeal.png` (19826×8168)
+10. `Transaction PIN.png` (16424×10752)
+
+Then:
+
+- **Close the asset gaps** — 8 bank logos and the two card marks, once real
    files exist. One line each.
-5. **Get eyes on a device.** The largest outstanding risk is that everything is
-   layout-verified and fidelity-unverified.
+- **Get eyes on a device.** The largest outstanding risk is that everything is
+  layout-verified and fidelity-unverified.
 
 ### Behavioural bugs fixed while matching, in case the pattern repeats
 
