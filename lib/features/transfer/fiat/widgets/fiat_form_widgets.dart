@@ -541,6 +541,35 @@ class SectionHeader extends StatelessWidget {
   }
 }
 
+/// Small rounded status pill. Amber by default, which is how the boards draw
+/// an in-flight state; pass [color] and [background] for other statuses.
+class StatusPill extends StatelessWidget {
+  final String label;
+  final Color color;
+  final Color background;
+
+  const StatusPill(
+    this.label, {
+    super.key,
+    this.color = AppColors.primaryDark,
+    this.background = AppColors.warningPill,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: background,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(label,
+          style: TextStyle(
+              color: color, fontSize: 12, fontWeight: FontWeight.w700)),
+    );
+  }
+}
+
 /// A white AppBar with a black back button and a plain-text title.
 AppBar whiteAppBar(String title) {
   return AppBar(

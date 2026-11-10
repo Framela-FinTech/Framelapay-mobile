@@ -120,6 +120,10 @@ import '../../features/exchange/rate_alerts_screen.dart';
 import '../../features/exchange/rate_alert_form_screen.dart';
 import '../../features/exchange/rate_alert_created_screen.dart';
 import '../../data/models/rate_alert.dart';
+import '../../data/models/ongoing_transfer.dart';
+import '../../features/transfer/status/transfer_status_screen.dart';
+import '../../features/transfer/status/transfer_progress_screen.dart';
+import '../../features/transfer/status/transfer_status_details_screen.dart';
 import '../../data/models/currency_wallet.dart';
 
 /// Every route name lives here — one source of truth.
@@ -275,6 +279,11 @@ class AppRoutes {
   static const selectCurrencyPair = '/exchange-rates/select-pair';
   static const currencyPairUpdated = '/exchange-rates/pair-updated';
   static const ratePairDetail = '/exchange-rates/pair';
+  // Transfer Status board: in-flight transfers.
+  static const transferStatus = '/transfer-status';
+  static const transferProgress = '/transfer-status/progress';
+  static const transferStatusDetails = '/transfer-status/details';
+
   static const rateAlerts = '/exchange-rates/alerts';
   static const rateAlertForm = '/exchange-rates/alerts/edit';
   static const rateAlertCreated = '/exchange-rates/alerts/created';
@@ -604,6 +613,17 @@ class AppRoutes {
       case ratePairDetail:
         return _page(
             RatePairDetailScreen(pair: settings.arguments as CurrencyPair));
+
+      case transferStatus:
+        return _page(const TransferStatusScreen());
+
+      case transferProgress:
+        return _page(TransferProgressScreen(
+            transfer: settings.arguments as OngoingTransfer));
+
+      case transferStatusDetails:
+        return _page(TransferStatusDetailsScreen(
+            transfer: settings.arguments as OngoingTransfer));
 
       case rateAlerts:
         return _page(const RateAlertsScreen());

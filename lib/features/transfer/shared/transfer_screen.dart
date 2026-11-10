@@ -28,7 +28,9 @@ class TransferScreen extends StatelessWidget {
                   _tab('Receive Money',
                       onTap: () =>
                           Navigator.pushNamed(context, AppRoutes.receive)),
-                  _tab('History'),
+                  _tab('History',
+                      onTap: () =>
+                          Navigator.pushNamed(context, AppRoutes.activity)),
                 ],
               ),
               const SizedBox(height: 20),

@@ -30,7 +30,12 @@ import 'package:framela/data/models/conversion_result.dart';
 import 'package:framela/data/models/exchange_rate.dart';
 import 'package:framela/features/exchange/currency_pair_updated_screen.dart';
 import 'package:framela/features/exchange/exchange_rates_screen.dart';
+import 'package:framela/data/models/ongoing_transfer.dart';
+import 'package:framela/data/models/processing_step.dart';
 import 'package:framela/data/models/rate_alert.dart';
+import 'package:framela/features/transfer/status/transfer_progress_screen.dart';
+import 'package:framela/features/transfer/status/transfer_status_details_screen.dart';
+import 'package:framela/features/transfer/status/transfer_status_screen.dart';
 import 'package:framela/features/exchange/rate_alert_created_screen.dart';
 import 'package:framela/features/exchange/rate_alert_form_screen.dart';
 import 'package:framela/features/exchange/rate_alerts_screen.dart';
@@ -81,6 +86,29 @@ const _alert = RateAlert(
   targetRate: 1520,
 );
 
+const _ongoing = OngoingTransfer(
+  id: 't1',
+  recipient: 'Amina Yusuf',
+  amount: r'$150.00',
+  method: 'Debit/Credit Card',
+  startedAt: '12 Oct 2026 · 10:24',
+  stage: OngoingStage.processing,
+  youSend: r'$150.00',
+  fee: r'$2.50',
+  totalPayment: r'$152.50',
+  recipientReceives: '₦235,125.00',
+  reference: 'FRM-20261012-10427',
+  destinationBank: 'Zenith Bank',
+  accountNumber: '•••• 5678',
+  steps: [
+    ProcessingStep(
+        title: 'Transfer initiated', subtitle: 'Completed · 10:24', done: true),
+    ProcessingStep(
+        title: 'Partner processing', subtitle: 'In progress', inProgress: true),
+    ProcessingStep(title: 'Completed', subtitle: 'Waiting'),
+  ],
+);
+
 const _wallets = [
   _wallet,
   CurrencyWallet(code: 'USD', name: 'US Dollar', symbol: r'$', balance: 350000),
@@ -127,6 +155,10 @@ void main() {
     'Select Currency Pair': const SelectCurrencyPairScreen(),
     'Currency Pair Updated': const CurrencyPairUpdatedScreen(pair: _pair),
     'Rate Pair Detail': const RatePairDetailScreen(pair: _pair),
+    'Transfer Status': const TransferStatusScreen(),
+    'Transfer Progress': const TransferProgressScreen(transfer: _ongoing),
+    'Transfer Status Details':
+        const TransferStatusDetailsScreen(transfer: _ongoing),
     'My Rate Alerts': const RateAlertsScreen(),
     'Set Rate Alert': const RateAlertFormScreen(),
     'Alert Details': const RateAlertFormScreen(alert: _alert),

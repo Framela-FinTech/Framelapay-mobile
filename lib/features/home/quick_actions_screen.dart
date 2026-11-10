@@ -21,6 +21,7 @@ class QuickActionsScreen extends StatelessWidget {
     _QuickAction('Beneficiaries', 'folder-user',
         route: AppRoutes.beneficiariesList),
     _QuickAction('Crypto', 'BTC', route: AppRoutes.sendStablecoinWallet),
+    _QuickAction('Transfer Status', 'clock', route: AppRoutes.transferStatus),
     _QuickAction('Transactions History', 'receipt',
         route: AppRoutes.activity),
   ];
