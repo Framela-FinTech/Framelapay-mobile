@@ -26,7 +26,12 @@ import 'package:framela/features/transfer/shared/choose_network_screen.dart';
 import 'package:framela/features/transfer/shared/transaction_details_screen.dart';
 import 'package:framela/features/transfer/to_external_wallet/enter_wallet_address_screen.dart';
 import 'package:framela/features/transfer/to_external_wallet/verify_wallet_address_screen.dart';
+import 'package:framela/data/models/conversion_result.dart';
+import 'package:framela/features/transfer/wallet/conversion_completed_screen.dart';
+import 'package:framela/features/transfer/wallet/conversion_receipt_screen.dart';
+import 'package:framela/features/transfer/wallet/convert_funds_screen.dart';
 import 'package:framela/features/transfer/wallet/convert_funds_sheet.dart';
+import 'package:framela/features/transfer/wallet/convert_select_wallet_screen.dart';
 import 'package:framela/features/transfer/wallet/select_wallet_screen.dart';
 import 'package:framela/features/wallet/choose_wallet_balance_sheet.dart';
 import 'package:framela/features/wallet/fund_card_screen.dart';
@@ -38,6 +43,17 @@ const _wallet = CurrencyWallet(
   name: 'Nigerian Naira',
   symbol: '₦',
   balance: 150000,
+);
+
+const _result = ConversionResult(
+  from: CurrencyWallet(
+      code: 'NGN', name: 'Nigerian Naira', symbol: '₦', balance: 500000),
+  to: CurrencyWallet(
+      code: 'USD', name: 'US Dollar', symbol: r'$', balance: 1250),
+  amountConverted: 150000,
+  fee: 1500,
+  amountReceived: 99,
+  rateText: '1 USD = 1,500.0000 NGN',
 );
 
 const _wallets = [
@@ -82,6 +98,10 @@ void main() {
 
   final screens = <String, Widget>{
     'Send Money': const SelectWalletScreen(),
+    'Convert Select Wallet': const ConvertSelectWalletScreen(),
+    'Convert Funds screen': const ConvertFundsScreen(),
+    'Conversion Completed': const ConversionCompletedScreen(result: _result),
+    'Conversion Receipt': const ConversionReceiptScreen(result: _result),
     'Referral': const ReferralScreen(),
     'History': const ActivityScreen(),
     'Choose Network': const ChooseNetworkScreen(),

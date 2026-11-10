@@ -106,6 +106,12 @@ import '../../features/transfer/bank/payment_instruction_screen.dart';
 import '../../features/transfer/card/pay_with_card_screen.dart';
 import '../../features/transfer/card/card_verification_screen.dart';
 import '../../features/transfer/wallet/select_wallet_screen.dart';
+import '../../features/transfer/wallet/convert_select_wallet_screen.dart';
+import '../../features/transfer/wallet/convert_funds_screen.dart';
+import '../../features/transfer/wallet/conversion_completed_screen.dart';
+import '../../features/transfer/wallet/conversion_receipt_screen.dart';
+import '../../data/models/conversion_result.dart';
+import '../../data/models/currency_wallet.dart';
 
 /// Every route name lives here — one source of truth.
 /// Add a new constant + case whenever a new screen needs to be reachable.
@@ -252,6 +258,13 @@ class AppRoutes {
   static const cardVerification = '/card-verification';
 
   static const selectWallet = '/select-wallet';
+
+  // Standalone conversion journey (Conversion board), reached from the Wallet
+  // tab. Converting mid-transfer from Send Money uses the bottom sheet.
+  static const convertSelectWallet = '/convert-select-wallet';
+  static const convertFunds = '/convert-funds';
+  static const conversionCompleted = '/conversion-completed';
+  static const conversionReceipt = '/conversion-receipt';
 
   // Note: kycProcessing is intentionally NOT a named route here —
   // it takes a required `nextRoute` constructor parameter, so it's
@@ -559,6 +572,21 @@ class AppRoutes {
 
       case selectWallet:
         return _page(const SelectWalletScreen());
+
+      case convertSelectWallet:
+        return _page(const ConvertSelectWalletScreen());
+
+      case convertFunds:
+        return _page(
+            ConvertFundsScreen(from: settings.arguments as CurrencyWallet?));
+
+      case conversionCompleted:
+        return _page(ConversionCompletedScreen(
+            result: settings.arguments as ConversionResult));
+
+      case conversionReceipt:
+        return _page(ConversionReceiptScreen(
+            result: settings.arguments as ConversionResult));
 
       default:
         return _page(Scaffold(

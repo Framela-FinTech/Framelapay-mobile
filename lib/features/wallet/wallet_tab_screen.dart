@@ -273,15 +273,14 @@ class _WalletTabScreenState extends State<WalletTabScreen> {
     );
   }
 
-  /// The sheet returns a success message; this entry point used to discard it,
-  /// so converting from the Wallet tab gave no feedback and left balances stale.
+  /// The Conversion board gives the Wallet tab a full-screen journey —
+  /// Select From Wallet, Convert Funds, completion, receipt — rather than the
+  /// bottom sheet, which belongs to converting mid-transfer from Send Money.
   Future<void> _convert() async {
-    final message = await showConvertFundsSheet(context, _wallets);
-    if (message == null || !mounted) return;
-    await _load();
+    await Navigator.pushNamed(context, AppRoutes.convertSelectWallet);
     if (!mounted) return;
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(message)));
+    // Balances may have moved while we were away.
+    await _load();
   }
 
   // ---------- Currencies ----------

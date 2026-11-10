@@ -37,6 +37,10 @@ class CurrencyWallet {
     }
   }
 
+  /// Thousands-separated amount with 2 decimals, e.g. 150000 -> "150,000.00".
+  /// Public so conversion results and the convert form share one formatter.
+  static String format(double v) => _fmt(v);
+
   static String _fmt(double v) {
     final s = v.toStringAsFixed(2);
     final parts = s.split('.');

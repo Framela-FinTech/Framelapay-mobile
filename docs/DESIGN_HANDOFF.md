@@ -18,7 +18,7 @@ Figma URL in the repo and the MCP Figma tools have nothing to point at, so
 | `Home Transfer.png` | 22770×12500 | **all four rows done** |
 | `History.png` | 9482×6724 | **done** |
 | `Beneficiary.png` | 9172×4400 | untouched |
-| `Conversion.png` | 6238×3120 | untouched |
+| `Conversion.png` | 6238×3120 | **done** |
 | `Edit Profile Picture.png` | 5710×3260 | untouched |
 | `Exchange.png` | 8462×5754 | untouched |
 | `Help.png` | 10016×7732 | untouched |
@@ -208,9 +208,19 @@ Those predate the kit; converting them is net-new work, not a restyle.
 `choose_wallet_balance_sheet`, `profile/beneficiaries/add_beneficiary_screen`,
 `profile/referral/referral_screen`.
 
-**`Conversion.png` and `Exchange.png` are still untouched and may re-specify
-these same screens differently.** Check them before treating conversion as
-finished.
+**The two boards disagree on how Convert Funds is presented, and both are
+implemented.** Home Transfer row 2 draws it as a **bottom sheet** over a
+dimmed Send Money, returning with a green banner — that is converting
+mid-transfer. Conversion.png draws it as a **full screen** with its own app
+bar, preceded by Select From Wallet and followed by completion and a receipt —
+that is the standalone journey from the Wallet tab.
+
+The resolution: **split by entry point.** Send Money's convert card opens the
+sheet; the Wallet tab's Convert action pushes `convertSelectWallet`. The form
+itself lives once, in `convert_funds_form.dart`, and both presentations wrap
+it. Change the form, not the wrappers.
+
+`Exchange.png` is still untouched and may re-specify these screens again.
 
 ### History — DONE
 
@@ -398,12 +408,12 @@ overflow; they prove nothing about fidelity to the board.
 
 ## 10. Suggested next steps
 
-`Home Transfer.png` and `History.png` are done. Twelve boards remain.
+`Home Transfer.png`, `History.png` and `Conversion.png` are done. Eleven boards remain.
 
-1. **`Conversion.png` / `Exchange.png`** first — they may re-specify the wallet
-   and convert screens just finished, so any conflict is worth knowing early.
-2. **`KYC.png`, `Settings.png`, `Help.png`** — large surfaces, all still on
+1. **`KYC.png`, `Settings.png`, `Help.png`** — large surfaces, all still on
    pre-design-pass markers.
+2. **`Exchange.png`** — may re-specify the convert screens a third time; worth
+   reading before trusting the current split.
 3. **`Beneficiary.png`** — the beneficiaries list, details, edit and remove
    screens were out of row 2's scope and are untouched.
 4. **Close the asset gaps** — 8 bank logos and the two card marks, once real

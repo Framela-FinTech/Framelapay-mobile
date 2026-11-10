@@ -169,4 +169,28 @@ const List<TransactionReceipt> sampleReceipts = [
       ReceiptRow('Estimated completion', 'Within 1 hour'),
     ],
   ),
+  // The Conversion board's receipt, so a wallet conversion appears in History
+  // and Statements like any other transaction.
+  TransactionReceipt(
+    name: 'NGN to USD',
+    amount: r'$99.00',
+    currencyAmount: 'USD 99.00',
+    reference: '1500',
+    transactionId: 'FRM-20261103-1500',
+    date: '3 November 2026',
+    status: ReceiptStatus.completed,
+    headlineAmount: r'$99.00',
+    caption: 'Funds converted · USD Wallet',
+    statusNote: 'Conversion Completed',
+    rows: [
+      ReceiptRow('From', 'NGN Wallet'),
+      ReceiptRow('To', 'USD Wallet'),
+      ReceiptRow('Converted from', '₦150,000.00'),
+      ReceiptRow('Fee', '₦1,500.00'),
+      ReceiptRow('Amount received', r'$99.00'),
+      ReceiptRow('Exchange rate', '1 USD = ₦1,500.00'),
+      ReceiptRow('Conversion type', 'Wallet conversion'),
+      ReceiptRow('Date and time', '3 November 2026 · 3:00 PM WAT'),
+    ],
+  ),
 ];
