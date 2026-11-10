@@ -27,6 +27,11 @@ import 'package:framela/features/transfer/shared/transaction_details_screen.dart
 import 'package:framela/features/transfer/to_external_wallet/enter_wallet_address_screen.dart';
 import 'package:framela/features/transfer/to_external_wallet/verify_wallet_address_screen.dart';
 import 'package:framela/data/models/conversion_result.dart';
+import 'package:framela/data/models/exchange_rate.dart';
+import 'package:framela/features/exchange/currency_pair_updated_screen.dart';
+import 'package:framela/features/exchange/exchange_rates_screen.dart';
+import 'package:framela/features/exchange/rate_pair_detail_screen.dart';
+import 'package:framela/features/exchange/select_currency_pair_screen.dart';
 import 'package:framela/features/transfer/wallet/conversion_completed_screen.dart';
 import 'package:framela/features/transfer/wallet/conversion_receipt_screen.dart';
 import 'package:framela/features/transfer/wallet/convert_funds_screen.dart';
@@ -54,6 +59,15 @@ const _result = ConversionResult(
   fee: 1500,
   amountReceived: 99,
   rateText: '1 USD = 1,500.0000 NGN',
+);
+
+const _pair = CurrencyPair(
+  baseCode: 'USD',
+  baseName: 'US Dollar',
+  baseCountry: 'US',
+  quoteCode: 'NGN',
+  quoteName: 'Nigerian Naira',
+  quoteCountry: 'NG',
 );
 
 const _wallets = [
@@ -98,6 +112,10 @@ void main() {
 
   final screens = <String, Widget>{
     'Send Money': const SelectWalletScreen(),
+    'Exchange Rates': const ExchangeRatesScreen(),
+    'Select Currency Pair': const SelectCurrencyPairScreen(),
+    'Currency Pair Updated': const CurrencyPairUpdatedScreen(pair: _pair),
+    'Rate Pair Detail': const RatePairDetailScreen(pair: _pair),
     'Convert Select Wallet': const ConvertSelectWalletScreen(),
     'Convert Funds screen': const ConvertFundsScreen(),
     'Conversion Completed': const ConversionCompletedScreen(result: _result),

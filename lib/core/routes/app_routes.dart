@@ -111,6 +111,11 @@ import '../../features/transfer/wallet/convert_funds_screen.dart';
 import '../../features/transfer/wallet/conversion_completed_screen.dart';
 import '../../features/transfer/wallet/conversion_receipt_screen.dart';
 import '../../data/models/conversion_result.dart';
+import '../../data/models/exchange_rate.dart';
+import '../../features/exchange/exchange_rates_screen.dart';
+import '../../features/exchange/select_currency_pair_screen.dart';
+import '../../features/exchange/currency_pair_updated_screen.dart';
+import '../../features/exchange/rate_pair_detail_screen.dart';
 import '../../data/models/currency_wallet.dart';
 
 /// Every route name lives here — one source of truth.
@@ -261,6 +266,12 @@ class AppRoutes {
 
   // Standalone conversion journey (Conversion board), reached from the Wallet
   // tab. Converting mid-transfer from Send Money uses the bottom sheet.
+  // Exchange rates (Exchange board). Rate alerts are a later pass.
+  static const exchangeRates = '/exchange-rates';
+  static const selectCurrencyPair = '/exchange-rates/select-pair';
+  static const currencyPairUpdated = '/exchange-rates/pair-updated';
+  static const ratePairDetail = '/exchange-rates/pair';
+
   static const convertSelectWallet = '/convert-select-wallet';
   static const convertFunds = '/convert-funds';
   static const conversionCompleted = '/conversion-completed';
@@ -572,6 +583,20 @@ class AppRoutes {
 
       case selectWallet:
         return _page(const SelectWalletScreen());
+
+      case exchangeRates:
+        return _page(const ExchangeRatesScreen());
+
+      case selectCurrencyPair:
+        return _page(const SelectCurrencyPairScreen());
+
+      case currencyPairUpdated:
+        return _page(CurrencyPairUpdatedScreen(
+            pair: settings.arguments as CurrencyPair));
+
+      case ratePairDetail:
+        return _page(
+            RatePairDetailScreen(pair: settings.arguments as CurrencyPair));
 
       case convertSelectWallet:
         return _page(const ConvertSelectWalletScreen());

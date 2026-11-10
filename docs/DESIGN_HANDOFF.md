@@ -20,7 +20,7 @@ Figma URL in the repo and the MCP Figma tools have nothing to point at, so
 | `Beneficiary.png` | 9172×4400 | untouched |
 | `Conversion.png` | 6238×3120 | **done** |
 | `Edit Profile Picture.png` | 5710×3260 | untouched |
-| `Exchange.png` | 8462×5754 | untouched |
+| `Exchange.png` | 8462×5754 | **rates done; rate alerts outstanding** |
 | `Help.png` | 10016×7732 | untouched |
 | `KYC.png` | 8964×3596 | untouched |
 | `Personal Information Edit.png` | 6268×8626 | untouched |
@@ -94,6 +94,7 @@ In `lib/core/theme/app_colors.dart`:
 | `infoNotice` | `#E0EDFD` | Review Transfer notice |
 | `successNotice` | `#DCF5E7` | Confirm Recipient notice, receipt "Completed" pill |
 | `infoHalo` | `#DBEAFE` | FX quote and Card Verification badge haloes |
+| `chartLine` | `#2563EB` | Exchange rate chart line and end dot |
 
 Already correct and left alone: `success #18794E`, `iconTileSoft #F4F8FD`,
 `successSoft #EDFDF5` (halo only), `divider #CBD5E1`, `primaryDark #0B1A33`,
@@ -220,7 +221,26 @@ sheet; the Wallet tab's Convert action pushes `convertSelectWallet`. The form
 itself lives once, in `convert_funds_form.dart`, and both presentations wrap
 it. Change the form, not the wrappers.
 
-`Exchange.png` is still untouched and may re-specify these screens again.
+`Exchange.png` turned out **not** to re-specify these screens — it is a
+separate Exchange Rates feature. The split above stands.
+
+### Exchange rates — PARTLY DONE
+
+`lib/features/exchange/` — a greenfield feature, not a restyle. Built: the
+rates browser, the currency-pair picker and its confirmation, and the pair
+detail screen. Reached from the previously dead "Exchange rates" quick action.
+
+**Outstanding: the six rate-alert screens** — My Rate Alerts, Set Rate Alert
+(plus its two open-dropdown states), Alert Details, and "Rate alert created".
+The board draws them; nothing is built. The "My Rate Alerts" and "Set Rate
+Alert" buttons are deliberately **omitted** from the finished screens rather
+than shipped dead — add them with that pass.
+
+The chart is hand-painted in `widgets/rate_chart.dart` (no charting
+dependency). `test/rate_chart_test.dart` pins its edge cases: a flat series
+would divide by zero when scaling, a one-point series has nothing to draw, and
+the generated series must land exactly on the quoted rate or the line and the
+number above it disagree.
 
 ### History — DONE
 
@@ -408,12 +428,13 @@ overflow; they prove nothing about fidelity to the board.
 
 ## 10. Suggested next steps
 
-`Home Transfer.png`, `History.png` and `Conversion.png` are done. Eleven boards remain.
+`Home Transfer.png`, `History.png` and `Conversion.png` are done;
+`Exchange.png` has its rates half built. Ten boards remain untouched.
 
 1. **`KYC.png`, `Settings.png`, `Help.png`** — large surfaces, all still on
    pre-design-pass markers.
-2. **`Exchange.png`** — may re-specify the convert screens a third time; worth
-   reading before trusting the current split.
+2. **`Exchange.png`'s rate alerts** — six screens, already specified, and the
+   two buttons that lead to them are currently omitted.
 3. **`Beneficiary.png`** — the beneficiaries list, details, edit and remove
    screens were out of row 2's scope and are untouched.
 4. **Close the asset gaps** — 8 bank logos and the two card marks, once real

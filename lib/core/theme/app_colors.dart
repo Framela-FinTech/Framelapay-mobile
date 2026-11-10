@@ -74,6 +74,10 @@ class AppColors {
   static const Color successNotice = Color(0xFFDCF5E7); // verified notice
   static const Color infoHalo = Color(0xFFDBEAFE); // quote badge halo
 
+  /// Exchange-rate chart line and its end dot. A more vivid indigo than
+  /// `primary50`, which is why it is its own token.
+  static const Color chartLine = Color(0xFF2563EB);
+
   // ---- Stablecoin marks ----
   // Sampled from the Figma coin glyphs; these are the board's own variants,
   // not Circle's / Tether's official brand hexes.

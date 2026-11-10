@@ -28,7 +28,8 @@ class QuickActionsScreen extends StatelessWidget {
   static const _manage = <_QuickAction>[
     _QuickAction('Refer & Earn', 'gift', route: AppRoutes.referral),
     // No exchange-rates screen exists yet, so this tile stays inert.
-    _QuickAction('Exchange rates', 'chart-up'),
+    _QuickAction('Exchange rates', 'chart-up',
+        route: AppRoutes.exchangeRates),
     _QuickAction('Transactions Receipts', 'receipt',
         route: AppRoutes.transactionReceipts),
     _QuickAction('Security', 'shield', route: AppRoutes.securityHome),
