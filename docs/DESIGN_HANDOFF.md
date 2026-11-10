@@ -3,7 +3,7 @@
 Everything an agent needs to continue matching the app to the Figma boards:
 current state, the rules that have been set, and the traps already hit.
 
-Written 2026-11-09. Branch `dev`, HEAD `3d4272c`.
+Written 2026-11-09, updated 2026-11-10. Branch `dev`.
 
 ---
 
@@ -15,13 +15,13 @@ Figma URL in the repo and the MCP Figma tools have nothing to point at, so
 
 | Board | Size | State |
 |---|---|---|
-| `Home Transfer.png` | 22770×12500 | rows 1 & 3 done, rows 2 & 4 outstanding |
+| `Home Transfer.png` | 22770×12500 | **all four rows done** |
+| `History.png` | 9482×6724 | **done** |
 | `Beneficiary.png` | 9172×4400 | untouched |
 | `Conversion.png` | 6238×3120 | untouched |
 | `Edit Profile Picture.png` | 5710×3260 | untouched |
 | `Exchange.png` | 8462×5754 | untouched |
 | `Help.png` | 10016×7732 | untouched |
-| `History.png` | 9482×6724 | untouched |
 | `KYC.png` | 8964×3596 | untouched |
 | `Personal Information Edit.png` | 6268×8626 | untouched |
 | `Restriction & Appeal.png` | 19826×8168 | untouched |
@@ -36,10 +36,21 @@ Four rows. Y-ranges are full-resolution pixels.
 
 | Row | Y range | Flow | State |
 |---|---|---|---|
-| 1 | 1209–3842 | Fiat **bank** (22 frames, Home → receipt) | **done** |
-| 2 | ~4169–6546 | Wallet / Send Money / Convert Funds, plus Beneficiary and Referral off to the right | outstanding |
-| 3 | 6930–8965 | Fiat **card** (9 frames) | **done** |
-| 4 | ~9791–11883 | Stablecoin send | partly done (see §4) |
+| 1 | 1209–3842 | Fiat **bank** (22 frames, Home → receipt) | done |
+| 2 | 4169–6546 | Wallet / Send Money / Convert Funds, plus Beneficiary and Referral off to the right (13 frames) | done |
+| 3 | 6930–8965 | Fiat **card** (9 frames) | done |
+| 4 | 9791–11883 | Stablecoin send (19 frames) | done |
+
+**Row 4 draws only the FramelaPay-user path.** There are no frames for the
+external-wallet path (`to_external_wallet/`), so those two screens follow the
+house conventions rather than a design. Do not go looking for their frames.
+
+### `History.png` row map
+
+| Row | Y range | Frames | State |
+|---|---|---|---|
+| 1 | 695–3255 | List, the three filter dropdowns, filtered, search, empty state, period picker ×3 | done |
+| 2 | 3793–5816 | Receipt in completed / failed / pending, each with the share sheet | done |
 
 ### THE SCALE RULE
 
@@ -178,28 +189,38 @@ Identical to bank except `fx_quote` branches on `TransferMethod` to
 `pay_with_card` → `card_verification`, then rejoins at `fiat_review_transfer`.
 Those two are the only card-specific screens.
 
-### Stablecoin (row 4) — PARTLY DONE
+### Stablecoin (row 4) — DONE
 
 Lives in `transfer/shared/`, `transfer/to_framela_user/` and
 `transfer/to_external_wallet/` — there is no `stablecoin/` directory.
 
-Matched earlier: `send_stablecoin_wallet`, `choose_network`,
-`send_stablecoin_recipient`, `stablecoin_completed`, `processing_transfer`.
+`shared/transaction_details_screen.dart` renders through the shared
+`ReceiptCard`; the external-wallet screens were brought onto the kit and reuse
+`AssetNetworkBar`, the bar the matched sibling screens already carry.
 
-**Not matched** — no Scaffold background, old black 16px app bar:
-`to_external_wallet/enter_wallet_address_screen.dart`,
-`to_external_wallet/verify_wallet_address_screen.dart`,
-`shared/transaction_details_screen.dart`.
+Some stablecoin screens still hand-roll their chrome (inline `AppBar`, raw
+`ElevatedButton`, a local `_noticeBanner()` in `shared/review_transfer_screen`).
+Those predate the kit; converting them is net-new work, not a restyle.
 
-Note: **no stablecoin screen imports the shared kit.** They hand-roll app bars,
-raw `ElevatedButton`s and a local `_noticeBanner()`. Converting them is net-new
-work, not a restyle.
+### Wallet / conversion (row 2) — DONE
 
-### Wallet / conversion (row 2) — NOT STARTED
+`select_wallet_screen` (Send Money), `convert_funds_sheet`,
+`choose_wallet_balance_sheet`, `profile/beneficiaries/add_beneficiary_screen`,
+`profile/referral/referral_screen`.
 
-`transfer/wallet/convert_funds_sheet.dart`,
-`transfer/wallet/select_wallet_screen.dart`, and the `Conversion.png` /
-`Exchange.png` boards.
+**`Conversion.png` and `Exchange.png` are still untouched and may re-specify
+these same screens differently.** Check them before treating conversion as
+finished.
+
+### History — DONE
+
+`features/activity/activity_screen.dart` plus
+`profile/statements/receipt_detail_screen.dart`.
+
+The three filter dropdowns **anchor under the chip row**, they are not bottom
+sheets — the body is a fixed header plus a `Stack` so the panel has something
+to anchor to. The period picker *is* a bottom sheet (it always was); what was
+wrong there was its content.
 
 ### Shared auth triple
 
@@ -291,7 +312,16 @@ The boards carry copy-paste errors. Found so far:
   country" placeholder on Card Number, a second field labelled "Expiry Date"
   where CVV belongs, and picker chevrons on two plain text fields
 - Card Verification labels a row **"CArd"**
-- The receipt frame shows "Transaction unsuccessful" on a *completed* receipt
+- The fiat receipt frame shows "Transaction unsuccessful" on a *completed*
+  receipt
+- Send Money spells it "the **walet** (currency)"
+- The Convert Funds frame reads "£1,000 converted to **$216.50**", which is
+  wrong at any real GBP/USD rate — the code computes from the repository rate
+- History's category list spells "**Receieved**"
+- The History *pending* receipt carries the *failed* receipt's caption
+  ("Currency exchange · EUR to NGN") over person-to-person rows, and shows
+  €500 in the rows against a €250 headline
+- Referral's two frames are identical duplicates
 
 **The user's standing decision: implement the sensible version and leave a
 one-line code comment noting the board's version.**
@@ -311,12 +341,14 @@ gate; subsequent runs in the same session are ~10s warm.
 
 ### The layout tests
 
-- `test/bank_flow_overflow_test.dart` — 16 cases: all bank and card screens,
-  plus the Statements receipt in all three states.
-- `test/shared_kit_regression_test.dart` — 9 cases: the non-transfer screens
-  exposed to the shared kit and the FX rate change.
+- `test/bank_flow_overflow_test.dart` — all bank and card screens, plus the
+  Statements receipt in all three states.
+- `test/shared_kit_regression_test.dart` — the wallet, stablecoin, History,
+  referral, beneficiary and profile screens, the two wallet sheets, and
+  interaction checks for the History filter dropdown and period picker.
 
-Both pump at **360×640** and fail on any `RenderFlex` overflow.
+34 cases in all. Both pump at **360×640** and fail on any `RenderFlex`
+overflow.
 
 ### THE TEST FONT TRAP — this cost about an hour
 
@@ -329,10 +361,19 @@ Without loading the real font, the tests report overflows of 90–220px that
 `setUpAll`, reading the bundled TTFs from `assets/fonts/`.
 **Any new layout test must do the same**, or its numbers are fiction.
 
-Other test notes: use fixed `tester.pump(duration)`, never `pumpAndSettle` —
-`fx_quote` and `card_verification` run periodic timers that never settle.
-`bank_redirect` auto-advances after 3s and needs a pump past it, or the test
-fails on a pending timer.
+Other test notes:
+
+- Prefer fixed `tester.pump(duration)` over `pumpAndSettle` for *screens* —
+  `fx_quote`, `card_verification` and the Convert Funds sheet run periodic
+  timers that never settle, so `pumpAndSettle` hangs on them.
+- **But a fixed pump does not run a bottom sheet's entry animation**, so the
+  sheet stays entirely off-screen and any `tap` on it silently misses (a
+  `warnIfMissed` warning is the only clue). To *interact* with a sheet, use
+  `pumpAndSettle` — safe for the period picker, which has no timer.
+- A sheet left off-screen is still laid out, so overflow is caught either way.
+  Those are valid layout checks; they are not interaction checks.
+- `bank_redirect` auto-advances after 3s and needs a pump past it, or the test
+  fails on a pending timer.
 
 ### What is NOT verified
 
@@ -357,13 +398,33 @@ overflow; they prove nothing about fidelity to the board.
 
 ## 10. Suggested next steps
 
-1. **Row 2** — wallet / Send Money / Convert Funds, plus `Conversion.png` and
-   `Exchange.png`. `convert_funds_sheet` has never been matched.
-2. **Stablecoin leftovers** — the three screens in §4 with no background and
-   the old app bar.
-3. **The other 13 boards** — KYC, Settings, History and Help are probably the
-   highest value.
+`Home Transfer.png` and `History.png` are done. Twelve boards remain.
+
+1. **`Conversion.png` / `Exchange.png`** first — they may re-specify the wallet
+   and convert screens just finished, so any conflict is worth knowing early.
+2. **`KYC.png`, `Settings.png`, `Help.png`** — large surfaces, all still on
+   pre-design-pass markers.
+3. **`Beneficiary.png`** — the beneficiaries list, details, edit and remove
+   screens were out of row 2's scope and are untouched.
 4. **Close the asset gaps** — 8 bank logos and the two card marks, once real
    files exist. One line each.
 5. **Get eyes on a device.** The largest outstanding risk is that everything is
    layout-verified and fidelity-unverified.
+
+### Behavioural bugs fixed while matching, in case the pattern repeats
+
+Design passes kept turning up real defects. Worth looking for these:
+
+- Convert Funds' amount field had **no `onChanged`**, so the quote never
+  recomputed as you typed.
+- `MockCurrencyWalletRepository` and `MockFxRepository` carried **different NGN
+  rates**, so the convert sheet disagreed with Destination and FX Quote.
+- The Wallet tab's Convert action **discarded** the sheet's success message, and
+  "Add currency" was wired to an empty callback.
+- Referral's "Done" used a bare-name `popUntil` that **empties the navigator**
+  when reached from Home.
+- History's `_choiceRow` closed itself with `Navigator.pop`, correct for a
+  bottom sheet but it would have **popped the History screen** once the panel
+  became inline.
+- `ConvertQuote` charged a flat fee in the *target* currency and did not deduct
+  it; the board says "Fee (included · 1%)" in the source currency.

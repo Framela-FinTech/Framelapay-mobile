@@ -795,22 +795,19 @@ class _ActivityScreenState extends State<ActivityScreen> {
       child: Center(
         child: Column(
           children: [
-            Container(
-              width: 80,
-              height: 80,
-              decoration: BoxDecoration(
-                color: AppColors.primaryDark.withValues(alpha: 0.08),
-                shape: BoxShape.circle,
-              ),
-              child: const AppIcon('search',
-                  size: 32, color: AppColors.primaryDark),
+            const IconBadge(
+              icon: 'search',
+              halo: AppColors.infoHalo,
+              size: 104,
+              glyphSize: 42,
+              glyphColor: AppColors.primary50,
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 20),
             const Text('No matching transactions',
                 style: TextStyle(
                     color: AppColors.primaryDark,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w700)),
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800)),
             const SizedBox(height: 8),
             const Text('Try another search or clear your filters.',
                 style: TextStyle(color: AppColors.textGrey, fontSize: 14)),

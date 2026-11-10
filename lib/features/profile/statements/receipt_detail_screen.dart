@@ -74,10 +74,15 @@ class ReceiptDetailScreen extends StatelessWidget {
   ReceiptCard _card() {
     late final String label;
     late final Color colour;
+    // Only the completed pill needs an explicit fill: a 12% tint of `success`
+    // lands noticeably greyer than the board's green. The failed and pending
+    // tints are within a couple of values, so they stay derived.
+    Color? background;
     switch (receipt.status) {
       case ReceiptStatus.completed:
         label = 'Completed';
         colour = AppColors.success;
+        background = AppColors.successNotice;
       case ReceiptStatus.failed:
         label = 'Failed';
         colour = AppColors.error;
@@ -88,6 +93,7 @@ class ReceiptDetailScreen extends StatelessWidget {
     return ReceiptCard(
       statusLabel: label,
       statusColor: colour,
+      statusBackground: background,
       headlineAmount: receipt.headlineAmount,
       caption: receipt.caption,
       rows: [for (final r in receipt.rows) ReceiptLine(r.label, r.value)],

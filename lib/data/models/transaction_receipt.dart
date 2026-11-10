@@ -152,14 +152,17 @@ const List<TransactionReceipt> sampleReceipts = [
     date: '10 October 2026',
     status: ReceiptStatus.pending,
     headlineAmount: '€250.00',
-    caption: 'Currency exchange · EUR to NGN',
+    // The board carries the failed receipt's "Currency exchange · EUR to NGN"
+    // caption here and shows €500 in the rows against a €250 headline. Both
+    // are copy-paste slips; this is the coherent version.
+    caption: 'Money sent · Michael Ade',
     statusNote: 'Processing transaction',
     rows: [
       ReceiptRow('From', 'Cynthia Nkechi'),
       ReceiptRow('To', 'Michael Ade'),
-      ReceiptRow('You sent', '€500.00'),
+      ReceiptRow('You sent', '€250.00'),
       ReceiptRow('Transfer fee', '€0.00'),
-      ReceiptRow('Total paid', '€500.00'),
+      ReceiptRow('Total paid', '€250.00'),
       ReceiptRow('Purpose', 'Personal transfer'),
       ReceiptRow('Payment method', 'EUR wallet transfer'),
       ReceiptRow('Date and time', '10 Oct 2026 · 10:32 AM WAT'),
