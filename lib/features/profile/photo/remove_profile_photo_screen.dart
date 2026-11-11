@@ -12,78 +12,60 @@ class RemoveProfilePhotoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: whiteAppBar('Remove Profile Photo?'),
+      backgroundColor: AppColors.pageGrey,
+      appBar: whiteAppBar('Remove Profile Picture'),
       body: SafeArea(
         child: Column(
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.fromLTRB(20, 48, 20, 24),
                 child: Column(
                   children: [
-                    const SizedBox(height: 40),
                     Container(
-                      width: 72,
-                      height: 72,
+                      width: 96,
+                      height: 96,
                       decoration: const BoxDecoration(
-                          color: Color(0xFFFBE9B8), shape: BoxShape.circle),
-                      child: const AppIcon('image-off',
-                          size: 32, color: Color(0xFFCB8A1E)),
+                        color: AppColors.warningPill,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Center(
+                        child: AppIcon('image-off',
+                            size: 40, color: Color(0xFF8A5300)),
+                      ),
                     ),
-                    const SizedBox(height: 20),
-                    const Text('Remove your profile photo?',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w800, fontSize: 22)),
-                    const SizedBox(height: 8),
-                    const Text(
-                        'Your photo will be replaced with the default profile '
-                        'icon. Your account details will stay the same.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: AppColors.textGrey, fontSize: 13)),
+                    const SizedBox(height: 24),
+                    const ScreenHeading(
+                      'Remove your profile photo?',
+                      helper:
+                          'Your photo will be replaced with the default profile '
+                          'icon. Your account details will stay the same.',
+                      center: true,
+                    ),
                   ],
                 ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-              child: Column(
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.error,
-                        foregroundColor: Colors.white,
-                        minimumSize: const Size.fromHeight(56),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                      ),
-                      onPressed: () => Navigator.pushNamed(
-                          context, AppRoutes.profilePhotoRemoved),
-                      child: const Text('Remove Photo'),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.error,
+                    foregroundColor: Colors.white,
+                    minimumSize: const Size.fromHeight(56),
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
                     ),
                   ),
-                  const SizedBox(height: 12),
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(56),
-                        side: const BorderSide(color: AppColors.divider),
-                        foregroundColor: AppColors.primaryDark,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('Keep Photo'),
-                    ),
-                  ),
-                ],
+                  onPressed: () => Navigator.pushNamed(
+                      context, AppRoutes.profilePhotoRemoved),
+                  child: const Text('Remove Photo',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                ),
               ),
             ),
           ],

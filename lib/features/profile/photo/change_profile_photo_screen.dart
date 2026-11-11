@@ -12,32 +12,29 @@ class ChangeProfilePhotoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: whiteAppBar('Change Profile Photo'),
+      backgroundColor: AppColors.pageGrey,
+      appBar: whiteAppBar('Change Profile Picture'),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
           child: Column(
             children: [
               _avatarWithBadge(),
-              const SizedBox(height: 20),
-              const Text('Choose a profile photo',
-                  style:
-                      TextStyle(fontWeight: FontWeight.w800, fontSize: 20)),
-              const SizedBox(height: 8),
-              const Text('Use a clear photo that helps you recognise your account.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: AppColors.textGrey, fontSize: 13)),
               const SizedBox(height: 24),
+              const ScreenHeading(
+                'Choose A Profile Photo',
+                helper:
+                    'Use a clear photo that helps you recognise your account.',
+                center: true,
+              ),
+              const SizedBox(height: 28),
               _tile(context, 'camera', 'Take a Photo', 'Use your device camera',
                   () => Navigator.pushNamed(
                       context, AppRoutes.adjustProfilePhoto)),
-              const SizedBox(height: 12),
               _tile(context, 'image', 'Choose from Gallery',
                   'Select an existing photo',
                   () => Navigator.pushNamed(
                       context, AppRoutes.adjustProfilePhoto)),
-              const SizedBox(height: 12),
               _removeTile(
                   context,
                   () => Navigator.pushNamed(
@@ -51,28 +48,38 @@ class ChangeProfilePhotoScreen extends StatelessWidget {
 
   Widget _avatarWithBadge() {
     return SizedBox(
-      width: 108,
-      height: 108,
+      width: 124,
+      height: 124,
       child: Stack(
+        alignment: Alignment.center,
         children: [
           Container(
-            width: 104,
-            height: 104,
+            width: 120,
+            height: 120,
             decoration: const BoxDecoration(
-                color: Color(0xFFE6ECFF), shape: BoxShape.circle),
-            child: const AppIcon('folder-user',
-                size: 44, color: AppColors.primaryDark),
+              color: Color(0xFFEAF2FB),
+              shape: BoxShape.circle,
+            ),
+            child: const Center(
+              child: AppIcon('folder-user',
+                  size: 52, color: AppColors.primaryDark),
+            ),
           ),
           Positioned(
-            right: 0,
-            bottom: 8,
+            right: 4,
+            bottom: 4,
             child: Container(
               width: 32,
               height: 32,
-              decoration: const BoxDecoration(
-                  color: AppColors.accentYellow, shape: BoxShape.circle),
-              child: const AppIcon('camera',
-                  size: 16, color: Colors.white, style: AppIconStyle.bold),
+              decoration: BoxDecoration(
+                color: AppColors.accentYellow,
+                shape: BoxShape.circle,
+                border: Border.all(color: AppColors.white, width: 2),
+              ),
+              child: const Center(
+                child: AppIcon('camera',
+                    size: 16, color: Colors.white, style: AppIconStyle.bold),
+              ),
             ),
           ),
         ],
@@ -82,76 +89,94 @@ class ChangeProfilePhotoScreen extends StatelessWidget {
 
   Widget _tile(BuildContext context, String icon, String title,
       String subtitle, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(14),
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: AppColors.inputFill,
-          borderRadius: BorderRadius.circular(14),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(10),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.divider),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 42,
+                height: 42,
+                decoration: BoxDecoration(
+                  color: AppColors.iconTileSoft,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(
+                  child: AppIcon(icon, size: 20, color: AppColors.primaryDark),
+                ),
               ),
-              child: AppIcon(icon, size: 20, color: AppColors.primaryDark),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 14)),
-                  const SizedBox(height: 2),
-                  Text(subtitle,
-                      style: const TextStyle(
-                          color: AppColors.textGrey, fontSize: 12)),
-                ],
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title,
+                        style: const TextStyle(
+                            color: AppColors.primaryDark,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16)),
+                    const SizedBox(height: 2),
+                    Text(subtitle,
+                        style: const TextStyle(
+                            color: AppColors.textGrey, fontSize: 13)),
+                  ],
+                ),
               ),
-            ),
-            const AppIcon('chevron-right', size: 18, color: AppColors.textGrey),
-          ],
+              const AppIcon('chevron-right',
+                  size: 18, color: AppColors.textGrey),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _removeTile(BuildContext context, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(14),
-      child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: const Color(0xFFFDEAEA),
-          borderRadius: BorderRadius.circular(14),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const AppIcon('trash', size: 20, color: AppColors.error),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: const Color(0xFFFEF2F2),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: const Color(0xFFFCA5A5).withValues(alpha: 0.35),
             ),
-            const SizedBox(width: 12),
-            const Text('Remove Current Photo',
-                style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                    color: AppColors.error)),
-          ],
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 42,
+                height: 42,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFEE2E2),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Center(
+                  child:
+                      AppIcon('trash', size: 20, color: AppColors.error),
+                ),
+              ),
+              const SizedBox(width: 14),
+              const Text('Remove Current Photo',
+                  style: TextStyle(
+                      color: AppColors.error,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15)),
+            ],
+          ),
         ),
       ),
     );

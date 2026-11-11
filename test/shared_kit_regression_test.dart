@@ -16,6 +16,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:framela/core/theme/app_theme.dart';
 import 'package:framela/data/models/currency_wallet.dart';
 import 'package:framela/features/profile/beneficiaries/add_beneficiary_screen.dart';
+import 'package:framela/features/profile/profile_screen.dart';
+import 'package:framela/features/profile/photo/change_profile_photo_screen.dart';
+import 'package:framela/features/profile/photo/adjust_profile_photo_screen.dart';
+import 'package:framela/features/profile/photo/photo_updated_screen.dart';
+import 'package:framela/features/profile/photo/remove_profile_photo_screen.dart';
+import 'package:framela/features/profile/photo/profile_photo_removed_screen.dart';
 import 'package:framela/features/profile/kyc/source_of_funds_screen.dart';
 import 'package:framela/features/profile/security/change_password_screen.dart';
 import 'package:framela/features/profile/statements/account_statements_screen.dart';
@@ -187,6 +193,12 @@ void main() {
     'Account Statements': const AccountStatementsScreen(),
     'Change Password': const ChangePasswordScreen(),
     'Source of Funds': const SourceOfFundsScreen(),
+    'Profile': const ProfileScreen(),
+    'Change Profile Picture': const ChangeProfilePhotoScreen(),
+    'Adjust Profile Picture': const AdjustProfilePhotoScreen(),
+    'Photo Updated': const PhotoUpdatedScreen(),
+    'Remove Profile Picture': const RemoveProfilePhotoScreen(),
+    'Profile Photo Removed': const ProfilePhotoRemovedScreen(),
   };
 
   screens.forEach((name, screen) {

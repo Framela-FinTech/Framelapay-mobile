@@ -56,6 +56,7 @@ import '../../features/profile/beneficiaries/edit_beneficiary_screen.dart';
 import '../../features/profile/beneficiaries/remove_beneficiary_screen.dart';
 import '../../features/profile/photo/change_profile_photo_screen.dart';
 import '../../features/profile/photo/adjust_profile_photo_screen.dart';
+import '../../features/profile/photo/photo_updated_screen.dart';
 import '../../features/profile/photo/remove_profile_photo_screen.dart';
 import '../../features/profile/photo/profile_photo_removed_screen.dart';
 import '../../features/profile/kyc/profile_kyc_status_screen.dart';
@@ -421,11 +422,7 @@ class AppRoutes {
       case adjustProfilePhoto:
         return _page(const AdjustProfilePhotoScreen());
       case photoUpdated:
-        return _page(const ProfileSuccessScreen(
-          title: 'Profile photo updated',
-          message: 'Your new profile photo is now visible on your account.',
-          primary: SuccessButton('Return to Profile', profile),
-        ));
+        return _page(const PhotoUpdatedScreen());
       case removeProfilePhoto:
         return _page(const RemoveProfilePhotoScreen());
       case profilePhotoRemoved:

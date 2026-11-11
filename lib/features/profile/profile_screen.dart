@@ -40,24 +40,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final user = _user;
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.pageGrey,
+      appBar: AppBar(
+        backgroundColor: AppColors.white,
+        elevation: 0,
+        leading: const BackButton(color: AppColors.primaryDark),
+        title: const Text('Profile',
+            style: TextStyle(
+                color: AppColors.primaryDark,
+                fontWeight: FontWeight.w700,
+                fontSize: 20)),
+      ),
       bottomNavigationBar: const AppBottomNav(currentIndex: 4),
       body: SafeArea(
         child: _loading || user == null
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 12),
-                    const Text('Profile',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 20)),
-                    const SizedBox(height: 16),
                     _userCard(user),
                     const SizedBox(height: 20),
-                    _sectionLabel('ACCOUNT'),
+                    _sectionLabel('Account'),
                     _tile('folder-user', 'Personal Information',
                         'View and update your personal details.',
                         route: AppRoutes.personalInformation),
@@ -70,32 +75,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     _tile('folder-user', 'Beneficiaries',
                         'Manage saved beneficiaries.',
                         route: AppRoutes.beneficiariesList),
-                    const SizedBox(height: 16),
-                    _sectionLabel('MONEY AND DOCUMENTS'),
-                    _tile('receipt', 'Statements & Receipts',
+                    const SizedBox(height: 12),
+                    _sectionLabel('Statement'),
+                    _tile('receipt', 'Statements',
                         'Download, share or print records.',
                         route: AppRoutes.statementsHub),
-                    const SizedBox(height: 16),
-                    _sectionLabel('SECURITY AND PREFERENCES'),
+                    const SizedBox(height: 12),
+                    _sectionLabel('Security'),
                     _tile('shield', 'Security',
                         'PIN, biometrics and trusted devices.',
                         route: AppRoutes.securityHome),
                     _tile('settings', 'Settings',
                         'Appearance, notifications and more.',
                         route: AppRoutes.settingsHome),
-                    const SizedBox(height: 16),
-                    _sectionLabel('SUPPORT'),
+                    const SizedBox(height: 12),
+                    _sectionLabel('Support'),
                     _tile('lifebuoy', 'Help & Support',
                         'Help articles and live support.',
                         route: AppRoutes.helpSupport),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 12),
                     _sectionLabel('ACCOUNT CONTROLS'),
                     _tile('power', 'Deactivate Account',
                         'Temporarily disable your account.',
                         route: AppRoutes.deactivateAccount, danger: true),
                     _tile('logout', 'Sign Out', 'Log out from this device.',
                         route: AppRoutes.signOut, danger: true),
-                    const SizedBox(height: 24),
                   ],
                 ),
               ),
@@ -155,20 +159,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _avatar() {
     return SizedBox(
-      width: 48,
-      height: 48,
+      width: 52,
+      height: 52,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
           const CircleAvatar(
-            radius: 24,
-            backgroundColor: AppColors.inputFill,
-            child: AppIcon('folder-user',
-                size: 24, color: AppColors.primaryDark),
+            radius: 26,
+            backgroundImage: AssetImage('assets/images/cynthia_avatar.png'),
           ),
           Positioned(
             bottom: -2,
-            left: -2,
+            right: -2,
             child: Container(
               width: 18,
               height: 18,
@@ -188,19 +190,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _tierPill() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: AppColors.accentYellow,
+        color: const Color(0xFF16253D),
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.accentYellow, width: 1),
       ),
       child: const Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          AppIcon('shield-tick', size: 11, color: AppColors.primaryDark),
+          Icon(Icons.check, size: 12, color: AppColors.accentYellow),
           SizedBox(width: 4),
           Text('Tier 2 Verified',
               style: TextStyle(
-                  color: AppColors.primaryDark,
+                  color: AppColors.accentYellow,
                   fontSize: 11,
                   fontWeight: FontWeight.w600)),
         ],
@@ -210,58 +213,74 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _sectionLabel(String text) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(top: 8, bottom: 10),
       child: Text(text,
           style: const TextStyle(
               color: AppColors.textGrey,
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 1)),
+              fontSize: 15,
+              fontWeight: FontWeight.w700)),
     );
   }
 
   Widget _tile(String icon, String title, String subtitle,
       {required String route, bool danger = false}) {
-    final tileColor =
-        danger ? AppColors.error.withOpacity(0.08) : AppColors.inputFill;
-    final fg = danger ? AppColors.error : AppColors.primaryDark;
-    return InkWell(
-      onTap: () => Navigator.pushNamed(context, route),
-      borderRadius: BorderRadius.circular(14),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: tileColor,
-          borderRadius: BorderRadius.circular(14),
-        ),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 18,
-              backgroundColor: AppColors.white,
-              child: AppIcon(icon, size: 18, color: fg),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: InkWell(
+        onTap: () => Navigator.pushNamed(context, route),
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: danger ? const Color(0xFFFEF2F2) : AppColors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: danger
+                  ? const Color(0xFFFCA5A5).withValues(alpha: 0.35)
+                  : AppColors.divider,
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title,
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14,
-                          color: danger ? AppColors.error : Colors.black)),
-                  const SizedBox(height: 2),
-                  Text(subtitle,
-                      style: const TextStyle(
-                          color: AppColors.textGrey, fontSize: 12)),
-                ],
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: danger
+                      ? const Color(0xFFFEE2E2)
+                      : AppColors.iconTileSoft,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(
+                  child: AppIcon(icon,
+                      size: 20,
+                      color: danger ? AppColors.error : AppColors.primaryDark),
+                ),
               ),
-            ),
-            AppIcon('chevron-right',
-                size: 18, color: danger ? AppColors.error : AppColors.textGrey),
-          ],
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15,
+                            color: danger
+                                ? AppColors.error
+                                : AppColors.primaryDark)),
+                    const SizedBox(height: 2),
+                    Text(subtitle,
+                        style: const TextStyle(
+                            color: AppColors.textGrey, fontSize: 13)),
+                  ],
+                ),
+              ),
+              AppIcon('chevron-right',
+                  size: 18,
+                  color: danger ? AppColors.error : AppColors.textGrey),
+            ],
+          ),
         ),
       ),
     );

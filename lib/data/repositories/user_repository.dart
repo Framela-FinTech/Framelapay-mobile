@@ -9,8 +9,8 @@ class MockUserRepository implements UserRepository {
   Future<UserProfile> getCurrentUser() async {
     await Future.delayed(const Duration(milliseconds: 300));
     return const UserProfile(
-      name: 'Cynthia',
-      framelaId: 'FRM48291380',
+      name: 'Cynthia Nkechi',
+      framelaId: 'FRM-482913',
       isKycVerified: true,
     );
   }

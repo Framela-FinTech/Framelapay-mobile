@@ -19,76 +19,106 @@ class _AdjustProfilePhotoScreenState extends State<AdjustProfilePhotoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: whiteAppBar('Adjust Profile Photo'),
+      backgroundColor: AppColors.pageGrey,
+      appBar: whiteAppBar('Adjust Profile Picture'),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
                 child: Container(
-                  width: 200,
-                  height: 200,
+                  width: 190,
+                  height: 190,
                   decoration: const BoxDecoration(
-                      color: Color(0xFFDCE6FB), shape: BoxShape.circle),
-                  child: const AppIcon('folder-user',
-                      size: 72, color: AppColors.primaryDark),
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/cynthia_avatar.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
               ),
-              const SizedBox(height: 24),
-              Text('POSITION AND SCALE',
-                  style: TextStyle(
-                      color: AppColors.textGrey,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.5)),
-              const SizedBox(height: 8),
+              const SizedBox(height: 28),
+              const Text(
+                'Position and Scale',
+                style: TextStyle(
+                  color: AppColors.textGrey,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 10),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
                 decoration: BoxDecoration(
-                  color: AppColors.inputFill,
-                  borderRadius: BorderRadius.circular(12),
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.divider),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.remove, size: 20),
+                    const Icon(Icons.remove,
+                        size: 20, color: AppColors.primaryDark),
                     Expanded(
-                      child: Slider(
-                        value: _scale,
-                        activeColor: AppColors.primaryDark,
-                        onChanged: (v) => setState(() => _scale = v),
+                      child: SliderTheme(
+                        data: SliderTheme.of(context).copyWith(
+                          activeTrackColor: AppColors.chartLine,
+                          inactiveTrackColor: AppColors.divider,
+                          thumbColor: AppColors.chartLine,
+                          overlayColor:
+                              AppColors.chartLine.withValues(alpha: 0.15),
+                          trackHeight: 4,
+                          thumbShape: const RoundSliderThumbShape(
+                              enabledThumbRadius: 7),
+                        ),
+                        child: Slider(
+                          value: _scale,
+                          onChanged: (v) => setState(() => _scale = v),
+                        ),
                       ),
                     ),
-                    const Icon(Icons.add, size: 20),
+                    const Icon(Icons.add,
+                        size: 20, color: AppColors.primaryDark),
                   ],
                 ),
               ),
-              const SizedBox(height: 12),
-              const NoticeBanner('Your photo will be cropped into a circle.',
-                  type: NoticeType.info),
-              const SizedBox(height: 24),
+              const SizedBox(height: 14),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 14, vertical: 12),
+                decoration: BoxDecoration(
+                  color: AppColors.infoNotice,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.info_outline,
+                        size: 20, color: AppColors.primaryDark),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        'Your photo will be cropped into a circle.',
+                        style: TextStyle(
+                            color: AppColors.primaryDark,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 32),
               PrimaryButton(
                 'Save Photo',
                 onPressed: () =>
                     Navigator.pushNamed(context, AppRoutes.photoUpdated),
               ),
               const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(56),
-                    side: const BorderSide(color: AppColors.divider),
-                    foregroundColor: AppColors.primaryDark,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                  ),
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Choose Another'),
-                ),
+              SecondaryButton(
+                'Choose Another',
+                onPressed: () => Navigator.pop(context),
               ),
             ],
           ),
