@@ -24,6 +24,8 @@ import 'package:framela/features/profile/photo/remove_profile_photo_screen.dart'
 import 'package:framela/features/profile/photo/profile_photo_removed_screen.dart';
 import 'package:framela/features/profile/kyc/source_of_funds_screen.dart';
 import 'package:framela/features/profile/security/change_password_screen.dart';
+import 'package:framela/features/profile/security/security_screen.dart';
+import 'package:framela/features/profile/security/trusted_devices_screens.dart';
 import 'package:framela/features/profile/statements/account_statements_screen.dart';
 import 'package:framela/features/activity/activity_screen.dart';
 import 'package:framela/features/profile/referral/referral_screen.dart';

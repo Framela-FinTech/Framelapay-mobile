@@ -19,7 +19,7 @@ Figma URL in the repo and the MCP Figma tools have nothing to point at, so
 | `History.png` | 9482×6724 | **done** |
 | `Beneficiary.png` | 9172×4400 | untouched |
 | `Conversion.png` | 6238×3120 | **done** |
-| `Edit Profile Picture.png` | 5710×3260 | untouched |
+| `Edit Profile Picture.png` | 5710×3260 | **done** |
 | `Exchange.png` | 8462×5754 | **done** |
 | `Help.png` | 10016×7732 | untouched |
 | `KYC.png` | 8964×3596 | untouched |
@@ -27,7 +27,7 @@ Figma URL in the repo and the MCP Figma tools have nothing to point at, so
 | `Restriction & Appeal.png` | 19826×8168 | untouched |
 | `Settings.png` | 6088×4410 | untouched |
 | `Transaction PIN.png` | 16424×10752 | untouched |
-| `Transfer Status.png` | 2413×1605 | untouched |
+| `Transfer Status.png` | 2413×1605 | **done** |
 | `Trusted Device.png` | 6924×3806 | untouched |
 
 ### `Home Transfer.png` row map
@@ -251,6 +251,56 @@ sheets — the body is a fixed header plus a `Stack` so the panel has something
 to anchor to. The period picker *is* a bottom sheet (it always was); what was
 wrong there was its content.
 
+### Transfer status — DONE
+
+`lib/features/transfer/status/` — tracks in-flight transfers.
+
+Four frames on the board (@1x 390pt logical):
+- Frame 0: `transfer_status_screen.dart` ("Transfer Status") with ongoing
+  transfer cards, status pills, and empty state ("Nothing in flight").
+- Frame 1: `transfer_progress_screen.dart` ("Transfer Progress") with amber sync
+  badge (`AppColors.warningPill`, icon `#8A5300`) and the shared
+  `ProcessingTimeline`.
+- Frame 2: `transfer_status_details_screen.dart` ("Transfer Details") showing the
+  financial breakdown, bank info, and "Report a problem" / "Go to transfers".
+- Frame 3: Transfer screen History tab (matches existing History view; wired tab
+  tap).
+
+Extracted `ProcessingTimeline` from `processing_transfer_screen.dart` into
+`lib/features/transfer/shared/widgets/processing_timeline.dart` so both the
+post-confirmation processing screen and the status check-in render the exact same
+timeline widget. Added `StatusPill` to `fiat_form_widgets.dart`. Mock data in
+`MockOngoingTransferRepository`.
+
+### Edit profile picture — DONE
+
+`lib/features/profile/` and `lib/features/profile/photo/`.
+
+Six frames on the board (@2x 780px wide = 390pt logical):
+- Frame 0: `profile_screen.dart` ("Profile") — brought onto `AppColors.pageGrey`,
+  white cards with 1px `divider` border and radius 16, soft danger cards for
+  Account Controls, updated Cynthia Nkechi card with verified badge and dark/gold
+  Tier 2 Verified pill.
+- Frame 1: `change_profile_photo_screen.dart` ("Change Profile Picture") —
+  large avatar placeholder with gold camera badge, "Take a Photo" / "Choose
+  from Gallery" white cards, and soft-red "Remove Current Photo" card.
+- Frame 2: `adjust_profile_photo_screen.dart` ("Adjust Profile Picture") —
+  190pt circular crop preview using `cynthia_avatar.png`, "Position and Scale"
+  slider card with blue active track, light-blue notice banner, "Save Photo"
+  and "Choose Another".
+- Frame 3: `photo_updated_screen.dart` ("Photo Updated") — green check badge,
+  "Profile photo updated" message, and "Return To Profile" CTA.
+- Frame 4: `remove_profile_photo_screen.dart` ("Remove Profile Picture") —
+  amber warning badge with `image-off` glyph, "Remove your profile photo?"
+  heading, and single red "Remove Photo" CTA.
+- Frame 5: `profile_photo_removed_screen.dart` ("Profile Photo Removed") —
+  green check badge, default profile placeholder circle, "Return to profile"
+  and "Add a New Photo".
+
+Asset: `assets/images/cynthia_avatar.png` extracted directly from the board's
+preview frame. Mock data in `MockUserRepository` updated to "Cynthia Nkechi" and
+`FRM-482913`.
+
 ### Shared auth triple
 
 `verify_fingerprint` → `enter_passcode` → `processing_transfer` are shared by
@@ -427,22 +477,21 @@ overflow; they prove nothing about fidelity to the board.
 
 ## 10. Suggested next steps
 
-`Home Transfer.png`, `History.png`, `Conversion.png` and `Exchange.png` are
-done. Ten boards remain, listed below smallest first.
+`Home Transfer.png`, `History.png`, `Conversion.png`, `Exchange.png`,
+`Transfer Status.png`, and `Edit Profile Picture.png` are done. Eight boards
+remain, listed below smallest first.
 
 Working smallest board first:
 
-1. `Transfer Status.png` (2413×1605)
-2. `Edit Profile Picture.png` (5710×3260)
-3. `Trusted Device.png` (6924×3806)
-4. `Settings.png` (6088×4410)
-5. `KYC.png` (8964×3596)
-6. `Beneficiary.png` (9172×4400) — the beneficiaries list, details, edit and
+1. `Trusted Device.png` (6924×3806)
+2. `Settings.png` (6088×4410)
+3. `KYC.png` (8964×3596)
+4. `Beneficiary.png` (9172×4400) — the beneficiaries list, details, edit and
    remove screens were out of row 2's scope
-7. `Personal Information Edit.png` (6268×8626)
-8. `Help.png` (10016×7732)
-9. `Restriction & Appeal.png` (19826×8168)
-10. `Transaction PIN.png` (16424×10752)
+5. `Personal Information Edit.png` (6268×8626)
+6. `Help.png` (10016×7732)
+7. `Restriction & Appeal.png` (19826×8168)
+8. `Transaction PIN.png` (16424×10752)
 
 Then:
 

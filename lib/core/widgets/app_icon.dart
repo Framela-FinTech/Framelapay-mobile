@@ -123,6 +123,7 @@ class AppIcon extends StatelessWidget {
     'refresh': Icons.refresh,
     'arrow-up-circle': Icons.arrow_circle_up_outlined,
     'arrow-down-circle': Icons.arrow_circle_down_outlined,
+    'mobile': Icons.phone_iphone_outlined,
   };
 
   /// Filled Material fallbacks for the bold style, where a filled counterpart

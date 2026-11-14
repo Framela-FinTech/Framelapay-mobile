@@ -19,37 +19,36 @@ class _SecurityScreenState extends State<SecurityScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.pageGrey,
       appBar: whiteAppBar('Security'),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 8),
               _tile(
-                icon: 'lock',
+                icon: 'search',
                 title: 'Password',
-                subtitle: 'Change or reset your login password',
+                subtitle: 'Change or reset your login password.',
                 onTap: () =>
                     Navigator.pushNamed(context, AppRoutes.securityPassword),
               ),
               _tile(
-                icon: 'shield-tick',
+                icon: 'more',
                 title: 'Transaction PIN',
-                subtitle: 'Change or secure your transaction PIN',
+                subtitle: 'Change or recover your transaction PIN.',
                 onTap: () =>
                     Navigator.pushNamed(context, AppRoutes.transactionPin),
               ),
               _tile(
-                icon: 'shield',
+                icon: 'mobile',
                 title: 'Trusted Devices',
-                subtitle: 'Manage trusted devices',
+                subtitle: 'Remove Devices.',
                 onTap: () =>
                     Navigator.pushNamed(context, AppRoutes.trustedDevices),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               _biometricToggle(),
             ],
           ),
@@ -60,36 +59,46 @@ class _SecurityScreenState extends State<SecurityScreen> {
 
   Widget _biometricToggle() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.inputFill,
-        borderRadius: BorderRadius.circular(14),
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.divider),
       ),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 20,
-            backgroundColor: AppColors.primaryDark,
-            child: const AppIcon('fingerprint', color: Colors.white, size: 18),
+          Container(
+            width: 42,
+            height: 42,
+            decoration: BoxDecoration(
+              color: AppColors.iconTileSoft,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Center(
+              child: AppIcon('fingerprint',
+                  size: 20, color: AppColors.primaryDark),
+            ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 14),
           const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Biometric sign-in',
                     style: TextStyle(
-                        fontWeight: FontWeight.w600, fontSize: 14)),
+                        color: AppColors.primaryDark,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16)),
                 SizedBox(height: 2),
                 Text('Use Face ID or fingerprint',
                     style:
-                        TextStyle(color: AppColors.textGrey, fontSize: 11)),
+                        TextStyle(color: AppColors.textGrey, fontSize: 13)),
               ],
             ),
           ),
           Switch(
             value: _biometric,
-            activeColor: AppColors.accentYellow,
+            activeColor: AppColors.primaryDark,
             onChanged: (v) => setState(() => _biometric = v),
           ),
         ],
@@ -103,40 +112,53 @@ class _SecurityScreenState extends State<SecurityScreen> {
     required String subtitle,
     required VoidCallback onTap,
   }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(14),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: AppColors.inputFill,
-          borderRadius: BorderRadius.circular(14),
-        ),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundColor: AppColors.primaryDark,
-              child: AppIcon(icon, color: Colors.white, size: 18),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 14)),
-                  const SizedBox(height: 2),
-                  Text(subtitle,
-                      style: const TextStyle(
-                          color: AppColors.textGrey, fontSize: 11)),
-                ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: AppColors.divider),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 42,
+                height: 42,
+                decoration: BoxDecoration(
+                  color: AppColors.iconTileSoft,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(
+                  child: AppIcon(icon,
+                      size: 20, color: AppColors.primaryDark),
+                ),
               ),
-            ),
-            const AppIcon('chevron-right', color: AppColors.textGrey),
-          ],
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title,
+                        style: const TextStyle(
+                            color: AppColors.primaryDark,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16)),
+                    const SizedBox(height: 2),
+                    Text(subtitle,
+                        style: const TextStyle(
+                            color: AppColors.textGrey, fontSize: 13)),
+                  ],
+                ),
+              ),
+              const AppIcon('chevron-right',
+                  size: 18, color: AppColors.textGrey),
+            ],
+          ),
         ),
       ),
     );
