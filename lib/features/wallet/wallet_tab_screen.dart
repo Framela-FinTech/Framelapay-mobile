@@ -7,7 +7,6 @@ import '../../core/widgets/app_bottom_nav.dart';
 import '../../data/models/currency_wallet.dart';
 import '../../data/models/wallet_activity.dart';
 import '../../data/repositories/currency_wallet_repository.dart';
-import '../transfer/wallet/convert_funds_sheet.dart';
 import 'choose_wallet_balance_sheet.dart';
 
 /// Wallet tab (screens: wallet-main + wallet-action-required). The yellow

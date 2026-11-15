@@ -201,6 +201,12 @@ void main() {
     'Photo Updated': const PhotoUpdatedScreen(),
     'Remove Profile Picture': const RemoveProfilePhotoScreen(),
     'Profile Photo Removed': const ProfilePhotoRemovedScreen(),
+    'Security': const SecurityScreen(),
+    'Trusted Devices': const TrustedDevicesScreen(),
+    'Device Details (current)': const DeviceDetailsScreen(current: true),
+    'Device Details (previous)': const DeviceDetailsScreen(current: false),
+    'Remove Device': const RemoveDeviceScreen(),
+    'Action Complete': const DeviceActionCompleteScreen(),
   };
 
   screens.forEach((name, screen) {

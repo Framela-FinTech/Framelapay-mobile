@@ -125,7 +125,6 @@ import '../../data/models/ongoing_transfer.dart';
 import '../../features/transfer/status/transfer_status_screen.dart';
 import '../../features/transfer/status/transfer_progress_screen.dart';
 import '../../features/transfer/status/transfer_status_details_screen.dart';
-import '../../data/models/currency_wallet.dart';
 
 /// Every route name lives here — one source of truth.
 /// Add a new constant + case whenever a new screen needs to be reachable.

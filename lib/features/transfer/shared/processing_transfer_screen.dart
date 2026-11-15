@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_shadows.dart';
 import '../../../data/models/processing_step.dart';
 import 'widgets/processing_timeline.dart';
 import '../../../data/models/transfer_auth_flow.dart';
