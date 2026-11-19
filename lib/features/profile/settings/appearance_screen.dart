@@ -5,7 +5,7 @@ import '../../../core/widgets/app_icon.dart';
 import '../../transfer/fiat/widgets/fiat_form_widgets.dart';
 import '../widgets/profile_success_screen.dart';
 
-/// Appearance settings (sheet 5). Light / Dark / System cards. Selection is
+/// Appearance settings. Light / Dark / System cards. Selection is
 /// local state only — this does NOT actually switch the app theme.
 class AppearanceScreen extends StatefulWidget {
   const AppearanceScreen({super.key});
@@ -33,28 +33,24 @@ class _AppearanceScreenState extends State<AppearanceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.pageGrey,
       appBar: whiteAppBar('Appearance'),
       body: SafeArea(
         child: Column(
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 8),
                     const ScreenHeading(
                       'Choose your app appearance',
-                      helper:
-                          'Pick how Framela Pay looks on this device.',
+                      helper: 'Pick how Framela Pay looks on this device.',
                     ),
                     const SizedBox(height: 20),
-                    _option('light', 'Light', 'Bright background',
-                        'eye'),
-                    _option('dark', 'Dark', 'Dim background',
-                        'eye-slash'),
+                    _option('light', 'Light', 'Bright background', 'eye'),
+                    _option('dark', 'Dark', 'Dim background', 'eye-slash'),
                     _option('system', 'System', 'Match your device setting',
                         'settings'),
                     const SizedBox(height: 16),
@@ -78,49 +74,59 @@ class _AppearanceScreenState extends State<AppearanceScreen> {
 
   Widget _option(String key, String title, String subtitle, String icon) {
     final selected = _selected == key;
-    return InkWell(
-      onTap: () => setState(() => _selected = key),
-      borderRadius: BorderRadius.circular(14),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: AppColors.inputFill,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: selected ? AppColors.accentYellow : Colors.transparent,
-            width: 1.5,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: InkWell(
+        onTap: () => setState(() => _selected = key),
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: selected ? AppColors.primaryDark : AppColors.divider,
+              width: selected ? 1.5 : 1.0,
+            ),
           ),
-        ),
-        child: Row(
-          children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundColor: AppColors.primaryDark,
-              child: AppIcon(icon, color: Colors.white, size: 18),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(title,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 14)),
-                  const SizedBox(height: 2),
-                  Text(subtitle,
-                      style: const TextStyle(
-                          color: AppColors.textGrey, fontSize: 11)),
-                ],
+          child: Row(
+            children: [
+              Container(
+                width: 42,
+                height: 42,
+                decoration: BoxDecoration(
+                  color: AppColors.iconTileSoft,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Center(
+                  child: AppIcon(icon, size: 20, color: AppColors.primaryDark),
+                ),
               ),
-            ),
-            Radio<String>(
-              value: key,
-              groupValue: _selected,
-              activeColor: AppColors.accentYellow,
-              onChanged: (v) => setState(() => _selected = v!),
-            ),
-          ],
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title,
+                        style: const TextStyle(
+                            color: AppColors.primaryDark,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16)),
+                    const SizedBox(height: 2),
+                    Text(subtitle,
+                        style: const TextStyle(
+                            color: AppColors.textGrey, fontSize: 13)),
+                  ],
+                ),
+              ),
+              Radio<String>(
+                value: key,
+                groupValue: _selected,
+                activeColor: AppColors.primaryDark,
+                onChanged: (v) => setState(() => _selected = v!),
+              ),
+            ],
+          ),
         ),
       ),
     );

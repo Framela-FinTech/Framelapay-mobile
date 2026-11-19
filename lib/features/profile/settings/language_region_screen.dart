@@ -4,8 +4,7 @@ import '../../../core/routes/app_routes.dart';
 import '../../transfer/fiat/widgets/fiat_form_widgets.dart';
 import '../widgets/profile_success_screen.dart';
 
-/// Language & Region settings (sheet 5). Display-preference dropdowns only —
-/// this does NOT change the user's verified country of residence.
+/// Language & Region settings. Display preferences only.
 class LanguageRegionScreen extends StatefulWidget {
   const LanguageRegionScreen({super.key});
 
@@ -36,18 +35,17 @@ class _LanguageRegionScreenState extends State<LanguageRegionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.pageGrey,
       appBar: whiteAppBar('Language & Region'),
       body: SafeArea(
         child: Column(
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 8),
                     const ScreenHeading(
                       'Display preferences',
                       helper: 'Set your preferred language and region.',
