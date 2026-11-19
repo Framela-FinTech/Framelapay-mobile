@@ -22,10 +22,21 @@ import 'package:framela/features/profile/photo/adjust_profile_photo_screen.dart'
 import 'package:framela/features/profile/photo/photo_updated_screen.dart';
 import 'package:framela/features/profile/photo/remove_profile_photo_screen.dart';
 import 'package:framela/features/profile/photo/profile_photo_removed_screen.dart';
+import 'package:framela/features/profile/kyc/address_verification_screen.dart';
+import 'package:framela/features/profile/kyc/identity_verification_screen.dart';
+import 'package:framela/features/profile/kyc/profile_kyc_status_screen.dart';
+import 'package:framela/features/profile/kyc/review_verification_screen.dart';
 import 'package:framela/features/profile/kyc/source_of_funds_screen.dart';
+import 'package:framela/features/profile/kyc/upgrade_verification_screen.dart';
+import 'package:framela/features/profile/kyc/verification_submitted_screen.dart';
+import 'package:framela/features/profile/kyc/verification_successful_screen.dart';
 import 'package:framela/features/profile/security/change_password_screen.dart';
 import 'package:framela/features/profile/security/security_screen.dart';
 import 'package:framela/features/profile/security/trusted_devices_screens.dart';
+import 'package:framela/features/profile/settings/settings_screen.dart';
+import 'package:framela/features/profile/settings/appearance_screen.dart';
+import 'package:framela/features/profile/settings/language_region_screen.dart';
+import 'package:framela/features/profile/settings/notifications_settings_screen.dart';
 import 'package:framela/features/profile/statements/account_statements_screen.dart';
 import 'package:framela/features/activity/activity_screen.dart';
 import 'package:framela/features/profile/referral/referral_screen.dart';
@@ -194,7 +205,14 @@ void main() {
     'Add Beneficiary': const AddBeneficiaryScreen(),
     'Account Statements': const AccountStatementsScreen(),
     'Change Password': const ChangePasswordScreen(),
+    'KYC Status': const ProfileKycStatusScreen(),
+    'Upgrade Verification': const UpgradeVerificationScreen(),
+    'Identity Verification': const IdentityVerificationScreen(),
+    'Address Verification': const AddressVerificationScreen(),
     'Source of Funds': const SourceOfFundsScreen(),
+    'Review Verification': const ReviewVerificationScreen(),
+    'Verification Submitted': const VerificationSubmittedScreen(),
+    'Verification Successful': const VerificationSuccessfulScreen(),
     'Profile': const ProfileScreen(),
     'Change Profile Picture': const ChangeProfilePhotoScreen(),
     'Adjust Profile Picture': const AdjustProfilePhotoScreen(),
@@ -207,6 +225,10 @@ void main() {
     'Device Details (previous)': const DeviceDetailsScreen(current: false),
     'Remove Device': const RemoveDeviceScreen(),
     'Action Complete': const DeviceActionCompleteScreen(),
+    'Settings': const SettingsScreen(),
+    'Appearance': const AppearanceScreen(),
+    'Language & Region': const LanguageRegionScreen(),
+    'Notifications Settings': const NotificationsSettingsScreen(),
   };
 
   screens.forEach((name, screen) {

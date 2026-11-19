@@ -28,39 +28,27 @@ class _AddressVerificationScreenState extends State<AddressVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.pageGrey,
       appBar: whiteAppBar('Address Verification'),
       body: SafeArea(
         child: Column(
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const FieldLabel('Residential address'),
-                    TextField(
+                    AppTextInput(
                       controller: _address,
-                      style: const TextStyle(fontSize: 14),
-                      decoration: InputDecoration(
-                        suffixIcon: const Padding(
-                          padding: EdgeInsets.only(right: 12),
-                          child: AppIcon('location',
-                              size: 20, color: AppColors.primaryDark),
-                        ),
-                        suffixIconConstraints:
-                            const BoxConstraints(minWidth: 0, minHeight: 0),
-                        filled: true,
-                        fillColor: AppColors.inputFill,
-                        contentPadding: const EdgeInsets.all(16),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide.none,
-                        ),
+                      suffixIcon: const Padding(
+                        padding: EdgeInsets.only(right: 14),
+                        child: AppIcon('location',
+                            size: 20, color: AppColors.primaryDark),
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 18),
                     const FieldLabel('City'),
                     AppDropdownField(
                       hint: 'Select city',
@@ -68,12 +56,13 @@ class _AddressVerificationScreenState extends State<AddressVerificationScreen> {
                       items: const ['Lagos', 'Abuja', 'Port Harcourt', 'Kano'],
                       onChanged: (v) => setState(() => _city = v),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 22),
                     const KycUploadCard(
                       icon: 'cloud-upload',
                       title: 'Upload proof of address',
                       hint: 'Utility bill or bank statement • PDF, JPG or PNG',
                     ),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),

@@ -5,6 +5,7 @@ import '../../transfer/fiat/widgets/fiat_form_widgets.dart';
 import 'kyc_widgets.dart';
 
 /// Identity Verification — document type + issuing country + document upload.
+/// The Figma board labels the AppBar 'Upgrade Verification' for this step.
 class IdentityVerificationScreen extends StatefulWidget {
   const IdentityVerificationScreen({super.key});
 
@@ -21,14 +22,14 @@ class _IdentityVerificationScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: whiteAppBar('Identity Verification'),
+      backgroundColor: AppColors.pageGrey,
+      appBar: whiteAppBar('Upgrade Verification'),
       body: SafeArea(
         child: Column(
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -43,24 +44,30 @@ class _IdentityVerificationScreenState
                       ],
                       onChanged: (v) => setState(() => _docType = v),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 18),
                     const FieldLabel('Issuing country'),
                     AppDropdownField(
                       hint: 'Select country',
                       value: _country,
-                      items: const ['Nigeria', 'Ghana', 'Germany', 'United States'],
+                      items: const [
+                        'Nigeria',
+                        'Ghana',
+                        'Germany',
+                        'United States',
+                      ],
                       onChanged: (v) => setState(() => _country = v),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 22),
                     const KycUploadCard(
                       icon: 'scan',
                       title: 'Capture identity document',
                       hint: 'Upload a clear image of the information page',
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 18),
                     const NoticeBanner(
-                        'Your document must be valid, readable and belong to you.',
-                        type: NoticeType.info),
+                      'Your document must be valid, readable and belong to you.',
+                    ),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -70,7 +77,9 @@ class _IdentityVerificationScreenState
               child: PrimaryButton(
                 'Continue',
                 onPressed: () => Navigator.pushNamed(
-                    context, AppRoutes.profileKycAddress),
+                  context,
+                  AppRoutes.profileKycAddress,
+                ),
               ),
             ),
           ],

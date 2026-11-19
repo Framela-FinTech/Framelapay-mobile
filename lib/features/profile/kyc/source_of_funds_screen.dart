@@ -19,14 +19,14 @@ class _SourceOfFundsScreenState extends State<SourceOfFundsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: whiteAppBar('Source of Funds'),
+      backgroundColor: AppColors.pageGrey,
+      appBar: whiteAppBar('Source Of Funds'),
       body: SafeArea(
         child: Column(
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -42,7 +42,7 @@ class _SourceOfFundsScreenState extends State<SourceOfFundsScreen> {
                       ],
                       onChanged: (v) => setState(() => _source = v),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 18),
                     const FieldLabel('Employment status'),
                     AppDropdownField(
                       hint: 'Select status',
@@ -56,7 +56,7 @@ class _SourceOfFundsScreenState extends State<SourceOfFundsScreen> {
                       ],
                       onChanged: (v) => setState(() => _status = v),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 18),
                     const FieldLabel('Expected monthly activity'),
                     AppDropdownField(
                       hint: 'Select range',
@@ -69,11 +69,12 @@ class _SourceOfFundsScreenState extends State<SourceOfFundsScreen> {
                       ],
                       onChanged: (v) => setState(() => _activity = v),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 18),
                     const NoticeBanner(
-                        'This information helps us meet regulatory requirements '
-                        'and protect your account.',
-                        type: NoticeType.info),
+                      'This information helps us meet regulatory requirements '
+                      'and protect your account.',
+                    ),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -83,7 +84,9 @@ class _SourceOfFundsScreenState extends State<SourceOfFundsScreen> {
               child: PrimaryButton(
                 'Review Information',
                 onPressed: () => Navigator.pushNamed(
-                    context, AppRoutes.profileKycReview),
+                  context,
+                  AppRoutes.profileKycReview,
+                ),
               ),
             ),
           ],

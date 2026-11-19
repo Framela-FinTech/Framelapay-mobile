@@ -84,6 +84,7 @@ class AppTextInput extends StatelessWidget {
   final int? maxLength;
   final bool obscureText;
   final Widget? prefixIcon;
+  final Widget? suffixIcon;
   final ValueChanged<String>? onChanged;
   const AppTextInput({
     super.key,
@@ -94,6 +95,7 @@ class AppTextInput extends StatelessWidget {
     this.maxLength,
     this.obscureText = false,
     this.prefixIcon,
+    this.suffixIcon,
     this.onChanged,
   });
 
@@ -109,6 +111,7 @@ class AppTextInput extends StatelessWidget {
       decoration: InputDecoration(
         counterText: '',
         prefixIcon: prefixIcon,
+        suffixIcon: suffixIcon,
         prefixText: prefixText,
         prefixStyle:
             const TextStyle(fontSize: 16, color: AppColors.primaryDark),

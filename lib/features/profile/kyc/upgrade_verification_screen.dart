@@ -12,56 +12,64 @@ class UpgradeVerificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.pageGrey,
       appBar: whiteAppBar('Upgrade Verification'),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
                 child: Column(
                   children: [
-                    Container(
-                      width: 72,
-                      height: 72,
-                      decoration: const BoxDecoration(
-                          color: Color(0xFFDCE6FB), shape: BoxShape.circle),
-                      child: const AppIcon('shield-tick',
-                          size: 34, color: Color(0xFF2F6BFF)),
+                    const SizedBox(height: 12),
+                    const IconBadge(
+                      icon: 'shield-tick',
+                      halo: AppColors.infoHalo,
+                      size: 88,
+                      glyphSize: 36,
+                      glyphColor: AppColors.primary50,
                     ),
-                    const SizedBox(height: 16),
-                    const Text('Upgrade to Tier 3',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w800, fontSize: 24)),
-                    const SizedBox(height: 8),
-                    const Text(
-                        'Complete the remaining checks to increase your account '
-                        'limits.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: AppColors.textGrey, fontSize: 13)),
+                    const SizedBox(height: 20),
+                    const ScreenHeading(
+                      'Upgrade to Tier 3',
+                      helper:
+                          'Complete the remaining checks to increase your account limits.',
+                      center: true,
+                    ),
+                    const SizedBox(height: 36),
+                    _check(
+                      'id-card',
+                      'Valid identity document',
+                      'Passport, national ID or driving licence',
+                    ),
+                    const SizedBox(height: 24),
+                    _check(
+                      'location',
+                      'Proof of residential address',
+                      'Issued within the last 3 months',
+                    ),
+                    const SizedBox(height: 24),
+                    _check(
+                      'briefcase',
+                      'Source of funds',
+                      'Employment or business information',
+                    ),
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
-              _check('id-card', 'Valid identity document',
-                  'Passport, national ID or driving licence'),
-              const SizedBox(height: 16),
-              _check('location', 'Proof of residential address',
-                  'Issued within the last 3 months'),
-              const SizedBox(height: 16),
-              _check('briefcase', 'Source of funds',
-                  'Employment or business information'),
-              const SizedBox(height: 28),
-              PrimaryButton(
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+              child: PrimaryButton(
                 'Start Verification',
                 onPressed: () => Navigator.pushNamed(
-                    context, AppRoutes.profileKycIdentity),
+                  context,
+                  AppRoutes.profileKycIdentity,
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -71,19 +79,35 @@ class UpgradeVerificationScreen extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppIcon(icon, size: 22, color: AppColors.success),
-        const SizedBox(width: 12),
+        Padding(
+          padding: const EdgeInsets.only(top: 2),
+          child: AppIcon(
+            icon,
+            size: 24,
+            color: AppColors.success,
+          ),
+        ),
+        const SizedBox(width: 16),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w700, fontSize: 14)),
-              const SizedBox(height: 2),
-              Text(subtitle,
-                  style: const TextStyle(
-                      color: AppColors.textGrey, fontSize: 12)),
+              Text(
+                title,
+                style: const TextStyle(
+                  color: AppColors.primaryDark,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                subtitle,
+                style: const TextStyle(
+                  color: AppColors.textGrey,
+                  fontSize: 14,
+                ),
+              ),
             ],
           ),
         ),
