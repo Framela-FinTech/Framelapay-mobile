@@ -15,7 +15,15 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:framela/core/theme/app_theme.dart';
 import 'package:framela/data/models/currency_wallet.dart';
+import 'package:framela/data/models/fiat_beneficiary.dart';
 import 'package:framela/features/profile/beneficiaries/add_beneficiary_screen.dart';
+import 'package:framela/features/profile/beneficiaries/beneficiaries_list_screen.dart';
+import 'package:framela/features/profile/beneficiaries/beneficiary_details_screen.dart';
+import 'package:framela/features/profile/beneficiaries/beneficiary_removed_screen.dart';
+import 'package:framela/features/profile/beneficiaries/beneficiary_saved_screen.dart';
+import 'package:framela/features/profile/beneficiaries/confirm_beneficiary_screen.dart';
+import 'package:framela/features/profile/beneficiaries/edit_beneficiary_screen.dart';
+import 'package:framela/features/profile/beneficiaries/remove_beneficiary_screen.dart';
 import 'package:framela/features/profile/profile_screen.dart';
 import 'package:framela/features/profile/photo/change_profile_photo_screen.dart';
 import 'package:framela/features/profile/photo/adjust_profile_photo_screen.dart';
@@ -76,6 +84,14 @@ const _wallet = CurrencyWallet(
   name: 'Nigerian Naira',
   symbol: '₦',
   balance: 150000,
+);
+
+const _beneficiary = FiatBeneficiary(
+  fullName: 'John Doe',
+  bankName: 'Zenith Bank',
+  accountNumber: '70550345468',
+  country: 'Nigeria',
+  currency: 'NGN',
 );
 
 const _result = ConversionResult(
@@ -202,7 +218,19 @@ void main() {
     'Fund Wallet Details': const FundWalletDetailsScreen(wallet: _wallet),
     'Receive Details': const ReceiveDetailsScreen(wallet: _wallet),
     'Fund Card': const FundCardScreen(wallet: _wallet),
+    'Beneficiaries List': const BeneficiariesListScreen(),
     'Add Beneficiary': const AddBeneficiaryScreen(),
+    'Confirm Beneficiary':
+        const ConfirmBeneficiaryScreen(beneficiary: _beneficiary),
+    'Beneficiary Saved':
+        const BeneficiarySavedScreen(beneficiary: _beneficiary),
+    'Beneficiary Details':
+        const BeneficiaryDetailsScreen(beneficiary: _beneficiary),
+    'Edit Beneficiary':
+        const EditBeneficiaryScreen(beneficiary: _beneficiary),
+    'Remove Beneficiary':
+        const RemoveBeneficiaryScreen(beneficiary: _beneficiary),
+    'Beneficiary Removed': const BeneficiaryRemovedScreen(),
     'Account Statements': const AccountStatementsScreen(),
     'Change Password': const ChangePasswordScreen(),
     'KYC Status': const ProfileKycStatusScreen(),

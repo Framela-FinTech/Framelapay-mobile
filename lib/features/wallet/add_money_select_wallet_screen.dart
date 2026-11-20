@@ -112,7 +112,8 @@ class _AddMoneySelectWalletScreenState
         tab('Send Money', false,
             () => Navigator.pushReplacementNamed(context, AppRoutes.transferHub)),
         tab('Add Money', true, () {}),
-        tab('History', false, () {}),
+        tab('History', false,
+            () => Navigator.pushReplacementNamed(context, AppRoutes.activity)),
       ],
     );
   }

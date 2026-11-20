@@ -19,9 +19,10 @@ class CurrencyWallet {
   /// e.g. "₦150,000.00"
   String get formattedBalance => '$symbol${_fmt(balance)}';
 
-  /// ISO country code for the `country_flags` package (EU for the euro).
+  /// ISO-2 country code for the `country_flags` package (e.g. EU for EUR, US for USD).
+  /// Maps all supported and newly created wallet currencies to their respective country flags.
   String get countryCode {
-    switch (code) {
+    switch (code.toUpperCase()) {
       case 'USD':
         return 'US';
       case 'GBP':
@@ -32,8 +33,36 @@ class CurrencyWallet {
         return 'NG';
       case 'UAH':
         return 'UA';
+      case 'GHS':
+        return 'GH';
+      case 'KES':
+        return 'KE';
+      case 'ZAR':
+        return 'ZA';
+      case 'CAD':
+        return 'CA';
+      case 'AED':
+        return 'AE';
+      case 'AUD':
+        return 'AU';
+      case 'INR':
+        return 'IN';
+      case 'CNY':
+        return 'CN';
+      case 'JPY':
+        return 'JP';
+      case 'BRL':
+        return 'BR';
+      case 'EGP':
+        return 'EG';
+      case 'RWF':
+        return 'RW';
+      case 'TZS':
+        return 'TZ';
+      case 'UGX':
+        return 'UG';
       default:
-        return code;
+        return code.length >= 2 ? code.substring(0, 2) : code;
     }
   }
 

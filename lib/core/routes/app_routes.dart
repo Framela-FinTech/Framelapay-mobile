@@ -52,6 +52,8 @@ import '../../features/profile/beneficiaries/beneficiaries_list_screen.dart';
 import '../../features/profile/beneficiaries/add_beneficiary_screen.dart';
 import '../../features/profile/beneficiaries/confirm_beneficiary_screen.dart';
 import '../../features/profile/beneficiaries/beneficiary_details_screen.dart';
+import '../../features/profile/beneficiaries/beneficiary_saved_screen.dart';
+import '../../features/profile/beneficiaries/beneficiary_removed_screen.dart';
 import '../../features/profile/beneficiaries/edit_beneficiary_screen.dart';
 import '../../features/profile/beneficiaries/remove_beneficiary_screen.dart';
 import '../../features/profile/photo/change_profile_photo_screen.dart';
@@ -230,6 +232,7 @@ class AppRoutes {
   static const beneficiaryDetails = '/beneficiaries/detail';
   static const editBeneficiary = '/beneficiaries/edit';
   static const removeBeneficiary = '/beneficiaries/remove';
+  static const beneficiaryRemoved = '/beneficiaries/removed';
   // Statements & Receipts sub-screens.
   static const accountStatements = '/statements/account';
   static const statementReady = '/statements/ready';
@@ -450,11 +453,8 @@ class AppRoutes {
         final beneficiary = settings.arguments as FiatBeneficiary;
         return _page(ConfirmBeneficiaryScreen(beneficiary: beneficiary));
       case beneficiarySaved:
-        return _page(const ProfileSuccessScreen(
-          title: 'Beneficiary saved',
-          message: 'This recipient is now available in your saved list.',
-          primary: SuccessButton('Return to Beneficiaries', beneficiariesList),
-        ));
+        final beneficiary = settings.arguments as FiatBeneficiary?;
+        return _page(BeneficiarySavedScreen(beneficiary: beneficiary));
       case beneficiaryDetails:
         final beneficiary = settings.arguments as FiatBeneficiary;
         return _page(BeneficiaryDetailsScreen(beneficiary: beneficiary));
@@ -464,6 +464,8 @@ class AppRoutes {
       case removeBeneficiary:
         final beneficiary = settings.arguments as FiatBeneficiary;
         return _page(RemoveBeneficiaryScreen(beneficiary: beneficiary));
+      case beneficiaryRemoved:
+        return _page(const BeneficiaryRemovedScreen());
       case statementsHub:
         return _page(const StatementsHubScreen());
       case accountStatements:

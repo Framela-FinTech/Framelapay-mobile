@@ -1,97 +1,89 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/routes/app_routes.dart';
-import '../../../core/widgets/app_icon.dart';
 import '../../../data/models/fiat_beneficiary.dart';
 import '../../transfer/fiat/widgets/fiat_form_widgets.dart';
 
-/// Remove Beneficiary? — confirmation with a warning that previous transaction
-/// records remain available.
+/// Remove Beneficiary? — confirmation screen before deleting a saved recipient.
+/// Matches Row 2, Frame 2 of the `Beneficiary.png` Figma board.
 class RemoveBeneficiaryScreen extends StatelessWidget {
   final FiatBeneficiary beneficiary;
+
   const RemoveBeneficiaryScreen({super.key, required this.beneficiary});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.pageGrey,
       appBar: whiteAppBar('Remove Beneficiary?'),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFBE3A2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
+          children: [
+            const Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.fromLTRB(20, 36, 20, 24),
+                child: Column(
                   children: [
-                    const AppIcon('info-circle',
-                        size: 18, color: Color(0xFF8A6D1B)),
-                    const SizedBox(width: 10),
-                    const Expanded(
-                      child: Text(
-                        'This removes the saved recipient. Previous transaction '
-                        'records remain available.',
-                        style: TextStyle(fontSize: 13, color: Color(0xFF6B541A)),
-                      ),
+                    IconBadge(
+                      icon: 'trash',
+                      halo: Color(0xFFFEE2E2),
+                      glyphColor: AppColors.error,
+                      size: 88,
+                      glyphSize: 36,
+                    ),
+                    SizedBox(height: 20),
+                    ScreenHeading(
+                      'Remove Beneficiary?',
+                      center: true,
+                    ),
+                    SizedBox(height: 24),
+                    NoticeBanner(
+                      'This removes the saved recipient. Previous transaction '
+                      'records remain available.',
+                      type: NoticeType.warning,
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.error,
-                    foregroundColor: Colors.white,
-                    minimumSize: const Size.fromHeight(56),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                  ),
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Beneficiary removed')),
-                    );
-                    // Walk back up to the Beneficiaries list (an existing
-                    // ancestor); stop at the Home root if not found so this
-                    // never exits the app.
-                    Navigator.popUntil(
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.error,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                      ),
+                      onPressed: () => Navigator.pushReplacementNamed(
                         context,
-                        (route) =>
-                            route.settings.name ==
-                                AppRoutes.beneficiariesList ||
-                            route.isFirst);
-                  },
-                  child: const Text('Remove Beneficiary'),
-                ),
-              ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(56),
-                    side: const BorderSide(color: AppColors.divider),
-                    foregroundColor: AppColors.primaryDark,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
+                        AppRoutes.beneficiaryRemoved,
+                      ),
+                      child: const Text(
+                        'Remove Beneficiary',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ),
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
-                ),
+                  const SizedBox(height: 12),
+                  SecondaryButton(
+                    'Cancel',
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

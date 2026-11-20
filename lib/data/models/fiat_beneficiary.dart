@@ -77,28 +77,69 @@ class FiatBeneficiary {
 }
 
 /// Mock saved beneficiaries shown in the Profile → Beneficiaries screens.
-/// Separate from the transfer flow's MockBeneficiaryRepository so the names
-/// match the design sheet.
+/// Covers beneficiaries across multiple countries, banks, and currencies.
 const List<FiatBeneficiary> sampleBeneficiaries = [
   FiatBeneficiary(
     fullName: 'John Doe',
-    bankName: 'Example Bank',
-    accountNumber: '00001234',
-    country: 'Germany',
-    currency: 'EUR',
-  ),
-  FiatBeneficiary(
-    fullName: 'Michael Ade',
-    bankName: 'Partner Bank',
-    accountNumber: '00009832',
+    bankName: 'Zenith Bank',
+    accountNumber: '70550345468',
     country: 'Nigeria',
     currency: 'NGN',
   ),
   FiatBeneficiary(
-    fullName: 'Cynthia Business Ltd',
-    bankName: 'First Union',
-    accountNumber: '00004408',
+    fullName: 'Amara Okafor',
+    bankName: 'Access Bank',
+    accountNumber: '1029384201',
+    country: 'Ghana',
+    currency: 'GHS',
+  ),
+  FiatBeneficiary(
+    fullName: 'Michael Ade',
+    bankName: 'Oschadbank',
+    accountNumber: '9988774201',
+    country: 'Ukraine',
+    currency: 'UAH',
+  ),
+  FiatBeneficiary(
+    fullName: 'Robert Fox',
+    bankName: 'FramelaPay',
+    accountNumber: 'FRM-104829',
+    country: 'FramelaPay',
+    currency: 'USD',
+  ),
+  FiatBeneficiary(
+    fullName: 'Sarah Jenkins',
+    bankName: 'Barclays',
+    accountNumber: '2045618821',
+    country: 'United Kingdom',
+    currency: 'GBP',
+  ),
+  FiatBeneficiary(
+    fullName: 'David Miller',
+    bankName: 'Chase Bank',
+    accountNumber: '9843219012',
     country: 'United States',
     currency: 'USD',
+  ),
+  FiatBeneficiary(
+    fullName: 'Emma Schneider',
+    bankName: 'Deutsche Bank',
+    accountNumber: '5543123341',
+    country: 'Germany',
+    currency: 'EUR',
+  ),
+  FiatBeneficiary(
+    fullName: 'Kwame Mensah',
+    bankName: 'KCB Bank',
+    accountNumber: '4432115520',
+    country: 'Kenya',
+    currency: 'KES',
+  ),
+  FiatBeneficiary(
+    fullName: 'Liam Wilson',
+    bankName: 'RBC Royal Bank',
+    accountNumber: '8876541144',
+    country: 'Canada',
+    currency: 'CAD',
   ),
 ];

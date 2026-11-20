@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:country_flags/country_flags.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_shadows.dart';
@@ -6,8 +7,15 @@ import '../../core/routes/app_routes.dart';
 import '../../core/widgets/app_icon.dart';
 import '../../core/widgets/app_bottom_nav.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  bool _balanceVisible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -32,37 +40,62 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 12),
               _buildQuickLinks(context),
               const SizedBox(height: 20),
-              _buildTransferStatusCard(),
+              _buildTransferStatusCard(context),
               const SizedBox(height: 24),
               _buildSectionHeader(
                 "Today's Rates",
-                trailing: Row(
-                  children: const [
-                    Text('Updated now',
-                        style: TextStyle(
-                            color: AppColors.textGrey, fontSize: 12)),
-                    SizedBox(width: 6),
-                    AppIcon('refresh', size: 16, color: AppColors.textGrey),
-                  ],
+                trailing: GestureDetector(
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Exchange rates refreshed'),
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
+                  },
+                  child: Row(
+                    children: const [
+                      Text('Updated now',
+                          style: TextStyle(
+                              color: AppColors.textGrey, fontSize: 12)),
+                      SizedBox(width: 6),
+                      AppIcon('refresh', size: 16, color: AppColors.textGrey),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 12),
-              _buildRatesCard(),
+              _buildRatesCard(context),
               const SizedBox(height: 24),
               _buildReferralCard(context),
               const SizedBox(height: 24),
               _buildSectionHeader(
                 'Recent Activity',
-                trailing: _viewAll(() {}),
+                trailing: _viewAll(
+                    () => Navigator.pushNamed(context, AppRoutes.activity)),
               ),
               const SizedBox(height: 4),
               _activityRow(
-                  'Money sent to James Okoro', 'Aug 6th, 21:29 AM',
-                  'USD • \$250', up: true),
-              _activityRow('Money received from James Okoro',
-                  'Aug 6th, 21:29 AM', 'UAH • \$250', up: false),
-              _activityRow('Crypto purchased', 'Aug 6th, 21:29 AM',
-                  'BTC • \$250', up: true),
+                context,
+                'Money sent to James Okoro',
+                'Aug 6th, 21:29 AM',
+                'USD • \$250',
+                up: true,
+              ),
+              _activityRow(
+                context,
+                'Money received from James Okoro',
+                'Aug 6th, 21:29 AM',
+                'UAH • \$250',
+                up: false,
+              ),
+              _activityRow(
+                context,
+                'Crypto purchased',
+                'Aug 6th, 21:29 AM',
+                'BTC • \$250',
+                up: true,
+              ),
               const SizedBox(height: 24),
             ],
           ),
@@ -81,32 +114,53 @@ class HomeScreen extends StatelessWidget {
         Expanded(
           child: Row(
             children: [
-              const CircleAvatar(
-                radius: 24,
-                backgroundColor: AppColors.inputFill,
-                child: AppIcon('folder-user',
-                    color: AppColors.primaryDark, size: 26),
+              GestureDetector(
+                onTap: () => Navigator.pushNamed(context, AppRoutes.profile),
+                child: const CircleAvatar(
+                  radius: 24,
+                  backgroundColor: AppColors.inputFill,
+                  child: AppIcon('folder-user',
+                      color: AppColors.primaryDark, size: 26),
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('HI, CYNTHIA',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w800, fontSize: 18)),
+                    GestureDetector(
+                      onTap: () =>
+                          Navigator.pushNamed(context, AppRoutes.profile),
+                      child: const Text('HI, CYNTHIA',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w800, fontSize: 18)),
+                    ),
                     const SizedBox(height: 2),
-                    Row(
-                      children: const [
-                        Flexible(
-                          child: Text('Framela ID: FRM-482913',
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  color: AppColors.textGrey, fontSize: 12)),
-                        ),
-                        SizedBox(width: 6),
-                        AppIcon('copy', size: 14, color: AppColors.textGrey),
-                      ],
+                    InkWell(
+                      onTap: () {
+                        Clipboard.setData(
+                            const ClipboardData(text: 'FRM-482913'));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Framela ID copied to clipboard'),
+                            duration: Duration(seconds: 1),
+                          ),
+                        );
+                      },
+                      borderRadius: BorderRadius.circular(4),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: const [
+                          Flexible(
+                            child: Text('Framela ID: FRM-482913',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    color: AppColors.textGrey, fontSize: 12)),
+                          ),
+                          SizedBox(width: 6),
+                          AppIcon('copy', size: 14, color: AppColors.textGrey),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -165,53 +219,87 @@ class HomeScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: const [
-                  Text('Total Balance',
-                      style: TextStyle(color: AppColors.white, fontSize: 14)),
-                  SizedBox(width: 8),
-                  AppIcon('eye', color: AppColors.white, size: 16),
-                ],
-              ),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-                decoration: BoxDecoration(
-                  color: AppColors.secondaryDark,
-                  borderRadius: BorderRadius.circular(12),
-                ),
+              GestureDetector(
+                onTap: () => setState(() => _balanceVisible = !_balanceVisible),
                 child: Row(
-                  children: const [
-                    Text('All Accounts',
-                        style:
-                            TextStyle(color: AppColors.white, fontSize: 12)),
-                    SizedBox(width: 4),
-                    AppIcon('chevron-down', color: AppColors.white, size: 16),
+                  children: [
+                    const Text('Total Balance',
+                        style: TextStyle(color: AppColors.white, fontSize: 14)),
+                    const SizedBox(width: 8),
+                    AppIcon(
+                      _balanceVisible ? 'eye' : 'eye-slash',
+                      color: AppColors.white,
+                      size: 16,
+                    ),
                   ],
+                ),
+              ),
+              InkWell(
+                onTap: () =>
+                    Navigator.pushNamed(context, AppRoutes.walletTab),
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                  decoration: BoxDecoration(
+                    color: AppColors.secondaryDark,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: const [
+                      Text('All Accounts',
+                          style:
+                              TextStyle(color: AppColors.white, fontSize: 12)),
+                      SizedBox(width: 4),
+                      AppIcon('chevron-down', color: AppColors.white, size: 16),
+                    ],
+                  ),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 16),
-          const Text('\$12,550.00',
-              style: TextStyle(
-                  color: AppColors.white,
-                  fontSize: 32,
-                  fontWeight: FontWeight.w800)),
+          Text(
+            _balanceVisible ? '\$12,550.00' : '••••••••',
+            style: const TextStyle(
+              color: AppColors.white,
+              fontSize: 32,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
           const SizedBox(height: 4),
-          const Text('= ₦15,000,150.60',
-              style: TextStyle(color: AppColors.textGrey, fontSize: 13)),
+          Text(
+            _balanceVisible ? '= ₦15,000,150.60' : '••••••••',
+            style: const TextStyle(color: AppColors.textGrey, fontSize: 13),
+          ),
           const SizedBox(height: 20),
           Row(
             children: [
-              _balanceAction(context, 'arrow-up', 'Add Money',
-                  () => Navigator.pushNamed(
-                      context, AppRoutes.addMoneySelectWallet)),
-              _balanceAction(context, 'arrow-down', 'Send Money',
-                  () => Navigator.pushNamed(context, AppRoutes.transferHub)),
-              _balanceAction(context, 'coin-swap', 'Convert', () {}),
-              _balanceAction(context, 'more', 'More',
-                  () => Navigator.pushNamed(context, AppRoutes.quickActions)),
+              _balanceAction(
+                context,
+                'arrow-up',
+                'Add Money',
+                () => Navigator.pushNamed(
+                    context, AppRoutes.addMoneySelectWallet),
+              ),
+              _balanceAction(
+                context,
+                'arrow-down',
+                'Send Money',
+                () => Navigator.pushNamed(context, AppRoutes.transferHub),
+              ),
+              _balanceAction(
+                context,
+                'coin-swap',
+                'Convert',
+                () => Navigator.pushNamed(context, AppRoutes.convertFunds),
+              ),
+              _balanceAction(
+                context,
+                'more',
+                'More',
+                () => Navigator.pushNamed(context, AppRoutes.quickActions),
+              ),
             ],
           ),
         ],
@@ -283,10 +371,12 @@ class HomeScreen extends StatelessWidget {
               context, 'folder-user', 'Beneficiaries', AppColors.iconPurple,
               route: AppRoutes.beneficiariesList),
           const SizedBox(width: 12),
-          _quickCard(context, 'BTC', 'Crypto', AppColors.iconBlue),
+          _quickCard(context, 'BTC', 'Crypto', AppColors.iconBlue,
+              route: AppRoutes.sendStablecoinWallet),
           const SizedBox(width: 12),
           _quickCard(context, 'receipt', 'Transactions History',
-              AppColors.accentYellow),
+              AppColors.accentYellow,
+              route: AppRoutes.activity),
         ],
       ),
     );
@@ -330,63 +420,67 @@ class HomeScreen extends StatelessWidget {
 
   // ---------- Transfer status ----------
 
-  Widget _buildTransferStatusCard() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: AppShadows.card,
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 36,
-            height: 36,
-            decoration: const BoxDecoration(
-                color: AppColors.accentYellow, shape: BoxShape.circle),
-            child: const AppIcon('clock', color: AppColors.white, size: 18),
-          ),
-          const SizedBox(width: 12),
-          const Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Transfer Status',
-                    style:
-                        TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
-                SizedBox(height: 2),
-                Text('You have 2 ongoing transfer',
-                    style:
-                        TextStyle(color: AppColors.textGrey, fontSize: 12)),
-              ],
+  Widget _buildTransferStatusCard(BuildContext context) {
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, AppRoutes.transferStatus),
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: AppShadows.card,
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 36,
+              height: 36,
+              decoration: const BoxDecoration(
+                  color: AppColors.accentYellow, shape: BoxShape.circle),
+              child: const AppIcon('clock', color: AppColors.white, size: 18),
             ),
-          ),
-          const SizedBox(width: 8),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            decoration: BoxDecoration(
-              color: AppColors.accentYellow.withOpacity(0.18),
-              borderRadius: BorderRadius.circular(20),
+            const SizedBox(width: 12),
+            const Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Transfer Status',
+                      style:
+                          TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+                  SizedBox(height: 2),
+                  Text('You have 2 ongoing transfer',
+                      style:
+                          TextStyle(color: AppColors.textGrey, fontSize: 12)),
+                ],
+              ),
             ),
-            child: const Text('In progress',
-                style: TextStyle(
-                    color: AppColors.accentYellow,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w600)),
-          ),
-          const SizedBox(width: 4),
-          const AppIcon('chevron-right',
-              size: 18, color: AppColors.textGrey),
-        ],
+            const SizedBox(width: 8),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                color: AppColors.accentYellow.withOpacity(0.18),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Text('In progress',
+                  style: TextStyle(
+                      color: AppColors.accentYellow,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600)),
+            ),
+            const SizedBox(width: 4),
+            const AppIcon('chevron-right',
+                size: 18, color: AppColors.textGrey),
+          ],
+        ),
       ),
     );
   }
 
   // ---------- Today's rates ----------
 
-  Widget _buildRatesCard() {
+  Widget _buildRatesCard(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -397,25 +491,29 @@ class HomeScreen extends StatelessWidget {
       ),
       child: Column(
         children: [
-          _rateRow('USD / NGN', '₦150,000', '0.33%', 'US', up: true),
+          _rateRow(context, 'USD / NGN', '₦150,000', '0.33%', 'US', up: true),
           const Divider(height: 1, color: AppColors.divider),
-          _rateRow('GBP / NGN', '₦150,000', '0.33%', 'GB', up: false),
+          _rateRow(context, 'GBP / NGN', '₦150,000', '0.33%', 'GB', up: false),
           const Divider(height: 1, color: AppColors.divider),
-          _rateRow('UAH / NGN', '₦150,000', '0.33%', 'UA', up: true),
+          _rateRow(context, 'UAH / NGN', '₦150,000', '0.33%', 'UA', up: true),
           const Divider(height: 1, color: AppColors.divider),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 14),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text('View All',
-                    style: TextStyle(
-                        color: AppColors.iconBlue,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 13)),
-                SizedBox(width: 4),
-                AppIcon('chevron-right', size: 16, color: AppColors.iconBlue),
-              ],
+          InkWell(
+            onTap: () => Navigator.pushNamed(context, AppRoutes.exchangeRates),
+            borderRadius: const BorderRadius.vertical(bottom: Radius.circular(16)),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 14),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text('View All',
+                      style: TextStyle(
+                          color: AppColors.iconBlue,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 13)),
+                  SizedBox(width: 4),
+                  AppIcon('chevron-right', size: 16, color: AppColors.iconBlue),
+                ],
+              ),
             ),
           ),
         ],
@@ -423,35 +521,39 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _rateRow(String pair, String rate, String change, String countryCode,
+  Widget _rateRow(BuildContext context, String pair, String rate,
+      String change, String countryCode,
       {required bool up}) {
     final color = up ? AppColors.success : AppColors.error;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 14),
-      child: Row(
-        children: [
-          CountryFlag.fromCountryCode(
-            countryCode,
-            height: 24,
-            width: 24,
-            shape: const Circle(),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(pair,
-                style: const TextStyle(
-                    fontWeight: FontWeight.w600, fontSize: 14)),
-          ),
-          Text(rate,
-              style:
-                  const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
-          const SizedBox(width: 12),
-          Icon(up ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-              color: color, size: 20),
-          Text(change,
-              style: TextStyle(
-                  color: color, fontWeight: FontWeight.w600, fontSize: 13)),
-        ],
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, AppRoutes.selectCurrencyPair),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        child: Row(
+          children: [
+            CountryFlag.fromCountryCode(
+              countryCode,
+              height: 24,
+              width: 24,
+              shape: const Circle(),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(pair,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w600, fontSize: 14)),
+            ),
+            Text(rate,
+                style:
+                    const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+            const SizedBox(width: 12),
+            Icon(up ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                color: color, size: 20),
+            Text(change,
+                style: TextStyle(
+                    color: color, fontWeight: FontWeight.w600, fontSize: 13)),
+          ],
+        ),
       ),
     );
   }
@@ -459,131 +561,145 @@ class HomeScreen extends StatelessWidget {
   // ---------- Referral ----------
 
   Widget _buildReferralCard(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          colors: [
-            AppColors.iconBlue.withOpacity(0.85),
-            AppColors.iconBlue.withOpacity(0.45),
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, AppRoutes.referral),
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+              AppColors.iconBlue.withOpacity(0.85),
+              AppColors.iconBlue.withOpacity(0.45),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: AppShadows.card,
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: AppColors.white.withOpacity(0.3),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const AppIcon('gift', color: AppColors.white, size: 26),
+            ),
+            const SizedBox(width: 12),
+            const Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Earn more with referrals',
+                      style: TextStyle(
+                          color: AppColors.white,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15)),
+                  SizedBox(height: 4),
+                  Text('Invite friends to Framela and earn exciting rewards.',
+                      style: TextStyle(color: AppColors.white, fontSize: 12)),
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primaryDark,
+                foregroundColor: AppColors.white,
+                minimumSize: const Size(0, 40),
+                padding: const EdgeInsets.symmetric(horizontal: 14),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+              ),
+              onPressed: () =>
+                  Navigator.pushNamed(context, AppRoutes.referral),
+              child: const Text('Refer now', style: TextStyle(fontSize: 12)),
+            ),
           ],
         ),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: AppShadows.card,
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              color: AppColors.white.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const AppIcon('gift', color: AppColors.white, size: 26),
-          ),
-          const SizedBox(width: 12),
-          const Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Earn more with referrals',
-                    style: TextStyle(
-                        color: AppColors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 15)),
-                SizedBox(height: 4),
-                Text('Invite friends to Framela and earn exciting rewards.',
-                    style: TextStyle(color: AppColors.white, fontSize: 12)),
-              ],
-            ),
-          ),
-          const SizedBox(width: 10),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primaryDark,
-              foregroundColor: AppColors.white,
-              minimumSize: const Size(0, 40),
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-            ),
-            onPressed: () => Navigator.pushNamed(context, AppRoutes.referral),
-            child: const Text('Refer now', style: TextStyle(fontSize: 12)),
-          ),
-        ],
       ),
     );
   }
 
   // ---------- Recent activity ----------
 
-  Widget _activityRow(String title, String time, String amount,
-      {required bool up}) {
-    return Container(
-      margin: const EdgeInsets.only(top: 10),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(14),
-        boxShadow: AppShadows.card,
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: AppColors.success.withOpacity(0.12),
-              shape: BoxShape.circle,
+  Widget _activityRow(
+    BuildContext context,
+    String title,
+    String time,
+    String amount, {
+    required bool up,
+  }) {
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, AppRoutes.activity),
+      borderRadius: BorderRadius.circular(14),
+      child: Container(
+        margin: const EdgeInsets.only(top: 10),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(14),
+          boxShadow: AppShadows.card,
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppColors.success.withOpacity(0.12),
+                shape: BoxShape.circle,
+              ),
+              child: AppIcon(up ? 'arrow-up-right' : 'arrow-down',
+                  color: AppColors.success, size: 18),
             ),
-            child: AppIcon(up ? 'arrow-up-right' : 'arrow-down',
-                color: AppColors.success, size: 18),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontSize: 13, fontWeight: FontWeight.w600)),
+                  const SizedBox(height: 2),
+                  Text(time,
+                      style: const TextStyle(
+                          color: AppColors.textGrey, fontSize: 11)),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text(title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                Text(amount,
                     style: const TextStyle(
-                        fontSize: 13, fontWeight: FontWeight.w600)),
-                const SizedBox(height: 2),
-                Text(time,
-                    style: const TextStyle(
-                        color: AppColors.textGrey, fontSize: 11)),
+                        fontWeight: FontWeight.w600, fontSize: 12)),
+                const SizedBox(height: 4),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: AppColors.success.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text('Completed',
+                      style: TextStyle(
+                          color: AppColors.success,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600)),
+                ),
               ],
             ),
-          ),
-          const SizedBox(width: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(amount,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600, fontSize: 12)),
-              const SizedBox(height: 4),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                decoration: BoxDecoration(
-                  color: AppColors.success.withOpacity(0.12),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: const Text('Completed',
-                    style: TextStyle(
-                        color: AppColors.success,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600)),
-              ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
