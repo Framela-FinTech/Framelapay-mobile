@@ -24,6 +24,15 @@ import 'package:framela/features/profile/beneficiaries/beneficiary_saved_screen.
 import 'package:framela/features/profile/beneficiaries/confirm_beneficiary_screen.dart';
 import 'package:framela/features/profile/beneficiaries/edit_beneficiary_screen.dart';
 import 'package:framela/features/profile/beneficiaries/remove_beneficiary_screen.dart';
+import 'package:framela/data/models/correction_request.dart';
+import 'package:framela/features/profile/personal_info/personal_information_screen.dart';
+import 'package:framela/features/profile/personal_info/request_name_correction_screen.dart';
+import 'package:framela/features/profile/personal_info/request_dob_correction_screen.dart';
+import 'package:framela/features/profile/personal_info/edit_residential_address_screen.dart';
+import 'package:framela/features/profile/personal_info/personal_supporting_document_screen.dart';
+import 'package:framela/features/profile/personal_info/review_correction_request_screen.dart';
+import 'package:framela/features/profile/personal_info/correction_request_submitted_screen.dart';
+import 'package:framela/features/profile/personal_info/correction_request_status_screen.dart';
 import 'package:framela/features/profile/profile_screen.dart';
 import 'package:framela/features/profile/photo/change_profile_photo_screen.dart';
 import 'package:framela/features/profile/photo/adjust_profile_photo_screen.dart';
@@ -150,6 +159,15 @@ const _wallets = [
   CurrencyWallet(code: 'GBP', name: 'British Pound', symbol: '£', balance: 1000),
 ];
 
+const _correctionRequest = CorrectionRequest(
+  requestType: 'Full name',
+  currentValue: 'Cynthia Nkechi',
+  requestedValue: 'Cynthia N. Okoro',
+  reason: 'Typo in my details',
+  title: 'Full name correction',
+  reference: 'FRM-PI-2048',
+);
+
 Future<void> _loadInter() async {
   final loader = FontLoader('Inter');
   for (final weight in const [
@@ -257,6 +275,18 @@ void main() {
     'Appearance': const AppearanceScreen(),
     'Language & Region': const LanguageRegionScreen(),
     'Notifications Settings': const NotificationsSettingsScreen(),
+    'Personal Information': const PersonalInformationScreen(),
+    'Request Name Correction': const RequestNameCorrectionScreen(),
+    'Request DOB Correction': const RequestDobCorrectionScreen(),
+    'Edit Residential Address': const EditResidentialAddressScreen(),
+    'Supporting Document':
+        const PersonalSupportingDocumentScreen(request: _correctionRequest),
+    'Review Correction Request':
+        const ReviewCorrectionRequestScreen(request: _correctionRequest),
+    'Correction Request Submitted':
+        const CorrectionRequestSubmittedScreen(request: _correctionRequest),
+    'Correction Request Status':
+        const CorrectionRequestStatusScreen(request: _correctionRequest),
   };
 
   screens.forEach((name, screen) {

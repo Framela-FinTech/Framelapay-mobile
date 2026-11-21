@@ -75,6 +75,15 @@ import '../../features/profile/account_controls/deactivate_account_screens.dart'
 import '../../features/profile/account_controls/sign_out_screens.dart';
 import '../../features/profile/referral/referral_screen.dart';
 import '../../features/profile/security/trusted_devices_screens.dart';
+import '../../data/models/correction_request.dart';
+import '../../features/profile/personal_info/personal_information_screen.dart';
+import '../../features/profile/personal_info/request_name_correction_screen.dart';
+import '../../features/profile/personal_info/request_dob_correction_screen.dart';
+import '../../features/profile/personal_info/edit_residential_address_screen.dart';
+import '../../features/profile/personal_info/personal_supporting_document_screen.dart';
+import '../../features/profile/personal_info/review_correction_request_screen.dart';
+import '../../features/profile/personal_info/correction_request_submitted_screen.dart';
+import '../../features/profile/personal_info/correction_request_status_screen.dart';
 import '../../data/models/transaction_receipt.dart';
 import '../../data/models/fiat_beneficiary.dart';
 import '../../data/models/currency_wallet.dart';
@@ -174,6 +183,18 @@ class AppRoutes {
 
   // Profile section.
   static const personalInformation = '/personal-information';
+  static const requestNameCorrection = '/profile/personal-info/name-correction';
+  static const nameSupportingDocument = '/profile/personal-info/name-document';
+  static const reviewNameCorrection = '/profile/personal-info/review-name';
+  static const requestDobCorrection = '/profile/personal-info/dob-correction';
+  static const dobSupportingDocument = '/profile/personal-info/dob-document';
+  static const reviewDobCorrection = '/profile/personal-info/review-dob';
+  static const editResidentialAddress = '/profile/personal-info/edit-address';
+  static const addressSupportingDocument = '/profile/personal-info/address-document';
+  static const reviewAddressEdit = '/profile/personal-info/review-address';
+  static const reviewPersonalCorrection = '/profile/personal-info/review';
+  static const correctionRequestSubmitted = '/profile/personal-info/submitted';
+  static const correctionRequestStatus = '/profile/personal-info/status';
   static const referral = '/referral';
   static const helpSupport = '/help-support';
   static const helpCentre = '/help-centre';
@@ -376,10 +397,74 @@ class AppRoutes {
       // ---- Profile section ----
       case profile:
         return _page(const ProfileScreen());
-      // Permanent "Coming soon" placeholders.
+      // Personal Information and correction flows
       case personalInformation:
+        return _page(const PersonalInformationScreen());
+      case requestNameCorrection:
+        final currentName = settings.arguments is String
+            ? settings.arguments as String
+            : 'Cynthia Nkechi';
+        return _page(RequestNameCorrectionScreen(currentName: currentName));
+      case requestDobCorrection:
+        final currentDob = settings.arguments is String
+            ? settings.arguments as String
+            : '14 March 1995';
+        return _page(RequestDobCorrectionScreen(currentDob: currentDob));
+      case editResidentialAddress:
+        final currentAddress = settings.arguments is String
+            ? settings.arguments as String
+            : '12 Adetokunbo Ademola Street';
         return _page(
-            const ProfilePlaceholderScreen(title: 'Personal Information'));
+            EditResidentialAddressScreen(currentAddress: currentAddress));
+      case nameSupportingDocument:
+      case dobSupportingDocument:
+      case addressSupportingDocument:
+        final request = settings.arguments is CorrectionRequest
+            ? settings.arguments as CorrectionRequest
+            : const CorrectionRequest(
+                requestType: 'Full name',
+                currentValue: 'Cynthia Nkechi',
+                requestedValue: 'Cynthia N. Okoro',
+                reason: 'Typo in my details',
+                title: 'Full name correction',
+              );
+        return _page(PersonalSupportingDocumentScreen(request: request));
+      case reviewPersonalCorrection:
+      case reviewNameCorrection:
+      case reviewDobCorrection:
+      case reviewAddressEdit:
+        final request = settings.arguments is CorrectionRequest
+            ? settings.arguments as CorrectionRequest
+            : const CorrectionRequest(
+                requestType: 'Full name',
+                currentValue: 'Cynthia Nkechi',
+                requestedValue: 'Cynthia N. Okoro',
+                reason: 'Typo in my details',
+                title: 'Full name correction',
+              );
+        return _page(ReviewCorrectionRequestScreen(request: request));
+      case correctionRequestSubmitted:
+        final request = settings.arguments is CorrectionRequest
+            ? settings.arguments as CorrectionRequest
+            : const CorrectionRequest(
+                requestType: 'Full name',
+                currentValue: 'Cynthia Nkechi',
+                requestedValue: 'Cynthia N. Okoro',
+                reason: 'Typo in my details',
+                title: 'Full name correction',
+              );
+        return _page(CorrectionRequestSubmittedScreen(request: request));
+      case correctionRequestStatus:
+        final request = settings.arguments is CorrectionRequest
+            ? settings.arguments as CorrectionRequest
+            : const CorrectionRequest(
+                requestType: 'Full name',
+                currentValue: 'Cynthia Nkechi',
+                requestedValue: 'Cynthia N. Okoro',
+                reason: 'Typo in my details',
+                title: 'Full name correction',
+              );
+        return _page(CorrectionRequestStatusScreen(request: request));
       case referral:
         return _page(const ReferralScreen());
       case helpSupport:
