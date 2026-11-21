@@ -6,6 +6,8 @@ import '../../core/theme/app_shadows.dart';
 import '../../core/routes/app_routes.dart';
 import '../../core/widgets/app_icon.dart';
 import '../../core/widgets/app_bottom_nav.dart';
+import '../../data/models/activity_transaction.dart';
+import '../../data/models/transaction_receipt.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -636,7 +638,33 @@ class _HomeScreenState extends State<HomeScreen> {
     required bool up,
   }) {
     return InkWell(
-      onTap: () => Navigator.pushNamed(context, AppRoutes.activity),
+      onTap: () {
+        final receipt = TransactionReceipt(
+          name: title,
+          amount: amount,
+          currencyAmount: amount,
+          reference: 'FRM-20261010-10429',
+          transactionId: 'FRM-20261010-10429',
+          date: time,
+          status: ReceiptStatus.completed,
+          headlineAmount: amount,
+          caption: title,
+          rows: [
+            const ReceiptRow('From', 'Cynthia Nkechi'),
+            ReceiptRow(
+                'To', title.contains('James') ? 'James Okoro' : 'Crypto Wallet'),
+            const ReceiptRow('Transfer fee', r'$0.00'),
+            const ReceiptRow('Payment method', 'Wallet transfer'),
+            ReceiptRow('Date and time', time),
+          ],
+          statusNote: 'Transaction successful',
+        );
+        Navigator.pushNamed(
+          context,
+          AppRoutes.receiptDetail,
+          arguments: receipt,
+        );
+      },
       borderRadius: BorderRadius.circular(14),
       child: Container(
         margin: const EdgeInsets.only(top: 10),

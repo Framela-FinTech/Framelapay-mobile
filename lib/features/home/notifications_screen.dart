@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/routes/app_routes.dart';
 import '../../core/widgets/app_icon.dart';
 import '../../data/models/notification_item.dart';
 import '../../data/repositories/notification_repository.dart';
@@ -58,48 +59,70 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   }
 
   Widget _notificationTile(NotificationItem item) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CircleAvatar(
-            backgroundColor: AppColors.inputFill,
-            child: AppIcon(_iconFor(item.type), color: AppColors.primaryDark, size: 18),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(item.title,
-                        style: TextStyle(
-                            fontWeight:
-                                item.isRead ? FontWeight.w500 : FontWeight.w700,
-                            fontSize: 14)),
-                    Text(item.time,
-                        style: const TextStyle(
-                            color: AppColors.textGrey, fontSize: 11)),
-                  ],
-                ),
-                const SizedBox(height: 2),
-                Text(item.message,
-                    style: const TextStyle(color: AppColors.textGrey, fontSize: 12)),
-              ],
+    return InkWell(
+      onTap: () {
+        switch (item.type) {
+          case NotificationType.transfer:
+            Navigator.pushNamed(context, AppRoutes.transferStatus);
+            break;
+          case NotificationType.security:
+            Navigator.pushNamed(context, AppRoutes.securityHome);
+            break;
+          case NotificationType.promo:
+            Navigator.pushNamed(context, AppRoutes.referral);
+            break;
+          case NotificationType.system:
+            Navigator.pushNamed(context, AppRoutes.helpSupport);
+            break;
+        }
+      },
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CircleAvatar(
+              backgroundColor: AppColors.inputFill,
+              child: AppIcon(_iconFor(item.type),
+                  color: AppColors.primaryDark, size: 18),
             ),
-          ),
-          if (!item.isRead)
-            Container(
-              margin: const EdgeInsets.only(left: 8, top: 4),
-              width: 8,
-              height: 8,
-              decoration: const BoxDecoration(
-                  color: AppColors.accentYellow, shape: BoxShape.circle),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(item.title,
+                          style: TextStyle(
+                              fontWeight: item.isRead
+                                  ? FontWeight.w500
+                                  : FontWeight.w700,
+                              fontSize: 14)),
+                      Text(item.time,
+                          style: const TextStyle(
+                              color: AppColors.textGrey, fontSize: 11)),
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Text(item.message,
+                      style: const TextStyle(
+                          color: AppColors.textGrey, fontSize: 12)),
+                ],
+              ),
             ),
-        ],
+            if (!item.isRead)
+              Container(
+                margin: const EdgeInsets.only(left: 8, top: 4),
+                width: 8,
+                height: 8,
+                decoration: const BoxDecoration(
+                    color: AppColors.accentYellow, shape: BoxShape.circle),
+              ),
+          ],
+        ),
       ),
     );
   }

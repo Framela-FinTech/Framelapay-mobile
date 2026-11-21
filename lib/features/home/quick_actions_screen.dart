@@ -73,7 +73,7 @@ class QuickActionsScreen extends StatelessWidget {
               const SizedBox(height: 12),
               _list(context, _support),
               const SizedBox(height: 24),
-              _promoBanner(),
+              _promoBanner(context),
               const SizedBox(height: 24),
             ],
           ),
@@ -153,49 +153,53 @@ class QuickActionsScreen extends StatelessWidget {
     );
   }
 
-  Widget _promoBanner() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          colors: [Color(0xFFC7C9F2), Color(0xFF9DE8D6)],
+  Widget _promoBanner(BuildContext context) {
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, AppRoutes.transferHub),
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [Color(0xFFC7C9F2), Color(0xFF9DE8D6)],
+          ),
+          borderRadius: BorderRadius.circular(16),
         ),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.35),
-              shape: BoxShape.circle,
+        child: Row(
+          children: [
+            Container(
+              width: 56,
+              height: 56,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.35),
+                shape: BoxShape.circle,
+              ),
+              child: const AppIcon('globe',
+                  size: 30, color: AppColors.primaryDark),
             ),
-            child: const AppIcon('globe',
-                size: 30, color: AppColors.primaryDark),
-          ),
-          const SizedBox(width: 14),
-          const Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Send money internationally',
-                    style: TextStyle(
-                        color: AppColors.primaryDark,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 15)),
-                SizedBox(height: 4),
-                Text(
-                    'Fast, secure and reliable transfer to over 100 countries',
-                    style: TextStyle(
-                        color: AppColors.primaryDark, fontSize: 12)),
-              ],
+            const SizedBox(width: 14),
+            const Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Send money internationally',
+                      style: TextStyle(
+                          color: AppColors.primaryDark,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15)),
+                  SizedBox(height: 4),
+                  Text(
+                      'Fast, secure and reliable transfer to over 100 countries',
+                      style: TextStyle(
+                          color: AppColors.primaryDark, fontSize: 12)),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

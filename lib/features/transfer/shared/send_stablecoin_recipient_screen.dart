@@ -46,7 +46,8 @@ class SendStablecoinRecipientScreen extends StatelessWidget {
                       context, AppRoutes.enterWalletAddress)),
               _option('QR-code', 'Scan QR code',
                   "Scan a wallet QR code to get the recipient's address.",
-                  onTap: () {}),
+                  onTap: () => Navigator.pushNamed(
+                      context, AppRoutes.enterWalletAddress)),
             ],
           ),
         ),
