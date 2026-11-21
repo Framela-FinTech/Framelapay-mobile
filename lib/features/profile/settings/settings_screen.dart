@@ -30,26 +30,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
               _tile(
                 icon: 'bell',
                 title: 'Notifications',
-                subtitle: 'Choose which alerts you receive',
+                subtitle: 'Choose your notification preferences.',
                 onTap: () => Navigator.pushNamed(
                     context, AppRoutes.notificationsSettings),
               ),
               _tile(
                 icon: 'eye',
                 title: 'Appearance',
-                subtitle: 'Light, dark or system theme',
+                subtitle: 'Light, dark or system.',
                 onTap: () =>
                     Navigator.pushNamed(context, AppRoutes.appearance),
               ),
               _tile(
+                icon: 'dollar',
+                title: 'Preferred Total Currency',
+                subtitle: 'Choose your preferred currency.',
+                onTap: () => Navigator.pushNamed(
+                    context, AppRoutes.preferredTotalCurrency),
+              ),
+              _pushToggle(),
+              const SizedBox(height: 8),
+              _tile(
                 icon: 'globe',
                 title: 'Language & Region',
-                subtitle: 'Display preferences',
+                subtitle: 'Language and display region.',
                 onTap: () =>
                     Navigator.pushNamed(context, AppRoutes.languageRegion),
               ),
-              const SizedBox(height: 4),
-              _pushToggle(),
             ],
           ),
         ),
@@ -83,13 +90,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Enable Push Notifications',
+                const Text('Enable Push Notifications',
                     style: TextStyle(
                         color: AppColors.primaryDark,
                         fontWeight: FontWeight.w700,
                         fontSize: 16)),
-                SizedBox(height: 2),
-                Text('Receive updates on this device',
+                const SizedBox(height: 2),
+                const Text('Get important alerts.',
                     style:
                         TextStyle(color: AppColors.textGrey, fontSize: 13)),
               ],

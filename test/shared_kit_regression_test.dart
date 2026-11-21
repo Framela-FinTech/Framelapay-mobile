@@ -53,6 +53,8 @@ import 'package:framela/features/profile/security/trusted_devices_screens.dart';
 import 'package:framela/features/profile/settings/settings_screen.dart';
 import 'package:framela/features/profile/settings/appearance_screen.dart';
 import 'package:framela/features/profile/settings/language_region_screen.dart';
+import 'package:framela/features/profile/settings/preferred_total_currency_screen.dart';
+import 'package:framela/features/profile/settings/preference_saved_screen.dart';
 import 'package:framela/features/profile/settings/notifications_settings_screen.dart';
 import 'package:framela/features/profile/statements/account_statements_screen.dart';
 import 'package:framela/features/activity/activity_screen.dart';
@@ -274,6 +276,8 @@ void main() {
     'Settings': const SettingsScreen(),
     'Appearance': const AppearanceScreen(),
     'Language & Region': const LanguageRegionScreen(),
+    'Preferred Total Currency': const PreferredTotalCurrencyScreen(),
+    'Preference Saved': const PreferenceSavedScreen(),
     'Notifications Settings': const NotificationsSettingsScreen(),
     'Personal Information': const PersonalInformationScreen(),
     'Request Name Correction': const RequestNameCorrectionScreen(),

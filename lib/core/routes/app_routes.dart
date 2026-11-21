@@ -37,6 +37,8 @@ import '../../features/profile/settings/settings_screen.dart';
 import '../../features/profile/settings/appearance_screen.dart';
 import '../../features/profile/settings/notifications_settings_screen.dart';
 import '../../features/profile/settings/language_region_screen.dart';
+import '../../features/profile/settings/preferred_total_currency_screen.dart';
+import '../../features/profile/settings/preference_saved_screen.dart';
 import '../../features/profile/security/security_screen.dart';
 import '../../features/profile/security/password_screen.dart';
 import '../../features/profile/security/change_password_screen.dart';
@@ -235,6 +237,8 @@ class AppRoutes {
   static const appearance = '/settings/appearance';
   static const notificationsSettings = '/settings/notifications';
   static const languageRegion = '/settings/language-region';
+  static const preferredTotalCurrency = '/settings/preferred-total-currency';
+  static const preferenceSaved = '/settings/preference-saved';
   // Security sub-screens.
   static const securityPassword = '/security/password';
   static const changePassword = '/security/change-password';
@@ -597,6 +601,10 @@ class AppRoutes {
         return _page(const NotificationsSettingsScreen());
       case languageRegion:
         return _page(const LanguageRegionScreen());
+      case preferredTotalCurrency:
+        return _page(const PreferredTotalCurrencyScreen());
+      case preferenceSaved:
+        return _page(const PreferenceSavedScreen());
 
       case transferHub:
         return _page(const TransferScreen());
