@@ -6,7 +6,6 @@ import '../../core/theme/app_shadows.dart';
 import '../../core/routes/app_routes.dart';
 import '../../core/widgets/app_icon.dart';
 import '../../core/widgets/app_bottom_nav.dart';
-import '../../data/models/activity_transaction.dart';
 import '../../data/models/transaction_receipt.dart';
 
 class HomeScreen extends StatefulWidget {
