@@ -71,7 +71,6 @@ import '../../features/profile/kyc/source_of_funds_screen.dart';
 import '../../features/profile/kyc/review_verification_screen.dart';
 import '../../features/profile/kyc/verification_submitted_screen.dart';
 import '../../features/profile/kyc/verification_successful_screen.dart';
-import '../../features/profile/widgets/profile_success_screen.dart';
 import '../../features/profile/support/help_support_screens.dart';
 import '../../features/profile/account_controls/deactivate_account_screens.dart';
 import '../../features/profile/account_controls/sign_out_screens.dart';
